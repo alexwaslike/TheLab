@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{05F848AD-E9E4-2E53-92F7-12CED61AB557}") = "Bark", "Assembly-CSharp.csproj", "{FA269916-73D1-E940-B8A1-B792163E6839}"
+EndProject
+Project("{05F848AD-E9E4-2E53-92F7-12CED61AB557}") = "Bark", "Assembly-CSharp-Editor.csproj", "{E180EDA4-8BD6-4050-9BD0-EE2CA95571F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA269916-73D1-E940-B8A1-B792163E6839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA269916-73D1-E940-B8A1-B792163E6839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA269916-73D1-E940-B8A1-B792163E6839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA269916-73D1-E940-B8A1-B792163E6839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E180EDA4-8BD6-4050-9BD0-EE2CA95571F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E180EDA4-8BD6-4050-9BD0-EE2CA95571F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E180EDA4-8BD6-4050-9BD0-EE2CA95571F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E180EDA4-8BD6-4050-9BD0-EE2CA95571F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
