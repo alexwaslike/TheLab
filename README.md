@@ -5,3 +5,4 @@ Game project for Spring 2016 Video Game Design class.
 - Daniel Breaux: Programmer
 - Ann Bowler: Artist
 - Kim Le: Artist
+- Anthony Allen: Programmer
