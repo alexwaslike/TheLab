@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
 	public GameObject MainCharacterObj;
 	public MainCharacter MainCharacter;
 	public SpriteController SpriteController;
+    public PrefabController PrefabController;
 
 	// UI
 	public GameObject DogCollectionUI;
