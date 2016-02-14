@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Dog : MonoBehaviour {
 
-	private enum DogState{
+	public enum DogState{
 		Box, Follow, Attack, Idle, Dead
 	}
 
@@ -22,11 +22,8 @@ public class Dog : MonoBehaviour {
 
 	void Update () {
 		if (_state == DogState.Follow) {
-			_state = DogState.Follow;
 			GameController.SetSortingOrder (gameObject);
-			
 		} else if (_state == DogState.Attack) {
-			_state = DogState.Attack;
 			GameController.SetSortingOrder (gameObject);
 		}
 	}
@@ -37,28 +34,30 @@ public class Dog : MonoBehaviour {
 
 	private void Clicked(){
 		if (_state == DogState.Box) {
-			GameController.MainCharacter.AddDogToInventory (this);
-			ChangeState (DogState.Follow);
+			GameController.DogClicked (this);
 		}
 	}
 
-	private void ChangeState(DogState newState){
+	public void ChangeState(DogState newState){
 
 		switch (newState) {
 		case DogState.Box: 
+			_state = DogState.Box;
 			spriteRenderer.sprite = GameController.SpriteController.dog_BoxSprite;
 			break;
 		case DogState.Dead: 
+			_state = DogState.Dead;
 			spriteRenderer.sprite = GameController.SpriteController.dog_Gravestone;
 			break;
 		case DogState.Follow: 
+			_state = DogState.Follow;
 			spriteRenderer.sprite = GameController.SpriteController.dog_StandingSprite;
 			break;
 		}
 
 	}
 
-	private void Move(float x, float y){
+	public void Move(float x, float y){
 		transform.Translate (new Vector3(x, y, 0));
 	}
 

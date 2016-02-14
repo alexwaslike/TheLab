@@ -10,9 +10,12 @@ public class MainCharacter : MonoBehaviour {
 		get { return _dogInventory; }
 	}
 
+	private CharacterMovement _characterMovement;
+
 	void Start () {
 		GameController.SetSortingOrder (gameObject);
 		_dogInventory = new List<Dog> ();
+		_characterMovement = GetComponent<CharacterMovement> ();
 	}
 	
 	void Update () {
@@ -21,5 +24,6 @@ public class MainCharacter : MonoBehaviour {
 		
 	public void AddDogToInventory(Dog dog){
 		_dogInventory.Add (dog);
+		_characterMovement.PositionDog (dog, _dogInventory.IndexOf(dog));
 	}
 }

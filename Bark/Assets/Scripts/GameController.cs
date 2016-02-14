@@ -10,15 +10,21 @@ public class GameController : MonoBehaviour {
 	public MainCharacter MainCharacter;
 	public SpriteController SpriteController;
 
-	void Start(){
-		MainCharacter = MainCharacterObj.GetComponent<MainCharacter> ();
-	}
+	// UI
+	public GameObject DogCollectionUI;
+
 
 	public void SetSortingOrder(GameObject obj){
 		SpriteRenderer spriteRenderer = obj.GetComponent<SpriteRenderer> ();
 		if (spriteRenderer != null) {
-			spriteRenderer.sortingOrder = maxHeight - Mathf.FloorToInt(obj.transform.position.y);
+			spriteRenderer.sortingOrder = maxHeight - Mathf.FloorToInt(obj.transform.position.y*4);
 		} else
 			Debug.LogError ("Sprite Renderer null when attempting to sort object!");
 	}
+
+	public void DogClicked(Dog dog){
+		DogCollectionUI.GetComponent<DogCollectionUI>().selectedDog = dog;
+		DogCollectionUI.SetActive (true);
+	}
+
 }
