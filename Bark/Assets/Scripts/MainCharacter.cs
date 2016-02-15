@@ -1,29 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(CombatAI))]
+
 public class MainCharacter : MonoBehaviour {
 
 	public GameController GameController;
+    public CombatAI CombatAI;
 
 	private List<Dog> _dogInventory;
-	public List<Dog> DogInventory{
+	public List<Dog> DogInventory
+    {
 		get { return _dogInventory; }
 	}
 
-	private CharacterMovement _characterMovement;
-
-	void Start () {
+	void Start ()
+    {
+        CombatAI = GetComponent<CombatAI>();
 		GameController.SetSortingOrder (gameObject);
 		_dogInventory = new List<Dog> ();
-		_characterMovement = GetComponent<CharacterMovement> ();
 	}
 	
-	void Update () {
+	void Update ()
+    {
 		GameController.SetSortingOrder (gameObject);
 	}
 		
-	public void AddDogToInventory(Dog dog){
+	public void AddDogToInventory(Dog dog)
+    {
 		_dogInventory.Add (dog);
-		_characterMovement.PositionDog (dog, _dogInventory.IndexOf(dog));
+		dog.PositionDog (_dogInventory.IndexOf(dog));
 	}
 }

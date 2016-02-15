@@ -69,15 +69,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CharacterMovement.cs" />
+    <Compile Include="Assets\Scripts\CombatAI.cs" />
+    <Compile Include="Assets\Scripts\Creature.cs" />
+    <Compile Include="Assets\Scripts\CreatureType.cs" />
     <Compile Include="Assets\Scripts\Dog.cs" />
     <Compile Include="Assets\Scripts\DogCollectionUI.cs" />
     <Compile Include="Assets\Scripts\DogTrait.cs" />
     <Compile Include="Assets\Scripts\EnvironmentObject.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\HUD.cs" />
     <Compile Include="Assets\Scripts\MainCharacter.cs" />
     <Compile Include="Assets\Scripts\Monster.cs" />
     <Compile Include="Assets\Scripts\PrefabController.cs" />
     <Compile Include="Assets\Scripts\SpriteController.cs" />
+    <Compile Include="Assets\Scripts\State.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

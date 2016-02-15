@@ -11,8 +11,9 @@ public class SpriteController : MonoBehaviour {
 	public Sprite dog_StandingSprite;
 	public Sprite dog_Gravestone;
 
-	// MONSTER SPRITES
-
+    // MONSTER SPRITES
+    public Sprite monster_IdleSprite;
+    public Sprite monster_AttackSprite;
 
 
 

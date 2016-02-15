@@ -5,8 +5,6 @@ public class PrefabController : MonoBehaviour {
 
     public GameObject prefab_Dog;
 
-    public GameObject prefab_Shadow;
-
     public GameObject prefab_Monster;
 
 

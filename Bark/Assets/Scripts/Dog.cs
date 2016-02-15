@@ -1,92 +1,77 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+
+[RequireComponent(typeof(Creature))]
+[RequireComponent(typeof(CombatAI))]
 
 public class Dog : MonoBehaviour {
 
-	public enum DogState{
-		Box, Follow, Attack, Idle, Dead
-	}
-	private DogState _state;
-
-	private string _name;
-    public string Name
-    {
-        get { return _name; }
-    }
-
-    private string _species;
+	private string _species = "doge";
     public string Species
     {
         get { return _species; }
     }
 
-    private float _interactionRange = 2.0f;
-    public float InteractionRange
+    private float DogDistance = 1.0f;
+
+    public GameObject Shadow;
+    public Creature Creature;
+    public CombatAI CombatAI;
+
+	void Start ()
     {
-        get { return _interactionRange; }
-    }
+        Creature = GetComponent<Creature>();
+        CombatAI = GetComponent<CombatAI>();
 
-    private SpriteRenderer spriteRenderer;
-    private int _maxHealth = 100;
+		Creature.SpriteRenderer = GetComponent<SpriteRenderer> ();
 
-    public int Health;
-    public GameObject shadow;
-    public GameController GameController;
-
-	void Start () {
-		spriteRenderer = GetComponent<SpriteRenderer> ();
-
-		GameController.SetSortingOrder (gameObject);
-		ChangeState (DogState.Box);
-        Health = _maxHealth;
+        Creature.GameController.SetSortingOrder (gameObject);
+        Creature.ChangeState (State.Box);
 	}
 
-	void Update () {
-		if (_state == DogState.Follow) {
-			GameController.SetSortingOrder (gameObject);
-		} else if (_state == DogState.Attack) {
-			GameController.SetSortingOrder (gameObject);
-		} else if (_state == DogState.Box)
-        {
-            if (Vector3.Distance(transform.position, GameController.MainCharacter.transform.position) <= InteractionRange)
-                shadow.SetActive(true);
+	void Update ()
+    {
+		if (Creature.CurrentState == State.Follow) {
+
+            PositionDog(Creature.GameController.MainCharacter.DogInventory.IndexOf(this));
+            Creature.GameController.SetSortingOrder (gameObject);
+
+		} else if (Creature.CurrentState == State.Attack) {
+
+            Creature.GameController.SetSortingOrder (gameObject);
+
+		} else if (Creature.CurrentState == State.Box ){
+
+            if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
+                Shadow.SetActive(true);
             else
-                shadow.SetActive(false);
+                Shadow.SetActive(false);
+
         }
 	}
 
-	public void OnMouseUp(){
-        if (Vector3.Distance(GameController.MainCharacter.transform.position, transform.position) <= InteractionRange)
+	public void OnMouseUp()
+    {
+        if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
             Clicked();
 	}
 
-	private void Clicked(){
-		if (_state == DogState.Box) {
-			GameController.DogClicked (this);
+	private void Clicked()
+    {
+		if (Creature.CurrentState == State.Box) {
+            Creature.GameController.DogClicked (this);
 		}
 	}
 
-	public void ChangeState(DogState newState){
+    public void PositionDog(int index)
+    {
+        MainCharacter character = Creature.GameController.MainCharacter;
+        float radians = ((360 / character.DogInventory.Count) * index) * (Mathf.PI / 180.0f);
+        float xLoc = character.transform.position.x + (Mathf.Cos(radians) * DogDistance);
+        float yLoc = character.transform.position.y + (Mathf.Sin(radians) * DogDistance);
 
-		switch (newState) {
-		case DogState.Box: 
-			_state = DogState.Box;
-			spriteRenderer.sprite = GameController.SpriteController.dog_BoxSprite;
-			break;
-		case DogState.Dead: 
-			_state = DogState.Dead;
-			spriteRenderer.sprite = GameController.SpriteController.dog_Gravestone;
-			break;
-		case DogState.Follow: 
-			_state = DogState.Follow;
-			spriteRenderer.sprite = GameController.SpriteController.dog_StandingSprite;
-			break;
-		}
+        Creature.Move((xLoc - transform.position.x) * Creature.Speed, (yLoc - transform.position.y) * Creature.Speed);
 
-	}
-
-	public void Move(float x, float y){
-		transform.Translate (new Vector3(x, y, 0));
-	}
+    }
 
 }

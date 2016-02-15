@@ -1,56 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Creature))]
+[RequireComponent(typeof(CombatAI))]
+
 public class Monster : MonoBehaviour {
 
-	private enum MonsterState
-	{
-		Idle, Attack
-	}
-	private MonsterState _state;
+    public Creature Creature;
+    public CombatAI CombatAI;
 
-	private float _interactionRange = 2.0f;
-	public float InteractionRange
-	{
-		get { return _interactionRange; }
-	}
+    private Dog _currentTarget;
 
-	private SpriteRenderer _spriteRenderer;
-	private int _maxHealth = 100;
-	private int _attackDamage = 1;
+	void Start ()
+    {
+        Creature = GetComponent<Creature>();
+        CombatAI = GetComponent<CombatAI>();
 
-	public int Health;
-	public GameController GameController;
+        Creature.GameController.SetSortingOrder (gameObject);
+        Creature.ChangeState(State.Idle);
+        CombatAI.InteractionRange = 6.0f;
+    }
 
-	private string _name;
-	public string Name
-	{
-		get { return _name; }
-	}
+	void Update ()
+    {
 
+        if (Creature.CurrentState == State.Attack) {
+            CombatAI.TryAttack();
+        } else if (Creature.CurrentState == State.Idle) {
 
-	void Start () {
-		GameController.SetSortingOrder (gameObject);
-		_state = MonsterState.Idle;
-	}
+            // walk around...
 
-	void Update () {
-
-		if (_state == MonsterState.Attack) {
-
-
-
-
-		} else if (_state == MonsterState.Idle) {
-
-
-
+            if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
+                Creature.ChangeState(State.Attack);
 		}
 
-		GameController.SetSortingOrder (gameObject);
-	}
-
-	private void Move(float x, float y){
-		transform.Translate (new Vector3(x, y, 0));
-	}
+        Creature.GameController.SetSortingOrder(gameObject);
+    }
 }
