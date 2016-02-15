@@ -24,7 +24,7 @@ public class HUD : MonoBehaviour
     void Update()
     {
 
-        HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * GameController.MainCharacter.GetComponent<CombatAI>().Health, _height);
+		HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * GameController.MainCharacter.GetComponent<Health>().HP, _height);
         HealthBarImg.rectTransform.anchoredPosition = new Vector2(_xLoc + HealthBarImg.rectTransform.sizeDelta.x / 2 - _maxWidth/2, _yLoc);
 
     }

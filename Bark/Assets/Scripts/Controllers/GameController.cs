@@ -10,13 +10,10 @@ public class GameController : MonoBehaviour {
 	public MainCharacter MainCharacter;
 	public SpriteController SpriteController;
     public PrefabController PrefabController;
+	public CombatController CombatController;
 
 	// UI
 	public GameObject DogCollectionUI;
-
-    // combat
-    public float MaxAttackersMultiplier = 1.5f;
-    public int CurrentNumAttackers = 0;
 
 	public void SetSortingOrder(GameObject obj)
     {
@@ -32,17 +29,5 @@ public class GameController : MonoBehaviour {
 		DogCollectionUI.GetComponent<DogCollectionUI>().selectedDog = dog;
 		DogCollectionUI.SetActive (true);
 	}
-
-    public bool CanAttack()
-    {
-        if(MainCharacter.DogInventory.Count > 0 && CurrentNumAttackers + 1 <= MaxAttackersMultiplier * MainCharacter.DogInventory.Count) {
-            return true;
-        }
-        else if(CurrentNumAttackers + 1 <= MaxAttackersMultiplier) {
-            return true;
-        }
-        return false;
-        
-    }
 
 }

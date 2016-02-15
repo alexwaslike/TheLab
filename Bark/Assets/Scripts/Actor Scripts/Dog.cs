@@ -14,14 +14,16 @@ public class Dog : MonoBehaviour {
 
     private float DogDistance = 1.0f;
 
-    public GameObject Shadow;
+	public GameObject Shadow;
     public Creature Creature;
     public CombatAI CombatAI;
+	public Health Health;
 
 	void Start ()
     {
         Creature = GetComponent<Creature>();
         CombatAI = GetComponent<CombatAI>();
+		Health = GetComponent<Health>();
 
 		Creature.SpriteRenderer = GetComponent<SpriteRenderer> ();
 
@@ -31,6 +33,7 @@ public class Dog : MonoBehaviour {
 
 	void Update ()
     {
+
 		if (Creature.CurrentState == State.Follow) {
 
             PositionDog(Creature.GameController.MainCharacter.DogInventory.IndexOf(this));
@@ -38,6 +41,9 @@ public class Dog : MonoBehaviour {
 
 		} else if (Creature.CurrentState == State.Attack) {
 
+			Debug.Log ("ATTAK");
+
+			CombatAI.TryAttackMonster ();
             Creature.GameController.SetSortingOrder (gameObject);
 
 		} else if (Creature.CurrentState == State.Box ){
@@ -65,13 +71,25 @@ public class Dog : MonoBehaviour {
 
     public void PositionDog(int index)
     {
-        MainCharacter character = Creature.GameController.MainCharacter;
-        float radians = ((360 / character.DogInventory.Count) * index) * (Mathf.PI / 180.0f);
-        float xLoc = character.transform.position.x + (Mathf.Cos(radians) * DogDistance);
-        float yLoc = character.transform.position.y + (Mathf.Sin(radians) * DogDistance);
 
-        Creature.Move((xLoc - transform.position.x) * Creature.Speed, (yLoc - transform.position.y) * Creature.Speed);
+        MainCharacter character = Creature.GameController.MainCharacter;
+
+		if (character.DogInventory.Count > 0) {
+			float radians = ((360 / character.DogInventory.Count) * index) * (Mathf.PI / 180.0f);
+			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * DogDistance);
+			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * DogDistance);
+
+			Creature.Move ((xLoc - transform.position.x) * Creature.Speed, (yLoc - transform.position.y) * Creature.Speed);
+		} else
+			Debug.LogWarning ("Dog not in inventory!!");
 
     }
+
+	public void Death(){
+		Creature.ChangeState (State.Dead);
+		CombatAI.GameController.MainCharacter.RemoveDogFromInventory (this);
+		CombatAI.GameController.CombatController.RemoveFromCombat (CombatAI);
+		Destroy (gameObject);
+	}
 
 }

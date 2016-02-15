@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(CombatAI))]
+[RequireComponent(typeof(Health))]
 
 public class MainCharacter : MonoBehaviour {
 
 	public GameController GameController;
-    public CombatAI CombatAI;
+	public Health Health;
 
 	private List<Dog> _dogInventory;
 	public List<Dog> DogInventory
@@ -16,8 +16,8 @@ public class MainCharacter : MonoBehaviour {
 
 	void Start ()
     {
-        CombatAI = GetComponent<CombatAI>();
-		GameController.SetSortingOrder (gameObject);
+		Health = GetComponent<Health>();
+        GameController.SetSortingOrder (gameObject);
 		_dogInventory = new List<Dog> ();
 	}
 	
@@ -30,5 +30,12 @@ public class MainCharacter : MonoBehaviour {
     {
 		_dogInventory.Add (dog);
 		dog.PositionDog (_dogInventory.IndexOf(dog));
+	}
+
+	public void RemoveDogFromInventory(Dog dog){
+		_dogInventory.Remove (dog);
+	}
+
+	public void Death(){
 	}
 }

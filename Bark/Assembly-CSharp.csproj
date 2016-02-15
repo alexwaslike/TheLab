@@ -45,17 +45,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\CharacterMovement.cs" />
-     <Compile Include="Assets\Scripts\Creature.cs" />
-     <Compile Include="Assets\Scripts\Dog.cs" />
-     <Compile Include="Assets\Scripts\DogCollectionUI.cs" />
-     <Compile Include="Assets\Scripts\DogTrait.cs" />
-     <Compile Include="Assets\Scripts\EnvironmentObject.cs" />
-     <Compile Include="Assets\Scripts\GameController.cs" />
-     <Compile Include="Assets\Scripts\MainCharacter.cs" />
-     <Compile Include="Assets\Scripts\Monster.cs" />
-     <Compile Include="Assets\Scripts\PrefabController.cs" />
-     <Compile Include="Assets\Scripts\SpriteController.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\CharacterMovement.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\CombatAI.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Creature.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\CreatureType.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Dog.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\DogTrait.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Health.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\MainCharacter.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Monster.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\State.cs" />
+     <Compile Include="Assets\Scripts\Controllers\CombatController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\GameController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\PrefabController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\SpriteController.cs" />
+     <Compile Include="Assets\Scripts\Environment\EnvironmentObject.cs" />
+     <Compile Include="Assets\Scripts\UI\DogCollectionUI.cs" />
+     <Compile Include="Assets\Scripts\UI\HUD.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

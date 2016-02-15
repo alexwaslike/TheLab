@@ -25,7 +25,7 @@ public class Monster : MonoBehaviour {
     {
 
         if (Creature.CurrentState == State.Attack) {
-            CombatAI.TryAttack();
+            CombatAI.TryAttackDog();
         } else if (Creature.CurrentState == State.Idle) {
 
             // walk around...
@@ -36,4 +36,10 @@ public class Monster : MonoBehaviour {
 
         Creature.GameController.SetSortingOrder(gameObject);
     }
+
+	public void Death(){
+		Creature.ChangeState (State.Dead);
+		Creature.GameController.CombatController.RemoveFromCombat (CombatAI);
+		Destroy (gameObject);
+	}
 }
