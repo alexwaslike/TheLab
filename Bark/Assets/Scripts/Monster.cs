@@ -9,7 +9,25 @@ public class Monster : MonoBehaviour {
 	}
 	private MonsterState _state;
 
+	private float _interactionRange = 2.0f;
+	public float InteractionRange
+	{
+		get { return _interactionRange; }
+	}
+
+	private SpriteRenderer _spriteRenderer;
+	private int _maxHealth = 100;
+	private int _attackDamage = 1;
+
+	public int Health;
 	public GameController GameController;
+
+	private string _name;
+	public string Name
+	{
+		get { return _name; }
+	}
+
 
 	void Start () {
 		GameController.SetSortingOrder (gameObject);
@@ -17,6 +35,18 @@ public class Monster : MonoBehaviour {
 	}
 
 	void Update () {
+
+		if (_state == MonsterState.Attack) {
+
+
+
+
+		} else if (_state == MonsterState.Idle) {
+
+
+
+		}
+
 		GameController.SetSortingOrder (gameObject);
 	}
 

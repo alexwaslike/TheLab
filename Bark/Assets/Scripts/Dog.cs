@@ -26,7 +26,6 @@ public class Dog : MonoBehaviour {
         get { return _interactionRange; }
     }
 
-    private bool _mouseWasDown;
     private SpriteRenderer spriteRenderer;
     private int _maxHealth = 100;
 
