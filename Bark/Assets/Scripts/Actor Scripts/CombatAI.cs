@@ -83,36 +83,30 @@ public class CombatAI : MonoBehaviour {
 
 	public void TryAttackMonster(){
 		
-		if (!WithinInteractionRange (GameController.MainCharacterObj)) {
-			Creature.ChangeState (State.Follow);
-			GameController.CombatController.RemoveFromCombat (this);
+		if(!GameController.CombatController.EngagedAI.Contains(this))
+			GameController.CombatController.AddToCombat (this);
+
+		if (HasTarget) {
+			Attack ();
 		} else {
 
-			if(!GameController.CombatController.EngagedAI.Contains(this))
-				GameController.CombatController.AddToCombat (this);
-
-			if (HasTarget) {
-				Attack ();
-			} else {
-				if (GameController.CombatController.EngagedAI.Count > 1) {
-
-					foreach(CombatAI AI in GameController.CombatController.EngagedAI){
-						if (AI.GetComponent<Monster> () != null) {
-							_currentTarget = AI.GetComponent<Health> ();
-							break;
-						}
-						Creature.ChangeState (State.Follow);
-					}
-					Attack ();
-
-				} else {
-					Creature.ChangeState (State.Follow);
+            bool foundTarget = false;
+            foreach (CombatAI AI in GameController.CombatController.EngagedAI) {
+				if (AI.GetComponent<Monster> () != null) {
+					_currentTarget = AI.GetComponent<Health> ();
+                    foundTarget = true;
+					break;
 				}
 			}
+            if (foundTarget) {
+                HasTarget = true;
+                Attack();
+            } else {
+                Creature.ChangeState(State.Follow);
+            }
 
 		}
-			
-		
+        
 	}
 
     private void Attack()
@@ -120,12 +114,11 @@ public class CombatAI : MonoBehaviour {
 		if (_currentTarget.GetComponent<CombatAI> () != null)
 			_currentTarget.GetComponent<CombatAI> ().BeingAttacked (this);
 
-		Creature.Move((_currentTarget.transform.position.x - transform.position.x) * Creature.Speed, (_currentTarget.transform.position.y - transform.position.y) * Creature.Speed);
-
         if (_attackCooldown == 0)
         {
             _attackCooldown = _attackRate;
 			_currentTarget.TakeDamage(AttackDamage);
+            //Debug.Log(gameObject.name + " attacks " + _currentTarget.gameObject.name + " for " + AttackDamage + " damage; health reduced to " + _currentTarget.HP);
         }
         else {
             _attackCooldown--;

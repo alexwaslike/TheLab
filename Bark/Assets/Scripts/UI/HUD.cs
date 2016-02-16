@@ -1,31 +1,50 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class HUD : MonoBehaviour
 {
 
+    private List<DogStats> _dogStatItems;
+    public List<DogStats> DogStatItems
+    {
+        get { return _dogStatItems; }
+    }
+
     public GameController GameController;
-    public RawImage HealthBarImg;
-    
-    private float _height;
-    private float _maxWidth;
-    private float _xLoc;
-    private float _yLoc;
+    public GameObject DogStatsPrefab;
+    public float DogStatsBuffer = 5.0f;
 
     void Start()
     {
-        _maxWidth = HealthBarImg.rectTransform.sizeDelta.x;
-        _height = HealthBarImg.rectTransform.sizeDelta.y;
-        _xLoc = HealthBarImg.rectTransform.anchoredPosition.x;
-        _yLoc = HealthBarImg.rectTransform.anchoredPosition.y;
+        _dogStatItems = new List<DogStats>();
     }
 
-    void Update()
+    public void AddNewDogStats(Dog dog)
     {
+        GameObject newStats = Instantiate(DogStatsPrefab, new Vector3(DogStatsPrefab.transform.position.x, DogStatsPrefab.transform.position.y, 0.0f), Quaternion.identity) as GameObject;
 
-		HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * GameController.MainCharacter.GetComponent<Health>().HP, _height);
-        HealthBarImg.rectTransform.anchoredPosition = new Vector2(_xLoc + HealthBarImg.rectTransform.sizeDelta.x / 2 - _maxWidth/2, _yLoc);
+        _dogStatItems.Add(newStats.GetComponent<DogStats>());
+        newStats.transform.SetParent(transform, false);
+        newStats.transform.Translate(new Vector3(0, DogStatsBuffer * -(_dogStatItems.Count-1), 0));
 
+        newStats.GetComponentInChildren<HealthBar>().Health = dog.Health;
+        newStats.GetComponent<DogStats>().Dog = dog;
+        
     }
+
+    public void RemoveDogStats(Dog dog)
+    {
+        foreach (DogStats dogStat in _dogStatItems) {
+            if (dogStat.Dog == dog) {
+                _dogStatItems.Remove(dogStat);
+                Destroy(dogStat.gameObject);
+                break;
+            }
+        }
+
+        for(int i=0; i<_dogStatItems.Count; i++) {
+            _dogStatItems[i].transform.Translate(new Vector3(0, DogStatsBuffer, 0));
+        }
+    }
+
 }

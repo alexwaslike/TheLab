@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GameController : MonoBehaviour {
 
@@ -14,6 +13,7 @@ public class GameController : MonoBehaviour {
 
 	// UI
 	public GameObject DogCollectionUI;
+    public HUD HUD;
 
 	public void SetSortingOrder(GameObject obj)
     {

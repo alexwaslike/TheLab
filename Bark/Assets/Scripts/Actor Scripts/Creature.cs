@@ -3,12 +3,6 @@ using System.Collections;
 
 public class Creature : MonoBehaviour {
 
-    private string _name = "doge";
-	public string Name
-	{
-		get { return _name; }
-	}
-
     private State _state;
     public State CurrentState
     {
@@ -22,13 +16,15 @@ public class Creature : MonoBehaviour {
     }
 
     public CreatureType Type;
+    public string Name = "doge";
     public CombatAI CombatAI;
     public SpriteRenderer SpriteRenderer;
     public GameController GameController;
 
     public void ChangeState(State newState)
     {
-		if (Type == CreatureType.Dog) {
+
+        if (Type == CreatureType.Dog) {
 			switch (newState) {
 			case State.Attack:
 				_state = State.Attack;
@@ -62,7 +58,7 @@ public class Creature : MonoBehaviour {
 				break;
 			}
 		} else
-			Debug.Log("Creature Type state control not implemented in Creature!");
+			Debug.Log("Creature Type state control not implemented!");
     }
 
     public void Move(float x, float y)

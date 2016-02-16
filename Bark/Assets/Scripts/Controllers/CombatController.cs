@@ -15,10 +15,6 @@ public class CombatController : MonoBehaviour {
 
 	public void AddToCombat(CombatAI combatAI){
 		_engagedAI.Add (combatAI);
-
-		Debug.Log ("engaged now contains:");
-		foreach(CombatAI ai in _engagedAI)
-			Debug.Log(ai.gameObject.name);
 	}
 
 	public void RemoveFromCombat(CombatAI aiToRemove){
@@ -33,9 +29,6 @@ public class CombatController : MonoBehaviour {
 			}
 		}
 
-		Debug.Log ("engaged now contains:");
-		foreach(CombatAI ai in _engagedAI)
-			Debug.Log(ai.gameObject.name);
 	}
 
 	void Start(){

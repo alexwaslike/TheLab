@@ -33,7 +33,6 @@ public class Dog : MonoBehaviour {
 
 	void Update ()
     {
-
 		if (Creature.CurrentState == State.Follow) {
 
             PositionDog(Creature.GameController.MainCharacter.DogInventory.IndexOf(this));
@@ -41,12 +40,11 @@ public class Dog : MonoBehaviour {
 
 		} else if (Creature.CurrentState == State.Attack) {
 
-			Debug.Log ("ATTAK");
-
 			CombatAI.TryAttackMonster ();
+            PositionDog(Creature.GameController.MainCharacter.DogInventory.IndexOf(this));
             Creature.GameController.SetSortingOrder (gameObject);
 
-		} else if (Creature.CurrentState == State.Box ){
+		} else if (Creature.CurrentState == State.Box ) {
 
             if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
                 Shadow.SetActive(true);
@@ -88,7 +86,8 @@ public class Dog : MonoBehaviour {
 	public void Death(){
 		Creature.ChangeState (State.Dead);
 		CombatAI.GameController.MainCharacter.RemoveDogFromInventory (this);
-		CombatAI.GameController.CombatController.RemoveFromCombat (CombatAI);
+        CombatAI.GameController.HUD.RemoveDogStats(this);
+        CombatAI.GameController.CombatController.RemoveFromCombat (CombatAI);
 		Destroy (gameObject);
 	}
 
