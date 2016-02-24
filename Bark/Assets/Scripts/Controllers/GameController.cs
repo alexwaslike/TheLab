@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class GameController : MonoBehaviour {
 	// UI
 	public GameObject DogCollectionUI;
     public HUD HUD;
+    public GameObject WinScreenUI;
 
 	public void SetSortingOrder(GameObject obj)
     {
@@ -30,4 +32,19 @@ public class GameController : MonoBehaviour {
 		DogCollectionUI.SetActive (true);
 	}
 
+    public void KeyPickup(GameObject WinScreenUI)
+    {
+        WinScreenUI.SetActive(true);
+    }
+
+    public void GoToMain()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void RestartLevel()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
 }
