@@ -11,16 +11,11 @@ public class Monster : MonoBehaviour {
 
 	void Start ()
     {
-        Creature = GetComponent<Creature>();
-        CombatAI = GetComponent<CombatAI>();
-
-        Creature.GameController.SetSortingOrder (gameObject);
         Creature.ChangeState(State.Idle);
     }
 
 	void Update ()
     {
-
         if (Creature.CurrentState == State.Attack) {
 
             if (CombatAI.HasTarget)
@@ -38,8 +33,6 @@ public class Monster : MonoBehaviour {
             if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
                 Creature.ChangeState(State.Attack);
 		}
-
-        Creature.GameController.SetSortingOrder(gameObject);
     }
 
 	public void Death(){

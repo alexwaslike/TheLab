@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class HUD : MonoBehaviour
 
     public GameController GameController;
     public GameObject DogStatsPrefab;
-    public float DogStatsBuffer = 5.0f;
+
+	private float DogStatsBuffer = Screen.height/7.0f;
 
     void Start()
     {
@@ -29,11 +31,11 @@ public class HUD : MonoBehaviour
 
         newStats.GetComponentInChildren<HealthBar>().Health = dog.Health;
         newStats.GetComponent<DogStats>().Dog = dog;
-        
+		newStats.GetComponent<DogStats>().HUD = this;
     }
 
     public void RemoveDogStats(Dog dog)
-    {
+    { 
         foreach (DogStats dogStat in _dogStatItems) {
             if (dogStat.Dog == dog) {
                 _dogStatItems.Remove(dogStat);
@@ -46,5 +48,15 @@ public class HUD : MonoBehaviour
             _dogStatItems[i].transform.Translate(new Vector3(0, DogStatsBuffer, 0));
         }
     }
+
+	public void ViewDogInventoryClicked(Dog dog){
+		GameController.DogInventory.SetActive (true);
+		GameController.DogInventory.GetComponent<DogCollectionUI> ().DisplayStats (dog);
+	}
+	
+
+	public void CloseDogInventoryClicked(){
+		GameController.DogInventory.SetActive(false);
+	}
 
 }

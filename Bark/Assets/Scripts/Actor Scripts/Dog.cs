@@ -21,13 +21,6 @@ public class Dog : MonoBehaviour {
 
 	void Start ()
     {
-        Creature = GetComponent<Creature>();
-        CombatAI = GetComponent<CombatAI>();
-		Health = GetComponent<Health>();
-
-		Creature.SpriteRenderer = GetComponent<SpriteRenderer> ();
-
-        Creature.GameController.SetSortingOrder (gameObject);
         Creature.ChangeState (State.Box);
 	}
 
@@ -36,13 +29,11 @@ public class Dog : MonoBehaviour {
 		if (Creature.CurrentState == State.Follow) {
 
             PositionDog(Creature.GameController.MainCharacter.DogInventory.IndexOf(this));
-            Creature.GameController.SetSortingOrder (gameObject);
 
 		} else if (Creature.CurrentState == State.Attack) {
 
 			CombatAI.TryAttackMonster ();
             PositionDog(Creature.GameController.MainCharacter.DogInventory.IndexOf(this));
-            Creature.GameController.SetSortingOrder (gameObject);
 
 		} else if (Creature.CurrentState == State.Box ) {
 
@@ -85,9 +76,7 @@ public class Dog : MonoBehaviour {
 
 	public void Death(){
 		Creature.ChangeState (State.Dead);
-		CombatAI.GameController.MainCharacter.RemoveDogFromInventory (this);
-        CombatAI.GameController.HUD.RemoveDogStats(this);
-        CombatAI.GameController.CombatController.RemoveFromCombat (CombatAI);
+		CombatAI.GameController.DogDeath (this);
 		Destroy (gameObject);
 	}
 

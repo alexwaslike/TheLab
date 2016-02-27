@@ -15,50 +15,55 @@ public class Creature : MonoBehaviour {
         get { return _speed; }
     }
 
+	// sprites
+	public Sprite Sprite_N;
+	public Sprite Sprite_S;
+	public Sprite Sprite_E;
+	public Sprite Sprite_W;
+	public Sprite Sprite_Dead;
+	public Sprite Sprite_Box;
+
+	// animations
+
+	// other public
     public CreatureType Type;
     public string Name = "doge";
     public CombatAI CombatAI;
     public SpriteRenderer SpriteRenderer;
     public GameController GameController;
 
+	void Start(){
+		GameController.SetSortingOrder (gameObject);
+	}
+
+	void Update(){
+		GameController.SetSortingOrder (gameObject);
+	}
+
     public void ChangeState(State newState)
     {
-
-        if (Type == CreatureType.Dog) {
-			switch (newState) {
-			case State.Attack:
-				_state = State.Attack;
-				break;
-			case State.Box:
-				_state = State.Box;
-				SpriteRenderer.sprite = GameController.SpriteController.dog_BoxSprite;
-				break;
-			case State.Dead:
-				_state = State.Dead;
-				SpriteRenderer.sprite = GameController.SpriteController.dog_Gravestone;
-				break;
-			case State.Follow:
-				_state = State.Follow;
-				SpriteRenderer.sprite = GameController.SpriteController.dog_StandingSprite;
-				break;
-			}
-		} else if (Type == CreatureType.Monster) {
-			switch (newState) {
-			case State.Idle:
-				_state = State.Idle;
-				SpriteRenderer.sprite = GameController.SpriteController.monster_IdleSprite;
-				break;
-			case State.Attack:
-				_state = State.Attack;
-				SpriteRenderer.sprite = GameController.SpriteController.monster_AttackSprite;
-				break;
-			case State.Dead:
-				_state = State.Dead;
-				SpriteRenderer.sprite = GameController.SpriteController.dog_Gravestone;
-				break;
-			}
-		} else
-			Debug.Log("Creature Type state control not implemented!");
+		switch (newState) {
+		case State.Idle:
+			_state = State.Idle;
+			SpriteRenderer.sprite = Sprite_S;
+			break;
+		case State.Attack:
+			_state = State.Attack;
+			SpriteRenderer.sprite = Sprite_S;
+			break;
+		case State.Box:
+			_state = State.Box;
+			SpriteRenderer.sprite = Sprite_Box;
+			break;
+		case State.Dead:
+			_state = State.Dead;
+			SpriteRenderer.sprite = Sprite_Dead;
+			break;
+		case State.Follow:
+			_state = State.Follow;
+			SpriteRenderer.sprite = Sprite_S;
+			break;
+		}
     }
 
     public void Move(float x, float y)
