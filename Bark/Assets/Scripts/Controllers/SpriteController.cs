@@ -8,13 +8,15 @@ public class SpriteController : MonoBehaviour {
 
 	// --------------------------DOG SPRITES--------------------------
 
-	public Sprite dog_BoxSprite;
-	public Sprite dog_StandingSprite;
-	public Sprite dog_Gravestone;
+	public Sprite dogSprite_Box;
+	public Sprite dogSprite_Standing;
+	public Sprite dogSprite_Gravestone;
+
+	public Sprite dogTraitSprite_Tall;
 
 	// --------------------------MONSTER SPRITES--------------------------
-    public Sprite monster_IdleSprite;
-    public Sprite monster_AttackSprite;
+    public Sprite monsterSprite_Idle;
+    public Sprite monsterSprite_Attack;
 
 
 

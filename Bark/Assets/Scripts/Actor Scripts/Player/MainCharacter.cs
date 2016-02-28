@@ -18,6 +18,9 @@ public class MainCharacter : MonoBehaviour {
 		get { return _dogInventory; }
 	}
 
+	protected string _attachedMethodName = "OnAttach";
+	protected string _detachMethodName = "OnDetach";
+
 	void Start ()
     {
 		Health = GetComponent<Health>();
@@ -34,9 +37,12 @@ public class MainCharacter : MonoBehaviour {
     {
 		_dogInventory.Add (dog);
 		dog.PositionDog (_dogInventory.IndexOf(dog));
+
+		dog.gameObject.SendMessage (_attachedMethodName, this);
 	}
 
 	public void RemoveDogFromInventory(Dog dog){
+		dog.gameObject.SendMessage (_detachMethodName, this);
 		_dogInventory.Remove (dog);
 	}
 

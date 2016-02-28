@@ -26,13 +26,11 @@ public class GameController : MonoBehaviour {
 	public bool AllowGameplay;
 
 	// private
-	private bool _gamePaused;
 	private float _timeScale;
 
 
 	// Monobehavior
 	void Start(){
-		_gamePaused = false;
 		AllowGameplay = true;
 		_timeScale = Time.timeScale;
 	}
@@ -54,14 +52,12 @@ public class GameController : MonoBehaviour {
 		{
 			Time.timeScale = 0.0f;
 			MainCharacterObj.GetComponent<CharacterMovement>().enabled = false;
-			_gamePaused = true;
 			AllowGameplay = false;
 		} else
 		{
 			Time.timeScale = _timeScale;
 			if(MainCharacterObj != null)
 				MainCharacterObj.GetComponent<CharacterMovement>().enabled = true;
-			_gamePaused = false;
 			AllowGameplay = true;
 		}
 	}

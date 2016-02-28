@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 public class Dog : MonoBehaviour {
 
-	private string _species = "doge";
+	protected string _species = "doge";
     public string Species
     {
         get { return _species; }
     }
 
-    private float DogDistance = 1.0f;
+	protected float _dogDistance = 1.0f;
 
 	public GameObject Shadow;
     public Creature Creature;
@@ -51,7 +51,7 @@ public class Dog : MonoBehaviour {
             Clicked();
 	}
 
-	private void Clicked()
+	protected void Clicked()
     {
 		if (Creature.CurrentState == State.Box) {
             Creature.GameController.DogClicked (this);
@@ -65,8 +65,8 @@ public class Dog : MonoBehaviour {
 
 		if (character.DogInventory.Count > 0) {
 			float radians = ((360 / character.DogInventory.Count) * index) * (Mathf.PI / 180.0f);
-			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * DogDistance);
-			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * DogDistance);
+			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * _dogDistance);
+			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * _dogDistance);
 
 			Creature.Move ((xLoc - transform.position.x) * Creature.Speed, (yLoc - transform.position.y) * Creature.Speed);
 		} else

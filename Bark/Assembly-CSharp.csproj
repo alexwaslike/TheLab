@@ -45,20 +45,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Actor Scripts\CharacterMovement.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\CombatAI.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\Creature.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\CreatureType.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\Dog.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\DogTrait.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\Health.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\MainCharacter.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\Monster.cs" />
-     <Compile Include="Assets\Scripts\Actor Scripts\State.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Components\CombatAI.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Components\Creature.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Components\Health.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Dogs\Dog.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Dogs\DogTraitDescription.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Dogs\TallDog.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Enums\CreatureType.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Enums\State.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Monsters\Monster.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Player\CharacterMovement.cs" />
+     <Compile Include="Assets\Scripts\Actor Scripts\Player\MainCharacter.cs" />
      <Compile Include="Assets\Scripts\Controllers\CombatController.cs" />
      <Compile Include="Assets\Scripts\Controllers\GameController.cs" />
      <Compile Include="Assets\Scripts\Controllers\PrefabController.cs" />
      <Compile Include="Assets\Scripts\Controllers\SpriteController.cs" />
+     <Compile Include="Assets\Scripts\Controllers\WritingDB.cs" />
      <Compile Include="Assets\Scripts\Environment\EnvironmentObject.cs" />
      <Compile Include="Assets\Scripts\Environment\Item.cs" />
      <Compile Include="Assets\Scripts\Environment\KeyScript.cs" />
