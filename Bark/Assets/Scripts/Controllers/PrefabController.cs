@@ -10,5 +10,7 @@ public class PrefabController : MonoBehaviour {
 	// --------------------------MONSTER PREFABS--------------------------
     public GameObject prefab_Monster;
 
+	// --------------------------ITEM PREFABS--------------------------
+	public GameObject prefab_Rock;
 
 }

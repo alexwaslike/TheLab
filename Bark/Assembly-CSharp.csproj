@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\Controllers\PrefabController.cs" />
      <Compile Include="Assets\Scripts\Controllers\SpriteController.cs" />
      <Compile Include="Assets\Scripts\Environment\EnvironmentObject.cs" />
+     <Compile Include="Assets\Scripts\Environment\Item.cs" />
      <Compile Include="Assets\Scripts\Environment\KeyScript.cs" />
      <Compile Include="Assets\Scripts\UI\AddDogUI.cs" />
      <Compile Include="Assets\Scripts\UI\Credits.cs" />
@@ -68,6 +69,7 @@
      <Compile Include="Assets\Scripts\UI\DogStats.cs" />
      <Compile Include="Assets\Scripts\UI\HUD.cs" />
      <Compile Include="Assets\Scripts\UI\HealthBar.cs" />
+     <Compile Include="Assets\Scripts\UI\ItemInventory.cs" />
      <Compile Include="Assets\Scripts\UI\MainMenuController.cs" />
      <Compile Include="Assets\Scripts\UI\PauseOnEnable.cs" />
  <Reference Include="UnityEngine.UI">

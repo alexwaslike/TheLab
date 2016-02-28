@@ -8,6 +8,10 @@ public class MainCharacter : MonoBehaviour {
 	public GameController GameController;
 	public Health Health;
 
+	public float DogAttackMultiplier = 1.0f;
+	public float DogHealthMultiplier = 1.0f;
+	public float SpeedMultiplier = 1.0f;
+
 	private List<Dog> _dogInventory;
 	public List<Dog> DogInventory
     {
