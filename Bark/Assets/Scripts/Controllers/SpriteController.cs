@@ -3,17 +3,20 @@ using System.Collections;
 
 public class SpriteController : MonoBehaviour {
 
-	// CHARACTER SPRITES
+	// --------------------------CHARACTER SPRITES--------------------------
 
 
-	// DOG SPRITES
-	public Sprite dog_BoxSprite;
-	public Sprite dog_StandingSprite;
-	public Sprite dog_Gravestone;
+	// --------------------------DOG SPRITES--------------------------
 
-    // MONSTER SPRITES
-    public Sprite monster_IdleSprite;
-    public Sprite monster_AttackSprite;
+	public Sprite dogSprite_Box;
+	public Sprite dogSprite_Standing;
+	public Sprite dogSprite_Gravestone;
+
+	public Sprite dogTraitSprite_Tall;
+
+	// --------------------------MONSTER SPRITES--------------------------
+    public Sprite monsterSprite_Idle;
+    public Sprite monsterSprite_Attack;
 
 
 
