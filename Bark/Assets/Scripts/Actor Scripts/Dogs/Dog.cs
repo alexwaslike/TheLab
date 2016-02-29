@@ -12,6 +12,8 @@ public class Dog : MonoBehaviour {
         get { return _species; }
     }
 
+	public List<DogTrait> Traits;
+
 	protected float _dogDistance = 1.0f;
 
 	public GameObject Shadow;
@@ -55,6 +57,18 @@ public class Dog : MonoBehaviour {
     {
 		if (Creature.CurrentState == State.Box) {
             Creature.GameController.DogClicked (this);
+		}
+	}
+
+	public void Attached(MainCharacter mainCharacter){
+		foreach(DogTrait trait in Traits){
+			trait.OnAttach (mainCharacter);
+		}
+	}
+
+	public void Detached(){
+		foreach(DogTrait trait in Traits){
+			trait.OnDetach ();
 		}
 	}
 

@@ -1,30 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(DogTraitDescription))]
-public class TallDog : MonoBehaviour {
+public class TallDog : DogTrait {
 
-	private DogTraitDescription _description;
-	public DogTraitDescription Description{
-		get{ return _description; }
-	}
-
-	private MainCharacter _player;
 	private Camera _mainCamera;
-
 	private float _originalCameraSize;
 	private float _zoomedOutSize = 6.0f;
 	private float _zoomSpeed = 0.08f;
 	private bool zoomComplete = false;
 
-	public Dog Dog;
-
 	void Start () {
 
-		_description = GetComponent<DogTraitDescription> ();
-		_description.Name = "Tall";
-		_description.Description = WritingDB.DogTraitDescriptions[_description.Name];
-		_description.icon = Dog.Creature.GameController.SpriteController.dogTraitSprite_Tall;
+		Name = "Tall";
+		Description = WritingDB.DogTraitDescriptions[Name];
+		icon = Dog.Creature.GameController.SpriteController.dogTraitSprite_Tall;
 
 	}
 
@@ -36,7 +25,7 @@ public class TallDog : MonoBehaviour {
 		}
 	}
 
-	void OnAttach(MainCharacter mainCharacter){
+	public override void OnAttach(MainCharacter mainCharacter){
 		_player = mainCharacter; 
 
 		// put player on top of dog
@@ -47,7 +36,7 @@ public class TallDog : MonoBehaviour {
 
 	}
 
-	void OnDetach(MainCharacter mainCharacter){
+	public override void OnDetach(){
 		// removed player from dog
 
 		// resest sight distance

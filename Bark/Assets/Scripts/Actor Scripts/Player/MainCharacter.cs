@@ -38,11 +38,11 @@ public class MainCharacter : MonoBehaviour {
 		_dogInventory.Add (dog);
 		dog.PositionDog (_dogInventory.IndexOf(dog));
 
-		dog.gameObject.SendMessage (_attachedMethodName, this);
+		dog.Attached (this);
 	}
 
 	public void RemoveDogFromInventory(Dog dog){
-		dog.gameObject.SendMessage (_detachMethodName, this);
+		dog.Detached ();
 		_dogInventory.Remove (dog);
 	}
 
