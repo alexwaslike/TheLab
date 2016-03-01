@@ -12,4 +12,7 @@ public class PrefabController : MonoBehaviour {
 	// --------------------------ITEM PREFABS--------------------------
 	public GameObject prefab_Rock;
 
+	// --------------------------TILE PREFABS--------------------------
+	public GameObject prefab_GrassTile;
+
 }

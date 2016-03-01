@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
 	public SpriteController SpriteController;
     public PrefabController PrefabController;
 	public CombatController CombatController;
+	public LevelGeneration LevelGeneration;
 
 	// UI
 	public GameObject DogInventory;
