@@ -5,7 +5,7 @@ public class TallDog : DogTrait {
 
 	private Camera _mainCamera;
 	private float _originalCameraSize;
-	private float _zoomedOutSize = 6.0f;
+	private float _zoomedOutSize = 10.0f;
 	private float _zoomSpeed = 0.08f;
 	private bool zoomComplete = false;
 

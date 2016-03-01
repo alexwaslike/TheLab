@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
 
 	// sorting layer divisions
-	public int maxHeight = 100;
+	public int maxHeight = 500;
 	public int minHeight = 0;
 
 	// main character
