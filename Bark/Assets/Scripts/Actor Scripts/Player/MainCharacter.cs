@@ -12,10 +12,16 @@ public class MainCharacter : MonoBehaviour {
 	public float DogHealthMultiplier = 1.0f;
 	public float SpeedMultiplier = 1.0f;
 
-	private List<Dog> _dogInventory;
+	private List<Dog> _dogs;
 	public List<Dog> DogInventory
     {
-		get { return _dogInventory; }
+		get { return _dogs; }
+	}
+
+	private List<Item> _items;
+	public List<Item> Items
+	{
+		get { return _items; }
 	}
 
 	protected string _attachedMethodName = "OnAttach";
@@ -25,7 +31,8 @@ public class MainCharacter : MonoBehaviour {
     {
 		Health = GetComponent<Health>();
         GameController.SetSortingOrder (gameObject);
-		_dogInventory = new List<Dog> ();
+		_dogs = new List<Dog> ();
+		_items = new List<Item> ();
 	}
 	
 	void Update ()
@@ -35,15 +42,23 @@ public class MainCharacter : MonoBehaviour {
 		
 	public void AddDogToInventory(Dog dog)
     {
-		_dogInventory.Add (dog);
-		dog.PositionDog (_dogInventory.IndexOf(dog));
+		_dogs.Add (dog);
+		dog.PositionDog (_dogs.IndexOf(dog));
 
 		dog.Attached (this);
 	}
 
 	public void RemoveDogFromInventory(Dog dog){
 		dog.Detached ();
-		_dogInventory.Remove (dog);
+		_dogs.Remove (dog);
+	}
+
+	public void AddItemToInventory(Item item){
+		_items.Add (item);
+	}
+
+	public void RemoveItemFromInventory(Item item){
+		_items.Remove (item);
 	}
 
 	public void Death(){

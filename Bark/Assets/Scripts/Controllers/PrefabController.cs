@@ -4,7 +4,6 @@ using System.Collections;
 public class PrefabController : MonoBehaviour {
 
 	// --------------------------DOG PREFABS--------------------------
-    public GameObject prefab_Dog;
 	public GameObject prefab_Pom;
 
 	// --------------------------MONSTER PREFABS--------------------------

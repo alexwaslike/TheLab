@@ -51,12 +51,11 @@ public class HUD : MonoBehaviour
 
 	public void ViewDogInventoryClicked(Dog dog){
 		GameController.DogInventory.SetActive (true);
-		GameController.DogInventory.GetComponent<DogCollectionUI> ().DisplayStats (dog);
+		GameController.DogInventory.GetComponent<Inventory> ().IconClicked (dog.GetComponent<Collectible>());
 	}
-	
 
-	public void CloseDogInventoryClicked(){
-		GameController.DogInventory.SetActive(false);
+	public void ViewItemInventoryClicked(){
+		GameController.ItemInventory.SetActive(true);
 	}
 
 }

@@ -17,8 +17,10 @@ public class GameController : MonoBehaviour {
 	public CombatController CombatController;
 
 	// UI
-	public GameObject AddDogUI;
 	public GameObject DogInventory;
+	public GameObject AddDogUI;
+	public GameObject ItemInventory;
+	public GameObject AddItemUI;
     public HUD HUD;
     public GameObject WinScreenUI;
 
@@ -62,11 +64,18 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	// button clicks
+	// object clicks
 	public void DogClicked(Dog dog)
     {
-		AddDogUI.GetComponent<AddDogUI>().SelectedDog = dog;
+		AddDogUI.GetComponent<AddDogUI> ().SelectedCollectible = dog.GetComponent<Collectible> ();
+		DogInventory.SetActive (true);
 		AddDogUI.SetActive (true);
+	}
+
+	public void ItemClicked(Item item){
+		AddItemUI.GetComponent<AddItemUI> ().SelectedCollectible = item.GetComponent<Collectible> ();
+		ItemInventory.SetActive (true);
+		AddItemUI.SetActive (true);
 	}
 
     public void KeyPickup(GameObject WinScreenUI)
@@ -74,6 +83,7 @@ public class GameController : MonoBehaviour {
         WinScreenUI.SetActive(true);
     }
 
+	// scene changes
     public void GoToMain()
     {
         SceneManager.LoadScene("MainMenu");
@@ -89,9 +99,22 @@ public class GameController : MonoBehaviour {
 	public void DogDeath(Dog dog){
 		MainCharacter.RemoveDogFromInventory (dog);
 		HUD.RemoveDogStats(dog);
-		AddDogUI.GetComponent<DogCollectionUI> ().RemoveDogPortrait (dog);
-		DogInventory.GetComponent<DogCollectionUI> ().RemoveDogPortrait (dog);
+		DogInventory.GetComponent<Inventory> ().RemoveItem (dog.GetComponent<Collectible> ());
 		CombatController.RemoveFromCombat (dog.CombatAI);
+	}
+
+	public void AddDog(Dog dog){
+		MainCharacter.AddDogToInventory (dog);
+		HUD.AddNewDogStats (dog);
+		DogInventory.GetComponent<Inventory> ().AddNewItem (dog.GetComponent<Collectible>());
+
+		dog.GetComponent<Creature> ().ChangeState (State.Follow);
+	}
+
+	public void AddItem(Item item){
+		MainCharacter.AddItemToInventory (item);
+		ItemInventory.GetComponent<Inventory> ().AddNewItem (item.GetComponent<Collectible> ());
+		item.gameObject.SetActive (false);
 	}
 
 }

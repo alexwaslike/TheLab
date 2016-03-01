@@ -2,27 +2,28 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class AddDogUI : MonoBehaviour {
+public class AddItemUI : MonoBehaviour {
 
 	public GameController GameController;
 	public Collectible SelectedCollectible;
 	public Icon SelectedCollectibleIcon;
-	public Inventory DogInventory;
+	public Inventory ItemInventory;
 
 	void OnEnable(){
-		DogInventory.IconClicked (SelectedCollectible);
+		ItemInventory.IconClicked (SelectedCollectible);
 		SelectedCollectibleIcon.Collectible = SelectedCollectible;
-		SelectedCollectibleIcon.Inventory = DogInventory;
+		SelectedCollectibleIcon.Inventory = ItemInventory;
 		SelectedCollectibleIcon.Image.sprite = SelectedCollectible.Sprite;
 	}
 
-	public void AddDog(){
-		GameController.AddDog (SelectedCollectible.GetComponent<Dog>());
+	public void AddItem(){
+		GameController.AddItem (SelectedCollectible.GetComponent<Item>());
 		Exit ();
 	}
 
 	public void Exit(){
-		DogInventory.gameObject.SetActive (false);
+		ItemInventory.gameObject.SetActive (false);
 		gameObject.SetActive(false);
 	}
 }
+

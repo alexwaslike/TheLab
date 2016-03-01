@@ -3,26 +3,31 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(Creature))]
 [RequireComponent(typeof(CombatAI))]
+[RequireComponent(typeof(Collectible))]
+[RequireComponent(typeof(BoxCollider2D))]
 
 public class Dog : MonoBehaviour {
 
-	protected string _species = "doge";
-    public string Species
-    {
-        get { return _species; }
-    }
-
 	public List<DogTrait> Traits;
 
-	protected float _dogDistance = 1.0f;
+	private float _dogDistance = 1.0f;
 
 	public GameObject Shadow;
     public Creature Creature;
     public CombatAI CombatAI;
 	public Health Health;
+	public Collectible Collectible;
 
 	void Start ()
     {
+		string description = "Traits:\n";
+		foreach (DogTrait trait in Traits) {
+			description += trait.Name + ": " + trait.Description + "\n";
+		}
+		Collectible.Description = description;
+		Collectible.Name = Creature.Name;
+		Collectible.Sprite = Creature.Sprite_S;
+
         Creature.ChangeState (State.Box);
 	}
 
@@ -53,7 +58,7 @@ public class Dog : MonoBehaviour {
             Clicked();
 	}
 
-	protected void Clicked()
+	private void Clicked()
     {
 		if (Creature.CurrentState == State.Box) {
             Creature.GameController.DogClicked (this);
@@ -61,6 +66,7 @@ public class Dog : MonoBehaviour {
 	}
 
 	public void Attached(MainCharacter mainCharacter){
+		Shadow.SetActive(false);
 		foreach(DogTrait trait in Traits){
 			trait.OnAttach (mainCharacter);
 		}
