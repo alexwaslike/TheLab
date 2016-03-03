@@ -41,22 +41,26 @@ public class Monster : MonoBehaviour {
                 time -= Time.deltaTime;
                 switch(direction)
                 {
-                    case 4:
-                        directionx = 1;
-                        directiony = 0;
-                        break;
-                    case 3:
-                        directionx = -1;
-                        directiony = 0;
-                        break;
-                    case 2:
-                        directiony = 1;
-                        directionx = 0;
-                        break;
-                    default:
-                        directiony = -1;
-                        directionx = 0;
-                        break;
+				case 5:
+					directionx = 0;
+					directiony = 0;
+					break;
+                case 4:
+                    directionx = 1;
+                    directiony = 0;
+                    break;
+                case 3:
+                    directionx = -1;
+                    directiony = 0;
+                    break;
+                case 2:
+                    directiony = 1;
+                    directionx = 0;
+                    break;
+				case 1:
+                    directiony = -1;
+                    directionx = 0;
+                    break;
                 }
                 transform.Translate(new Vector3(directionx * speed * Time.deltaTime, directiony * speed * Time.deltaTime, 0));
 

@@ -7,7 +7,7 @@ public class LevelGeneration : MonoBehaviour {
 
 	public List<Vector3> LevelGrid;
 	private float _max_X = 100;
-	private float _max_Y = 10;
+	private float _max_Y = 50;
 	private GameObject tilePrefab;
 
 	void Start(){
@@ -22,9 +22,8 @@ public class LevelGeneration : MonoBehaviour {
         for (int x = 0; x < _max_X; x++) {
             for(int y = 0; y <_max_Y; y++){
 				Vector3 newPos = new Vector3 (x, y, 0);
-				//LevelGrid.Add (newPos);
-				Instantiate (tilePrefab, new Vector3(newPos.x*xSize, newPos.y*ySize, 0), Quaternion.identity);
-                Instantiate(tilePrefab, new Vector3(newPos.x * xSize + xSize/2, newPos.y * ySize - ySize/2, 0), Quaternion.identity);
+				LevelGrid.Add (new Vector3 (newPos.x * xSize, newPos.y * ySize, 0));
+				LevelGrid.Add (new Vector3(newPos.x * xSize + xSize/2, newPos.y * ySize - ySize/2, 0));
             }
 		}
 
