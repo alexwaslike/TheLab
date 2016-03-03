@@ -8,6 +8,9 @@ public class Monster : MonoBehaviour {
 
     public Creature Creature;
     public CombatAI CombatAI;
+    public int speed;
+    private float time;
+    private int direction, directionx, directiony;
 
 	void Start ()
     {
@@ -28,7 +31,36 @@ public class Monster : MonoBehaviour {
 
         } else if (Creature.CurrentState == State.Idle) {
 
-            // walk around...
+            if(time<=0)
+            {
+                time = Random.Range(1, 10);
+                direction = Random.Range(1, 5);
+            }
+            else
+            {
+                time -= Time.deltaTime;
+                switch(direction)
+                {
+                    case 4:
+                        directionx = 1;
+                        directiony = 0;
+                        break;
+                    case 3:
+                        directionx = -1;
+                        directiony = 0;
+                        break;
+                    case 2:
+                        directiony = 1;
+                        directionx = 0;
+                        break;
+                    default:
+                        directiony = -1;
+                        directionx = 0;
+                        break;
+                }
+                transform.Translate(new Vector3(directionx * speed * Time.deltaTime, directiony * speed * Time.deltaTime, 0));
+
+            }
 
             if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
                 Creature.ChangeState(State.Attack);
