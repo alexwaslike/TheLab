@@ -6,8 +6,8 @@ public class LevelGeneration : MonoBehaviour {
 	public GameController GameController;
 
 	public List<Vector3> LevelGrid;
-	private float _max_X = 1000;
-	private float _max_Y = 500;
+	private float _max_X = 100;
+	private float _max_Y = 10;
 	private GameObject tilePrefab;
 
 	void Start(){
