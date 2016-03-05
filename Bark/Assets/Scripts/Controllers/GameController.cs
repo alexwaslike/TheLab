@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
 	// main character
 	public GameObject MainCharacterObj;
 	public MainCharacter MainCharacter;
+	public Camera MainCamera;
 
 	// controllers
 	public SpriteController SpriteController;
