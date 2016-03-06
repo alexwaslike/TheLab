@@ -15,7 +15,9 @@ public class Item : MonoBehaviour {
 
 	public float StatModifier = 0.01f;
 
-	void Start(){
+	void Awake(){
+
+		Collectible.Inventory = GameController.ItemInventory.GetComponent<Inventory> ();
 		GameController.SetSortingOrder (gameObject);
 
 		Collectible.Name = Name;

@@ -34,7 +34,5 @@ public class Health : MonoBehaviour {
 				Debug.Log ("No death implemented for this actor!");
 		}
 		else _health -= damage;
-
-		//Debug.Log ("hello, i am " + gameObject.name + " and my health is " + _health);
 	}
 }

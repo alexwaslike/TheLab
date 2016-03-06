@@ -1,18 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class PrefabController : MonoBehaviour {
 
-	// --------------------------DOG PREFABS--------------------------
-	public GameObject prefab_Pom;
+	public List<GameObject> Dogs;
 
-	// --------------------------MONSTER PREFABS--------------------------
-    public GameObject prefab_Monster;
+	public List<GameObject> Monsters;
 
-	// --------------------------ITEM PREFABS--------------------------
-	public GameObject prefab_Rock;
+	public List<GameObject> Items;
 
-	// --------------------------TILE PREFABS--------------------------
-	public GameObject prefab_GrassTile;
+	public List<GameObject> Tiles;
 
+	public List<GameObject> Environment;
 }

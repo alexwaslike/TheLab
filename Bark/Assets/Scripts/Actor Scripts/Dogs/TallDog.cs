@@ -9,7 +9,7 @@ public class TallDog : DogTrait {
 	private float _zoomSpeed = 0.08f;
 	private bool zoomComplete = false;
 
-	void Start () {
+	void Awake () {
 
 		Name = "Tall";
 		Description = WritingDB.DogTraitDescriptions[Name];

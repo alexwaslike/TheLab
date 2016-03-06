@@ -118,7 +118,6 @@ public class CombatAI : MonoBehaviour {
         {
             _attackCooldown = _attackRate;
 			_currentTarget.TakeDamage(AttackDamage);
-            //Debug.Log(gameObject.name + " attacks " + _currentTarget.gameObject.name + " for " + AttackDamage + " damage; health reduced to " + _currentTarget.HP);
         }
         else {
             _attackCooldown--;

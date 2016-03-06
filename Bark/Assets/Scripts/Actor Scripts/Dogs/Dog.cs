@@ -20,6 +20,7 @@ public class Dog : MonoBehaviour {
 
 	void Start ()
     {
+
 		string description = "Traits:\n";
 		foreach (DogTrait trait in Traits) {
 			description += trait.Name + ": " + trait.Description + "\n";
@@ -27,6 +28,7 @@ public class Dog : MonoBehaviour {
 		Collectible.Description = description;
 		Collectible.Name = Creature.Name;
 		Collectible.Sprite = Creature.Sprite_S;
+		Collectible.Inventory = Creature.GameController.DogInventory.GetComponent<Inventory>();
 
         Creature.ChangeState (State.Box);
 	}
