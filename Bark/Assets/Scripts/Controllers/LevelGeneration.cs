@@ -87,7 +87,7 @@ public class LevelGeneration : MonoBehaviour {
 				Vector3 position = Dogs [i].transform.position;
 				if ((Mathf.Abs (position.x - PlayerLoc.position.x) >= radius || Mathf.Abs (position.y - PlayerLoc.position.y) >= radius)) {
 					Dogs [i].SetActive (false);
-				} else
+				} else if(Dogs[i].GetComponent<Creature>().CurrentState != State.InInventory)
 					Dogs [i].SetActive (true);
 			}
 		}
@@ -169,6 +169,7 @@ public class LevelGeneration : MonoBehaviour {
 						Dogs [i] = Instantiate (PrefabController.Dogs[objRoll], Grid [i], Quaternion.identity) as GameObject;
 						Dogs [i].transform.SetParent (DogParent, true);
 						Dogs [i].GetComponent<Creature> ().GameController = GameController;
+						Dogs [i].name = "Dog " + i;
 
 					}
 

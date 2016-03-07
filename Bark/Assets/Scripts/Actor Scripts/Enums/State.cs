@@ -1,4 +1,4 @@
 ﻿public enum State
 {
-    Box, Follow, Attack, Idle, Dead
+    Box, Follow, Attack, Idle, Dead, InInventory
 }

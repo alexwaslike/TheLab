@@ -10,8 +10,11 @@ public class Inventory : MonoBehaviour {
 
 	// children needed
 	public GameObject UIListContainer;
+	public Collectible SelectedItem;
 	public Image SelectedItemPortrait;
 	public Text SelectedItemText;
+	public GameObject ActivateDogButton;
+	public GameObject DeactivateDogButton;
 
 	// prefabs needed
 	public GameObject IconPrefab;
@@ -22,8 +25,9 @@ public class Inventory : MonoBehaviour {
 	{
 		get { return _collection; }
 	}
+	public int MaxDogsOnGround = 5;
 
-	void Start(){
+	void Awake(){
 		_collection = new Dictionary<Collectible, Icon> ();
 	}
 
@@ -41,6 +45,28 @@ public class Inventory : MonoBehaviour {
 
 	}
 
+	public void ActivateDog(){
+		if (GameController.MainCharacter.NumActiveDogs < MaxDogsOnGround) {
+			Dog selectedDog = SelectedItem.GetComponent<Dog> ();
+			if (selectedDog == null) {
+				Debug.LogError ("Trying to activate non-dog??? How the f******ck did we get here?!?!?");
+				return;
+			}
+			GameController.MainCharacter.ActivateDog (selectedDog);
+			DisplayStats (SelectedItem);
+		}
+	}
+
+	public void DeactivateDog(){
+		Dog selectedDog = SelectedItem.GetComponent<Dog> ();
+		if (selectedDog == null) {
+			Debug.LogError ("Trying to deactivate non-dog??? How the f******ck did we get here?!?!?");
+			return;
+		}
+		GameController.MainCharacter.DeactivateDog (selectedDog);
+		DisplayStats (SelectedItem);
+	}
+
 	public void RemoveItem(Collectible itemToRemove){
 		Destroy(_collection [itemToRemove].gameObject);
 		_collection.Remove (itemToRemove);
@@ -48,8 +74,19 @@ public class Inventory : MonoBehaviour {
 	}
 
 	private void DisplayStats(Collectible item){
+		SelectedItem = item;
 		SelectedItemPortrait.sprite = item.Sprite;
 		SelectedItemText.text = item.Description;
+
+		if (SelectedItem != null && SelectedItem.GetComponent<Dog>() != null && _collection.ContainsKey(SelectedItem)) {
+			if (SelectedItem.gameObject.activeSelf) {
+				DeactivateDogButton.SetActive (true);
+				ActivateDogButton.SetActive (false);
+			} else {
+				DeactivateDogButton.SetActive (false);
+				ActivateDogButton.SetActive (true);
+			}
+		}
 	}
 
 	public void IconClicked(Collectible item){

@@ -60,8 +60,13 @@ public class Creature : MonoBehaviour {
 			SpriteRenderer.sprite = Sprite_Dead;
 			break;
 		case State.Follow:
+			gameObject.SetActive (true);
 			_state = State.Follow;
 			SpriteRenderer.sprite = Sprite_S;
+			break;
+		case State.InInventory:
+			gameObject.SetActive (false);
+			_state = State.InInventory;
 			break;
 		}
     }

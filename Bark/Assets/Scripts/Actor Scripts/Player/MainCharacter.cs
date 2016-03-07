@@ -24,8 +24,10 @@ public class MainCharacter : MonoBehaviour {
 		get { return _items; }
 	}
 
-	protected string _attachedMethodName = "OnAttach";
-	protected string _detachMethodName = "OnDetach";
+	private int _numActiveDogs;
+	public int NumActiveDogs{
+		get { return _numActiveDogs; }
+	}
 
 	void Start ()
     {
@@ -33,11 +35,22 @@ public class MainCharacter : MonoBehaviour {
         GameController.SetSortingOrder (gameObject);
 		_dogs = new List<Dog> ();
 		_items = new List<Item> ();
+		_numActiveDogs = 0;
 	}
 	
 	void Update ()
     {
 		GameController.SetSortingOrder (gameObject);
+	}
+
+	public void ActivateDog(Dog dog){
+		_numActiveDogs++;
+		dog.Creature.ChangeState (State.Follow);
+	}
+
+	public void DeactivateDog(Dog dog){
+		_numActiveDogs--;
+		dog.Creature.ChangeState (State.InInventory);
 	}
 		
 	public void AddDogToInventory(Dog dog)
@@ -45,10 +58,14 @@ public class MainCharacter : MonoBehaviour {
 		_dogs.Add (dog);
 		dog.PositionDog (_dogs.IndexOf(dog));
 
+		if (dog.Creature.CurrentState == State.Follow)
+			_numActiveDogs++;
+
 		dog.Attached (this);
 	}
 
 	public void RemoveDogFromInventory(Dog dog){
+		_numActiveDogs--;
 		dog.Detached ();
 		_dogs.Remove (dog);
 	}

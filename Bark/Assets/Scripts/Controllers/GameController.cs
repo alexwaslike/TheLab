@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour {
 	public GameObject AddItemUI;
     public HUD HUD;
     public GameObject WinScreenUI;
+	public GameObject PauseGray;
 
 	// other
 	public bool AllowGameplay;
@@ -57,12 +58,14 @@ public class GameController : MonoBehaviour {
 			Time.timeScale = 0.0f;
 			MainCharacterObj.GetComponent<CharacterMovement>().enabled = false;
 			AllowGameplay = false;
+			PauseGray.SetActive (true);
 		} else
 		{
 			Time.timeScale = _timeScale;
 			if(MainCharacterObj != null)
 				MainCharacterObj.GetComponent<CharacterMovement>().enabled = true;
 			AllowGameplay = true;
+			PauseGray.SetActive (false);
 		}
 	}
 
@@ -106,11 +109,15 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void AddDog(Dog dog){
-		MainCharacter.AddDogToInventory (dog);
 		HUD.AddNewDogStats (dog);
-		DogInventory.GetComponent<Inventory> ().AddNewItem (dog.GetComponent<Collectible>());
+		DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
 
-		dog.GetComponent<Creature> ().ChangeState (State.Follow);
+		if(DogInventory.GetComponent<Inventory>().Collection.Count > DogInventory.GetComponent<Inventory>().MaxDogsOnGround)
+			dog.Creature.ChangeState (State.InInventory);
+		else
+			dog.Creature.ChangeState (State.Follow);
+
+		MainCharacter.AddDogToInventory (dog);
 	}
 
 	public void AddItem(Item item){
