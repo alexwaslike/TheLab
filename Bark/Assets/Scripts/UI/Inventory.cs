@@ -97,4 +97,20 @@ public class Inventory : MonoBehaviour {
 		gameObject.SetActive (false);
 	}
 
+	public void SwitchToItemsTab(){
+		if (GameController.DogInventory.activeSelf)
+			GameController.DogInventory.SetActive (false);
+		
+		if (!GameController.ItemInventory.activeSelf)
+			GameController.ItemInventory.SetActive (true);
+	}
+
+	public void SwitchToDogsTab(){
+		if (GameController.ItemInventory.activeSelf)
+			GameController.ItemInventory.SetActive (false);
+		
+		if (!GameController.DogInventory.activeSelf)
+		GameController.DogInventory.SetActive (true);
+	}
+
 }

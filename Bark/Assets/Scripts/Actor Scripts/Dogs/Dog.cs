@@ -102,7 +102,8 @@ public class Dog : MonoBehaviour {
 
 	public void Death(){
 		Creature.ChangeState (State.Dead);
-		CombatAI.GameController.DogDeath (this);
+		Creature.GameController.LevelGeneration.RemoveDogFromGrid (this);
+		Creature.GameController.DogDeath (this);
 	}
 
 }

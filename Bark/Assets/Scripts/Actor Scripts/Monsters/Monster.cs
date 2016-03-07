@@ -74,6 +74,7 @@ public class Monster : MonoBehaviour {
 	public void Death(){
 		Creature.ChangeState (State.Dead);
 		Creature.GameController.CombatController.RemoveFromCombat (CombatAI);
+		Creature.GameController.LevelGeneration.RemoveMonsterFromGrid (this);
 		Destroy (gameObject);
 	}
 }

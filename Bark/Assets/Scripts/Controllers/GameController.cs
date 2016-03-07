@@ -118,12 +118,16 @@ public class GameController : MonoBehaviour {
 			dog.Creature.ChangeState (State.Follow);
 
 		MainCharacter.AddDogToInventory (dog);
+
+		LevelGeneration.RemoveDogFromGrid (dog);
 	}
 
 	public void AddItem(Item item){
 		MainCharacter.AddItemToInventory (item);
 		ItemInventory.GetComponent<Inventory> ().AddNewItem (item.GetComponent<Collectible> ());
 		item.gameObject.SetActive (false);
+
+		LevelGeneration.RemoveItemFromGrid (item);
 	}
 
 }

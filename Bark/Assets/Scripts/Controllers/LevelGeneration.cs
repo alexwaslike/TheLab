@@ -13,10 +13,10 @@ public class LevelGeneration : MonoBehaviour {
 	public Transform PlayerLoc;
 
 	private Vector3[] Grid;
+	private int _max_X = 100;
+	private int _max_Y = 50;
 
 	private GameObject[] Tiles;
-	private int _tiles_max_X = 100;
-	private int _tiles_max_Y = 50;
 	private GameObject[] EnvironmentObjs;
 	private GameObject[] Dogs;
 	private GameObject[] Monsters;
@@ -34,12 +34,12 @@ public class LevelGeneration : MonoBehaviour {
 
 	void Awake(){
 
-		Grid =				new Vector3[_tiles_max_X*_tiles_max_Y];
-		Tiles =				new GameObject[_tiles_max_X*_tiles_max_Y];
-		EnvironmentObjs =	new GameObject[_tiles_max_X*_tiles_max_Y];
-		Dogs =				new GameObject[_tiles_max_X*_tiles_max_Y];
-		Monsters =			new GameObject[_tiles_max_X*_tiles_max_Y];
-		Items =				new GameObject[_tiles_max_X*_tiles_max_Y];
+		Grid =				new Vector3[_max_X*_max_Y];
+		Tiles =				new GameObject[_max_X*_max_Y];
+		EnvironmentObjs =	new GameObject[_max_X*_max_Y];
+		Dogs =				new GameObject[_max_X*_max_Y];
+		Monsters =			new GameObject[_max_X*_max_Y];
+		Items =				new GameObject[_max_X*_max_Y];
 
 		GenerateTiles ();
 		GenerateEnvironmentObjects ();
@@ -87,7 +87,7 @@ public class LevelGeneration : MonoBehaviour {
 				Vector3 position = Dogs [i].transform.position;
 				if ((Mathf.Abs (position.x - PlayerLoc.position.x) >= radius || Mathf.Abs (position.y - PlayerLoc.position.y) >= radius)) {
 					Dogs [i].SetActive (false);
-				} else if(Dogs[i].GetComponent<Creature>().CurrentState != State.InInventory)
+				} else
 					Dogs [i].SetActive (true);
 			}
 		}
@@ -102,8 +102,8 @@ public class LevelGeneration : MonoBehaviour {
 		float xSize = 3.61f;
 		float ySize = 1.82f;
 		int i = 0;
-		for (int x = 0 + xOffset; x < _tiles_max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _tiles_max_Y + yOffset; y++){
+		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
+			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
 
 				if (i < Tiles.Length) {
 
@@ -130,8 +130,8 @@ public class LevelGeneration : MonoBehaviour {
 		
 		int objRoll = 0;
 		int i = 0;
-		for (int x = 0 + xOffset; x < _tiles_max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _tiles_max_Y + yOffset; y++){
+		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
+			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
 
 				objRoll = Random.Range (0, MaxChance);
 				if (i < Grid.Length) {
@@ -157,8 +157,8 @@ public class LevelGeneration : MonoBehaviour {
 		
 		int objRoll = 0;
 		int i = 0;
-		for (int x = 0 + xOffset; x < _tiles_max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _tiles_max_Y + yOffset; y++){
+		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
+			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
 
 				objRoll = Random.Range (0, MaxChance);
 				if (i < Grid.Length) {
@@ -185,8 +185,8 @@ public class LevelGeneration : MonoBehaviour {
 		
 		int objRoll = 0;
 		int i = 0;
-		for (int x = 0 + xOffset; x < _tiles_max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _tiles_max_Y + yOffset; y++){
+		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
+			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
 
 				objRoll = Random.Range (0, MaxChance);
 				if (i < Grid.Length) {
@@ -213,8 +213,8 @@ public class LevelGeneration : MonoBehaviour {
 		
 		int objRoll = 0;
 		int i = 0;
-		for (int x = 0 + xOffset; x < _tiles_max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _tiles_max_Y + yOffset; y++){
+		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
+			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
 
 				objRoll = Random.Range (0, MaxChance);
 				if (i < Grid.Length) {
@@ -235,6 +235,33 @@ public class LevelGeneration : MonoBehaviour {
 			}
 		}
 
+	}
+
+	public void RemoveMonsterFromGrid(Monster monster){
+		for (int i = 0; i < Monsters.Length; i++) {
+			if (Monsters [i] != null && Monsters [i] == monster.gameObject) {
+				Monsters [i] = null;
+				break;
+			}
+		}
+	}
+
+	public void RemoveDogFromGrid(Dog dog){
+		for (int i = 0; i < Dogs.Length; i++) {
+			if (Dogs [i] != null && Dogs [i] == dog.gameObject) {
+				Dogs [i] = null;
+				break;
+			}
+		}
+	}
+
+	public void RemoveItemFromGrid(Item item){
+		for (int i = 0; i < Items.Length; i++) {
+			if (Items [i] != null && Items [i] == item.gameObject) {
+				Items [i] = null;
+				break;
+			}
+		}
 	}
 
 
