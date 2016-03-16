@@ -7,6 +7,7 @@ public class MainCharacter : MonoBehaviour {
 
 	public GameController GameController;
 	public Health Health;
+    public GameObject LoseUI;
 
 	public float DogAttackMultiplier = 1.0f;
 	public float DogHealthMultiplier = 1.0f;
@@ -78,6 +79,8 @@ public class MainCharacter : MonoBehaviour {
 		_items.Remove (item);
 	}
 
-	public void Death(){
+	public void Death()
+    {
+        LoseUI.SetActive(true);
 	}
 }
