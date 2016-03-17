@@ -23,8 +23,8 @@ public class Monster : MonoBehaviour {
 
             if (CombatAI.HasTarget)
             {
-                float xShift = (CombatAI.CurrentTarget.transform.position.x - transform.position.x) * Creature.Speed;
-                float yShift = (CombatAI.CurrentTarget.transform.position.y - transform.position.y) * Creature.Speed;
+                float xShift = (CombatAI.CurrentTarget.transform.position.x - transform.position.x) * Creature.Speed*Time.deltaTime;
+                float yShift = (CombatAI.CurrentTarget.transform.position.y - transform.position.y) * Creature.Speed*Time.deltaTime;
                 Creature.Move(xShift, yShift);
             }
             CombatAI.TryAttackDog();
