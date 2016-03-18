@@ -77,4 +77,28 @@ public class Monster : MonoBehaviour {
 		Creature.GameController.LevelGeneration.RemoveMonsterFromGrid (this);
 		Destroy (gameObject);
 	}
+
+    public void OnCollisionStay2D(Collision2D coll)
+    {
+        switch(direction)
+        {
+            case 5:
+                directionx = 0;
+                directiony = 0;
+                break;
+            case 4:
+                direction = 3;
+                break;
+            case 3:
+                direction = 4;
+                break;
+            case 2:
+                direction = 1;
+                break;
+            case 1:
+                direction = 2;
+                break;
+        }
+
+    }
 }
