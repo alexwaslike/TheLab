@@ -5,13 +5,7 @@ using System.Collections;
 
 public class CombatAI : MonoBehaviour {
 
-    private int _attackRate = 10;
-    public int AttackRate
-    {
-        get { return _attackRate; }
-    }
-
-	private Health _currentTarget;
+    private Health _currentTarget;
 	public Health CurrentTarget
     {
         get { return _currentTarget; }
@@ -19,12 +13,17 @@ public class CombatAI : MonoBehaviour {
 
     private int _attackCooldown;
 
+    public CombatController.TraitType Damage;
+    private int _attackDamage;
+
+    public CombatController.TraitType AttackRate;
+    private int _attackRate;
+
     public GameController GameController;
     public Creature Creature;
 	public Health Health;
     public float InteractionRange = 2.0f;
 	public float AttackRange = 2.0f;
-	public int AttackDamage = 10;
 	public bool HasTarget;
 
     void Start()
@@ -34,6 +33,9 @@ public class CombatAI : MonoBehaviour {
             GameController = Creature.GameController;
 
 		Health = GetComponent<Health> ();
+
+        _attackDamage = GameController.CombatController.TraitDamageAmount(Damage);
+        _attackRate = GameController.CombatController.TraitAttackSpeed(AttackRate);
 
         _attackCooldown = 0;
         HasTarget = false;
@@ -119,7 +121,7 @@ public class CombatAI : MonoBehaviour {
 			if (_attackCooldown == 0)
 			{
 				_attackCooldown = _attackRate;
-				_currentTarget.TakeDamage(AttackDamage);
+				_currentTarget.TakeDamage(_attackDamage);
 			}
 			else {
 				_attackCooldown--;

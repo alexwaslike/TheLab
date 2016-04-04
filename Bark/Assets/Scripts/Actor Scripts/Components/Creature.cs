@@ -9,17 +9,23 @@ public class Creature : MonoBehaviour {
         get { return _state; }
     }
 
-    public float Speed = 0.1f;
+    public CombatController.TraitType MovementSpeed;
+    public CombatController.TraitType HealthType;
+    public CombatController.TraitType Rarity;
 
-	// sprites
-	public Sprite Sprite_N;
+    private float _speed;
+    public float Speed
+    {
+        get { return _speed; }
+    }
+
+    // sprites
+    public Sprite Sprite_N;
 	public Sprite Sprite_S;
 	public Sprite Sprite_E;
 	public Sprite Sprite_W;
 	public Sprite Sprite_Dead;
 	public Sprite Sprite_Box;
-
-	// animations
 
 	// other public
     public CreatureType Type;
@@ -29,6 +35,10 @@ public class Creature : MonoBehaviour {
     public GameController GameController;
 
 	void Start(){
+
+        CombatAI.Health.MaxHealth = GameController.CombatController.TraitHealthAmount(HealthType);
+        _speed = GameController.CombatController.TraitMoveSpeed(MovementSpeed);
+
 		GameController.SetSortingOrder (gameObject);
 	}
 

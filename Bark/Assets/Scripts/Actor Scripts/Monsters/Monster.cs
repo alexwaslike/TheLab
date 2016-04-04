@@ -8,13 +8,11 @@ public class Monster : MonoBehaviour {
 
     public Creature Creature;
     public CombatAI CombatAI;
-	public float Speed;
     private float time;
     private int direction, directionx, directiony;
 
 	void Start ()
     {
-		Creature.Speed = Speed;
         Creature.ChangeState(State.Idle);
     }
 
@@ -63,7 +61,7 @@ public class Monster : MonoBehaviour {
                     directionx = 0;
                     break;
                 }
-                transform.Translate(new Vector3(directionx * Speed * Time.deltaTime, directiony * Speed * Time.deltaTime, 0));
+                transform.Translate(new Vector3(directionx * Creature.Speed * Time.deltaTime, directiony * Creature.Speed * Time.deltaTime, 0));
 
             }
 

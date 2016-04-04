@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Health : MonoBehaviour {
 
@@ -9,14 +8,10 @@ public class Health : MonoBehaviour {
 		get { return _health; }
 	}
 
-	private int _maxHealth = 100;
-	public int MaxHealth
-	{
-		get { return _maxHealth; }
-	}
+	public int MaxHealth;
 
 	void Start(){
-		_health = _maxHealth;
+		_health = MaxHealth;
 	}
 
 	public void TakeDamage(int damage)
