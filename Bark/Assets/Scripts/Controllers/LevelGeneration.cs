@@ -44,7 +44,6 @@ public class LevelGeneration : MonoBehaviour {
 	public int yOffset;
 	public float radiusFromPlayer;
 
-
 	void Awake(){
 
         tilePrefab = GameController.PrefabController.Tiles[0];
@@ -68,6 +67,16 @@ public class LevelGeneration : MonoBehaviour {
         for (int x = 0; x < _max_X; x++) {
             for (int y = 0; y < _max_Y; y++) {
 
+                if (Tiles[x, y] != null)
+                {
+                    position = Grid[x, y];
+                    if((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                        Tiles[x, y].SetActive(false);
+                    } else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                        Tiles[x, y].SetActive(true);
+                    }
+                }
+
                 if (Objects [x, y] != null) {
                     position = Objects[x, y].transform.position;
                     if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
@@ -75,16 +84,6 @@ public class LevelGeneration : MonoBehaviour {
                     }
                     else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
                         Objects[x, y].SetActive(true);
-                    }
-                }
-
-                if (Tiles[x, y] != null)
-                {
-                    position = Tiles[x, y].transform.position;
-                    if((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
-                        Tiles[x, y].SetActive(false);
-                    } else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
-                        Tiles[x, y].SetActive(true);
                     }
                 }
 
@@ -102,12 +101,10 @@ public class LevelGeneration : MonoBehaviour {
 
             }
         }
-
-
+        
     }
-
+    
     private void GenerateTiles(){
-
         
 		float xSize = 3.61f;
 		float ySize = 1.82f;
