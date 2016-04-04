@@ -15,14 +15,13 @@ public class Item : MonoBehaviour {
 
 	public float StatModifier = 0.01f;
 
-	void Awake(){
+	void Start(){
 
 		Collectible.Inventory = GameController.ItemInventory.GetComponent<Inventory> ();
 		GameController.SetSortingOrder (gameObject);
 
 		Collectible.Name = Name;
 		Collectible.Description = WritingDB.ItemDescriptions[Name];
-		Collectible.Sprite = SpriteRenderer.sprite;
 	}
 
 	void OnMouseUp(){
