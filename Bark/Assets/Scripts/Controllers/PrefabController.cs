@@ -11,5 +11,13 @@ public class PrefabController : MonoBehaviour {
 
 	public List<GameObject> Tiles;
 
-	public List<GameObject> Environment;
+	public List<GameObject> Trees;
+
+	public List<GameObject> Foliage;
+
+	public List<GameObject> Buildings;
+
+	public List<GameObject> Rocks;
+
+	public List<GameObject> Overlays;
 }

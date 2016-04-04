@@ -9,11 +9,7 @@ public class Creature : MonoBehaviour {
         get { return _state; }
     }
 
-    private float _speed = 0.1f;
-    public float Speed
-    {
-        get { return _speed; }
-    }
+    public float Speed = 0.1f;
 
 	// sprites
 	public Sprite Sprite_N;
@@ -73,7 +69,10 @@ public class Creature : MonoBehaviour {
 
     public void Move(float x, float y)
     {
-        transform.Translate(new Vector3(x, y, 0));
+        if(Mathf.Abs(y) > 0.001)
+            transform.Translate(new Vector3(x* (1 / Mathf.Sqrt(2)), y* (1 / Mathf.Sqrt(2)), 0));
+        else
+            transform.Translate(x, y, 0);
     }
 
 }

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class LevelGeneration : MonoBehaviour {
 
@@ -12,258 +11,355 @@ public class LevelGeneration : MonoBehaviour {
 	public Transform ItemParent;
 	public Transform PlayerLoc;
 
-	private Vector3[] Grid;
+	private Vector3[,] Grid;
 	private int _max_X = 100;
 	private int _max_Y = 50;
 
-	private GameObject[] Tiles;
-	private GameObject[] EnvironmentObjs;
-	private GameObject[] Dogs;
-	private GameObject[] Monsters;
-	private GameObject[] Items;
+	private GameObject[,] Objects;
+    private GameObject[,] Overlays;
+
+    public int TreeClusterMin = 0;
+    public int TreeClusterMax = 5;
+    public int PlantClusterMin = 0;
+    public int PlantClusterMax = 10;
+    public int RockClusterMin = 1;
+    public int RockClusterMax = 5;
+
+    private int xPos;
+    private int yPos;
+    public int distanceMin = -1;
+    public int distanceMax = 1;
+
+	public float FoliageClusterChance = 10f;
+	public float BuildingChance = 2f;
+	public float DogChance = 5f;
+	public float MonsterChance = 5f;
+    public float OverlayChance = 2f;
+    public float ItemChance = 1f;
+
+	private GameObject[,] Tiles;
+    public GameObject tilePrefab;
 
 	public int xOffset;
 	public int yOffset;
-	public float radius;
-	public int MaxChance;
-	public int EnvironmentObjChance;
-	public int DogChance;
-	public int MonsterChance;
-	public int ItemChance;
+	public float radiusFromPlayer;
 
 
 	void Awake(){
 
-		Grid =				new Vector3[_max_X*_max_Y];
-		Tiles =				new GameObject[_max_X*_max_Y];
-		EnvironmentObjs =	new GameObject[_max_X*_max_Y];
-		Dogs =				new GameObject[_max_X*_max_Y];
-		Monsters =			new GameObject[_max_X*_max_Y];
-		Items =				new GameObject[_max_X*_max_Y];
+        tilePrefab = GameController.PrefabController.Tiles[0];
 
-		GenerateTiles ();
-		GenerateEnvironmentObjects ();
-		GenerateDogs ();
-		GenerateMonsters();
-		GenerateItems ();
+        Grid =		new Vector3[_max_X, _max_Y];
+		Tiles =		new GameObject[_max_X, _max_Y];
+		Objects =	new GameObject[_max_X, _max_Y];
+        Overlays =  new GameObject[_max_X, _max_Y];
 
-	}
+		GenerateTiles();
+		GenerateEnvironment();
+        GenerateMonsters();
+        GenerateDogs();
+        GenerateOverlays();
+        GenerateItems();
+    }
 
 	void Update(){
 
-		for (int i = 0; i < Grid.Length; i++) {
+        Vector3 position;
+        for (int x = 0; x < _max_X; x++) {
+            for (int y = 0; y < _max_Y; y++) {
 
-			Vector3 position = Grid [i];
+                if (Objects [x, y] != null) {
+                    position = Objects[x, y].transform.position;
+                    if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                        Objects[x, y].SetActive(false);
+                    }
+                    else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                        Objects[x, y].SetActive(true);
+                    }
+                }
 
-			if (Mathf.Abs (position.x - PlayerLoc.position.x) >= radius || Mathf.Abs (position.y - PlayerLoc.position.y) >= radius) {
-				Tiles [i].SetActive (false);
-				if(EnvironmentObjs[i] != null)
-					EnvironmentObjs [i].SetActive (false);
-				if(Items[i] != null)
-					Items [i].SetActive (false);
-			} else {
-				Tiles [i].SetActive (true);
-				if(EnvironmentObjs[i] != null)
-					EnvironmentObjs [i].SetActive (true);
-				if(Items[i] != null)
-					Items [i].SetActive (true);
-			}
-		}
+                if (Tiles[x, y] != null)
+                {
+                    position = Tiles[x, y].transform.position;
+                    if((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                        Tiles[x, y].SetActive(false);
+                    } else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                        Tiles[x, y].SetActive(true);
+                    }
+                }
 
-		for (int i = 0; i < Monsters.Length; i++) {
+                if (Overlays[x, y] != null)
+                {
+                    position = Overlays[x, y].transform.position;
+                    if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                        Overlays[x, y].SetActive(false);
+                    }
+                    else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                        Overlays[x, y].SetActive(true);
+                    }
+                }
 
-			if (Monsters [i] != null) {
-				Vector3 position = Monsters [i].transform.position;
-				if ((Mathf.Abs (position.x - PlayerLoc.position.x) >= radius || Mathf.Abs (position.y - PlayerLoc.position.y) >= radius)) {
-					Monsters [i].SetActive (false);
-				} else
-					Monsters [i].SetActive (true);
-			}
-		}
 
-		for (int i = 0; i < Dogs.Length; i++) {
+            }
+        }
 
-			if (Dogs [i] != null) {
-				Vector3 position = Dogs [i].transform.position;
-				if ((Mathf.Abs (position.x - PlayerLoc.position.x) >= radius || Mathf.Abs (position.y - PlayerLoc.position.y) >= radius)) {
-					Dogs [i].SetActive (false);
-				} else
-					Dogs [i].SetActive (true);
-			}
-		}
-		
 
-	}
+    }
 
-	private void GenerateTiles(){
+    private void GenerateTiles(){
 
-		GameObject tilePrefab = GameController.PrefabController.Tiles[0];
-
+        
 		float xSize = 3.61f;
 		float ySize = 1.82f;
-		int i = 0;
-		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
+        bool alt = false;
 
-				if (i < Tiles.Length) {
+        for (int x = 0; x < _max_X; x++) {
+			for (int y = 0; y < _max_Y; y++){
 
-					Vector3 newPos = new Vector3 (x * xSize, y * ySize, 0);
-					Vector3 newPos2 = new Vector3 (x * xSize + xSize / 2, y * ySize - ySize / 2, 0);
+                Vector3 newPos = Vector3.zero;
 
-					Grid [i] = newPos;
-					Grid [i + 1] = newPos2;
+                if(alt)
+                    newPos = new Vector3(x * (xSize / 2), y * ySize + ySize/2, 0);
+                else
+                    newPos = new Vector3(x * (xSize / 2), y * ySize, 0);
 
-					Tiles[i] = Instantiate (tilePrefab, newPos, Quaternion.identity) as GameObject;
-					Tiles[i].transform.SetParent (TileParent, true);
-					Tiles[i + 1] = Instantiate (tilePrefab, newPos2, Quaternion.identity) as GameObject;
-					Tiles[i + 1].transform.SetParent (TileParent, true);
+                Grid [x, y] = newPos;
 
-				} else
+				Tiles[x, y] = Instantiate (tilePrefab, newPos, Quaternion.identity) as GameObject;
+				Tiles[x, y].transform.SetParent (TileParent, true);
+
+            }
+            alt = !alt;
+        }
+	}
+
+	private void GenerateEnvironment(){
+
+		int buildingChance = (int)(BuildingChance);
+		int foliageChance = (int)(buildingChance + FoliageClusterChance);
+
+        for (int x = 0; x < _max_X; x++) {
+			for (int y = 0; y < _max_Y; y++) {
+
+				int roll = Random.Range (0, 1000);
+                
+				if (roll <= buildingChance) {
+                    GenBuildingArea(x, y);
+                } else if (roll > buildingChance && roll <= foliageChance) {
+                    GenFoliageCluster(x, y);
+                }
+
+            }
+		}
+
+    }
+
+    private void GenerateDogs()
+    {
+        for (int x = 0; x < _max_X; x++)
+        {
+            for (int y = 0; y < _max_Y; y++)
+            {
+                int roll = Random.Range(0, 1000);
+                if (roll <= DogChance)
+                {
+                    Objects[x, y] = Instantiate(GenDog(), Grid[x, y], Quaternion.identity) as GameObject;
+                    Objects[x, y].transform.SetParent(DogParent, true);
+                    Objects[x, y].GetComponent<Creature>().GameController = GameController;
+                }
+            }
+        }
+    }
+
+    private void GenerateMonsters()
+    {
+        for (int x = 0; x < _max_X; x++)
+        {
+            for (int y = 0; y < _max_Y; y++)
+            {
+                int roll = Random.Range(0, 1000);
+                if (roll <= MonsterChance)
+                {
+                    Objects[x, y] = Instantiate(GenMonster(), Grid[x, y], Quaternion.identity) as GameObject;
+                    Objects[x, y].transform.SetParent(MonsterParent, true);
+                    Objects[x, y].GetComponent<Creature>().GameController = GameController;
+                }
+            }
+        }
+    }
+
+    private void GenerateOverlays()
+    {
+        for (int x = 0; x < _max_X; x++)
+        {
+            for (int y = 0; y < _max_Y; y++)
+            {
+                int roll = Random.Range(0, 100);
+                if (roll <= OverlayChance)
+                {
+                    Overlays[x, y] = Instantiate(GenOverlay(), Grid[x, y], Quaternion.identity) as GameObject;
+                    Overlays[x, y].transform.SetParent(EnvironmentParent, true);
+                    Overlays[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
+                }
+            }
+        }
+    }
+
+    private void GenerateItems()
+    {
+        for (int x = 0; x < _max_X; x++)
+        {
+            for (int y = 0; y < _max_Y; y++)
+            {
+                int roll = Random.Range(0, 1000);
+                if (roll <= ItemChance)
+                {
+                    Objects[x, y] = Instantiate(GenItem(), Grid[x, y], Quaternion.identity) as GameObject;
+                    Objects[x, y].transform.SetParent(DogParent, true);
+                    Objects[x, y].GetComponent<Item>().GameController = GameController;
+                }
+            }
+        }
+    }
+
+    private GameObject GenItem()
+    {
+        int roll = Random.Range(0, PrefabController.Items.Count);
+        return PrefabController.Items[roll];
+    }
+
+    private GameObject GenTree(){
+		int roll = Random.Range (0, PrefabController.Trees.Count);
+		return PrefabController.Trees [roll];
+	}
+
+	private GameObject GenPlant(){
+		int roll = Random.Range (0, PrefabController.Foliage.Count);
+		return PrefabController.Foliage [roll];
+	}
+
+	private GameObject GenRock(){
+		int roll = Random.Range (0, PrefabController.Rocks.Count);
+		return PrefabController.Rocks [roll];
+	}
+
+	private GameObject GenBuilding(){
+		int roll = Random.Range (0, PrefabController.Buildings.Count);
+		return PrefabController.Buildings [roll];
+	}
+
+	private GameObject GenOverlay(){
+		int roll = Random.Range (0, PrefabController.Overlays.Count);
+		return PrefabController.Overlays [roll];
+	}
+
+    private GameObject GenDog()
+    {
+        int roll = Random.Range(0, PrefabController.Dogs.Count);
+        return PrefabController.Dogs[roll];
+    }
+
+    private GameObject GenMonster()
+    {
+        int roll = Random.Range(0, PrefabController.Monsters.Count);
+        return PrefabController.Monsters[roll];
+    }
+
+    private void SetRandomLoc(int xCenter, int yCenter)
+    {
+        xPos = xCenter + Random.Range(distanceMin, distanceMax);
+        if (xPos < 0)
+            xPos = 0;
+        if (xPos >= _max_X)
+            xPos = _max_X-1;
+
+        yPos = yCenter + Random.Range(distanceMin, distanceMax);
+        if (yPos < 0)
+            yPos = 0;
+        if (yPos >= _max_Y)
+            yPos = _max_Y - 1;
+    }
+
+	private void GenTreeArea(int xCenter, int yCenter){
+		int num = Random.Range(TreeClusterMin, TreeClusterMax);
+
+        for (int i = 0; i < num; i++) {
+
+            SetRandomLoc(xCenter, yCenter);
+
+            if (Objects[xPos, yPos] == null)
+            {
+                Objects[xPos, yPos] = Instantiate(GenTree(), Grid[xPos, yPos], Quaternion.identity) as GameObject;
+                Objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
+                Objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
+            }
+
+		}
+	}
+
+	private void GenPlantArea(int xCenter, int yCenter)
+    {
+        int num = Random.Range(PlantClusterMin, PlantClusterMax);
+
+        for (int i = 0; i < num; i++)
+        {
+
+            SetRandomLoc(xCenter, yCenter);
+
+            if (Objects[xPos, yPos] == null)
+            {
+                Objects[xPos, yPos] = Instantiate(GenPlant(), Grid[xPos, yPos], Quaternion.identity) as GameObject;
+                Objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
+                Objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
+            }
+
+        }
+    }
+
+	private void GenRockArea(int xCenter, int yCenter)
+    {
+        int num = Random.Range(RockClusterMin, RockClusterMax);
+
+        for (int i = 0; i < num; i++)
+        {
+            SetRandomLoc(xCenter, yCenter);
+
+            if (Objects[xPos, yPos] == null)
+            {
+                Objects[xPos, yPos] = Instantiate(GenRock(), Grid[xPos, yPos], Quaternion.identity) as GameObject;
+                Objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
+                Objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
+            }
+
+        }
+
+    }
+
+	private void GenBuildingArea(int xCenter, int yCenter){
+
+		GenPlantArea (xCenter,yCenter);
+
+        Objects[xCenter, yCenter] = Instantiate(GenBuilding(), Grid[xCenter, yCenter], Quaternion.identity) as GameObject;
+        Objects[xCenter, yCenter].transform.SetParent(EnvironmentParent, true);
+        Objects[xCenter, yCenter].GetComponent<EnvironmentObject>().GameController = GameController;
+        
+	}
+
+	private void GenFoliageCluster(int x, int y){
+		GenRockArea (x,y);
+		GenTreeArea (x,y);
+		GenPlantArea (x,y);
+    }
+
+	public void RemoveFromGrid(Object obj){
+		for (int x = 0; x < _max_X; x++) {
+			for (int y = 0; y < _max_Y; y++) {
+				if (Objects[x, y] == obj) {
+					Objects[x, y] = null;
 					break;
-
-				i += 2;
+				}
 			}
 		}
 	}
-
-	private void GenerateEnvironmentObjects(){
-		
-		int objRoll = 0;
-		int i = 0;
-		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
-
-				objRoll = Random.Range (0, MaxChance);
-				if (i < Grid.Length) {
-
-					if (objRoll <= EnvironmentObjChance) {
-
-						objRoll = Random.Range (0, PrefabController.Environment.Count);
-						EnvironmentObjs [i] = Instantiate (PrefabController.Environment[objRoll], Grid [i], Quaternion.identity) as GameObject;
-						EnvironmentObjs [i].transform.SetParent (EnvironmentParent, true);
-						EnvironmentObjs [i].GetComponent<EnvironmentObject> ().GameController = GameController;
-
-					}
-
-				} else
-					break;
-
-				i += 2;
-			}
-		}
-	}
-
-	private void GenerateDogs(){
-		
-		int objRoll = 0;
-		int i = 0;
-		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
-
-				objRoll = Random.Range (0, MaxChance);
-				if (i < Grid.Length) {
-
-					if (objRoll <= DogChance) {
-
-						objRoll = Random.Range (0, PrefabController.Dogs.Count);
-						Dogs [i] = Instantiate (PrefabController.Dogs[objRoll], Grid [i], Quaternion.identity) as GameObject;
-						Dogs [i].transform.SetParent (DogParent, true);
-						Dogs [i].GetComponent<Creature> ().GameController = GameController;
-						Dogs [i].name = "Dog " + i;
-
-					}
-
-				} else
-					break;
-
-				i += 2;
-			}
-		}
-	}
-
-	private void GenerateMonsters(){
-		
-		int objRoll = 0;
-		int i = 0;
-		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
-
-				objRoll = Random.Range (0, MaxChance);
-				if (i < Grid.Length) {
-
-					if (objRoll <= MonsterChance) {
-
-						objRoll = Random.Range (0, PrefabController.Monsters.Count);
-						Monsters [i] = Instantiate (PrefabController.Monsters[objRoll], Grid [i], Quaternion.identity) as GameObject;
-						Monsters [i].transform.SetParent (MonsterParent, true);
-						Monsters [i].GetComponent<Creature> ().GameController = GameController;
-
-					}
-
-				} else
-					break;
-
-				i += 2;
-			}
-		}
-
-	}
-
-	private void GenerateItems(){
-		
-		int objRoll = 0;
-		int i = 0;
-		for (int x = 0 + xOffset; x < _max_X + xOffset; x++) {
-			for(int y = 0 + yOffset; y < _max_Y + yOffset; y++){
-
-				objRoll = Random.Range (0, MaxChance);
-				if (i < Grid.Length) {
-
-					if (objRoll <= ItemChance) {
-
-						objRoll = Random.Range (0, PrefabController.Items.Count);
-						Items [i] = Instantiate (PrefabController.Items[objRoll], Grid [i], Quaternion.identity) as GameObject;
-						Items [i].transform.SetParent (ItemParent, true);
-						Items [i].GetComponent<Item> ().GameController = GameController;
-
-					}
-
-				} else
-					break;
-
-				i += 2;
-			}
-		}
-
-	}
-
-	public void RemoveMonsterFromGrid(Monster monster){
-		for (int i = 0; i < Monsters.Length; i++) {
-			if (Monsters [i] != null && Monsters [i] == monster.gameObject) {
-				Monsters [i] = null;
-				break;
-			}
-		}
-	}
-
-	public void RemoveDogFromGrid(Dog dog){
-		for (int i = 0; i < Dogs.Length; i++) {
-			if (Dogs [i] != null && Dogs [i] == dog.gameObject) {
-				Dogs [i] = null;
-				break;
-			}
-		}
-	}
-
-	public void RemoveItemFromGrid(Item item){
-		for (int i = 0; i < Items.Length; i++) {
-			if (Items [i] != null && Items [i] == item.gameObject) {
-				Items [i] = null;
-				break;
-			}
-		}
-	}
-
-
 
 }

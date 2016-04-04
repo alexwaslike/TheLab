@@ -46,7 +46,7 @@ public class Dog : MonoBehaviour {
 
 		} else if (Creature.CurrentState == State.Box) {
 
-			if (CombatAI.WithinInteractionRange (Creature.GameController.MainCharacterObj))
+			if (CombatAI.WithinRange (Creature.GameController.MainCharacterObj, CombatAI.InteractionRange))
 				Shadow.SetActive (true);
 			else
 				Shadow.SetActive (false);
@@ -56,7 +56,7 @@ public class Dog : MonoBehaviour {
 
 	public void OnMouseUp()
     {
-        if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
+		if (CombatAI.WithinRange(Creature.GameController.MainCharacterObj, CombatAI.InteractionRange))
             Clicked();
 	}
 
@@ -102,7 +102,7 @@ public class Dog : MonoBehaviour {
 
 	public void Death(){
 		Creature.ChangeState (State.Dead);
-		Creature.GameController.LevelGeneration.RemoveDogFromGrid (this);
+		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
 		Creature.GameController.DogDeath (this);
 	}
 

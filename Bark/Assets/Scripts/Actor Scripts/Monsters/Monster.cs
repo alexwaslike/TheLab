@@ -8,12 +8,13 @@ public class Monster : MonoBehaviour {
 
     public Creature Creature;
     public CombatAI CombatAI;
-    public int speed;
+	public float Speed;
     private float time;
     private int direction, directionx, directiony;
 
 	void Start ()
     {
+		Creature.Speed = Speed;
         Creature.ChangeState(State.Idle);
     }
 
@@ -62,11 +63,11 @@ public class Monster : MonoBehaviour {
                     directionx = 0;
                     break;
                 }
-                transform.Translate(new Vector3(directionx * speed * Time.deltaTime, directiony * speed * Time.deltaTime, 0));
+                transform.Translate(new Vector3(directionx * Speed * Time.deltaTime, directiony * Speed * Time.deltaTime, 0));
 
             }
 
-            if (CombatAI.WithinInteractionRange(Creature.GameController.MainCharacterObj))
+			if (CombatAI.WithinRange(Creature.GameController.MainCharacterObj, CombatAI.InteractionRange))
                 Creature.ChangeState(State.Attack);
 		}
     }
@@ -74,7 +75,7 @@ public class Monster : MonoBehaviour {
 	public void Death(){
 		Creature.ChangeState (State.Dead);
 		Creature.GameController.CombatController.RemoveFromCombat (CombatAI);
-		Creature.GameController.LevelGeneration.RemoveMonsterFromGrid (this);
+		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
 		Destroy (gameObject);
 	}
 

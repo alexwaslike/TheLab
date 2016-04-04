@@ -119,7 +119,7 @@ public class GameController : MonoBehaviour {
 
 		MainCharacter.AddDogToInventory (dog);
 
-		LevelGeneration.RemoveDogFromGrid (dog);
+		LevelGeneration.RemoveFromGrid (dog.gameObject);
 	}
 
 	public void AddItem(Item item){
@@ -127,7 +127,7 @@ public class GameController : MonoBehaviour {
 		ItemInventory.GetComponent<Inventory> ().AddNewItem (item.GetComponent<Collectible> ());
 		item.gameObject.SetActive (false);
 
-		LevelGeneration.RemoveItemFromGrid (item);
+		LevelGeneration.RemoveFromGrid (item.gameObject);
 	}
 
 }

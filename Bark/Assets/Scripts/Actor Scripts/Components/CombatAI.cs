@@ -23,6 +23,7 @@ public class CombatAI : MonoBehaviour {
     public Creature Creature;
 	public Health Health;
     public float InteractionRange = 2.0f;
+	public float AttackRange = 2.0f;
 	public int AttackDamage = 10;
 	public bool HasTarget;
 
@@ -38,9 +39,9 @@ public class CombatAI : MonoBehaviour {
         HasTarget = false;
     }
 
-    public bool WithinInteractionRange(GameObject otherObject)
+	public bool WithinRange(GameObject otherObject, float range)
     {
-        if (Vector3.Distance(transform.position, otherObject.transform.position) <= InteractionRange)
+        if (Vector3.Distance(transform.position, otherObject.transform.position) <= range)
             return true;
         return false;
     }
@@ -49,7 +50,7 @@ public class CombatAI : MonoBehaviour {
     {
         if (Creature != null)
         {
-            if (!WithinInteractionRange(GameController.MainCharacterObj)){
+			if (!WithinRange(GameController.MainCharacterObj, InteractionRange)){
                 Creature.ChangeState(State.Idle);
 				GameController.CombatController.RemoveFromCombat (this);
             }
@@ -111,17 +112,19 @@ public class CombatAI : MonoBehaviour {
 
     private void Attack()
     {
-		if (_currentTarget.GetComponent<CombatAI> () != null)
-			_currentTarget.GetComponent<CombatAI> ().BeingAttacked (this);
+		if(WithinRange(_currentTarget.gameObject, AttackRange)) {
+			if (_currentTarget.GetComponent<CombatAI> () != null)
+				_currentTarget.GetComponent<CombatAI> ().BeingAttacked (this);
 
-        if (_attackCooldown == 0)
-        {
-            _attackCooldown = _attackRate;
-			_currentTarget.TakeDamage(AttackDamage);
-        }
-        else {
-            _attackCooldown--;
-        }
+			if (_attackCooldown == 0)
+			{
+				_attackCooldown = _attackRate;
+				_currentTarget.TakeDamage(AttackDamage);
+			}
+			else {
+				_attackCooldown--;
+			}
+		}
     }
 
 	private void BeingAttacked(CombatAI attacker){

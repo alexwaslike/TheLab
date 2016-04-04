@@ -4,13 +4,6 @@ using System.Collections.Generic;
 public class CharacterMovement : MonoBehaviour {
 
 	public float Speed = 0.1f;
-
-    /*private MainCharacter _mainCharacter;
-
-    void Start()
-    {
-        _mainCharacter = GetComponent<MainCharacter>();
-    }*/
     
 	void Update()
     {
@@ -18,10 +11,10 @@ public class CharacterMovement : MonoBehaviour {
 		float horizontal = Input.GetAxis("Horizontal");
 		float vertical = Input.GetAxis("Vertical");
 
-		transform.Translate(new Vector3(horizontal, vertical, 0)* Speed);
+        if (Mathf.Abs(vertical) > 0.001)
+		    transform.Translate(new Vector3(horizontal, vertical, 0) * Speed * (1/Mathf.Sqrt(2)) );
+        else
+            transform.Translate(new Vector3(horizontal, vertical, 0) * Speed);
 
-        /*for (int i = 0; i < _mainCharacter.DogInventory.Count; i++)
-            _mainCharacter.DogInventory[i].PositionDog(i);*/
-
-	}
+    }
 }
