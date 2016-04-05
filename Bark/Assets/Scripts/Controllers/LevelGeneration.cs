@@ -44,7 +44,11 @@ public class LevelGeneration : MonoBehaviour {
 	public int yOffset;
 	public float radiusFromPlayer;
 
+    private float _nearClipPlane;
+
 	void Awake(){
+
+        _nearClipPlane = GameController.MainCamera.nearClipPlane;
 
         tilePrefab = GameController.PrefabController.Tiles[0];
 
@@ -63,47 +67,46 @@ public class LevelGeneration : MonoBehaviour {
 
 	void Update(){
 
-        Vector3 position;
-        for (int x = 0; x < _max_X; x++) {
-            for (int y = 0; y < _max_Y; y++) {
+        Vector3 cameraBottomLeft = GameController.MainCamera.ViewportToWorldPoint(new Vector3(0, 0, _nearClipPlane));
+        Vector3 cameraTopRight = GameController.MainCamera.ViewportToWorldPoint(new Vector3(1, 1, _nearClipPlane));
 
-                if (Tiles[x, y] != null)
-                {
+        Vector3 position;
+        for(int x = 0; x < _max_X; x++)
+        {
+            for(int y = 0; y < _max_Y; y++)
+            {
+
+                if(Tiles[x,y] != null) {
                     position = Grid[x, y];
-                    if((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                    if(position.x > cameraTopRight.x + 2 || position.x < cameraBottomLeft.x - 2 || position.y > cameraTopRight.y + 1 || position.y < cameraBottomLeft.y - 1) {
                         Tiles[x, y].SetActive(false);
-                    } else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                    } else if (position.x - cameraTopRight.x < 2 || position.x - cameraBottomLeft.x < -2 || position.y - cameraTopRight.y < 1 || position.y - cameraBottomLeft.y < -1) {
                         Tiles[x, y].SetActive(true);
                     }
                 }
 
-                if (Objects [x, y] != null) {
+                if (Objects[x, y] != null) {
                     position = Objects[x, y].transform.position;
-                    if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                    if (position.x > cameraTopRight.x + 5 || position.x < cameraBottomLeft.x - 5 || position.y > cameraTopRight.y + 5 || position.y < cameraBottomLeft.y - 5) {
                         Objects[x, y].SetActive(false);
-                    }
-                    else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                    } else if (position.x - cameraTopRight.x < 5 || position.x - cameraBottomLeft.x < -5 || position.y - cameraTopRight.y < 5 || position.y - cameraBottomLeft.y < -5) {
                         Objects[x, y].SetActive(true);
                     }
                 }
 
-                if (Overlays[x, y] != null)
-                {
+                if (Overlays[x, y] != null) {
                     position = Overlays[x, y].transform.position;
-                    if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer + 1){
+                    if (position.x > cameraTopRight.x + 5 || position.x < cameraBottomLeft.x - 5 || position.y > cameraTopRight.y + 5 || position.y < cameraBottomLeft.y - 5) {
                         Overlays[x, y].SetActive(false);
-                    }
-                    else if ((int)Mathf.Abs(Vector3.Distance(position, PlayerLoc.position)) == (int)radiusFromPlayer){
+                    } else if (position.x - cameraTopRight.x < 5 || position.x - cameraBottomLeft.x < -5 || position.y - cameraTopRight.y < 5 || position.y - cameraBottomLeft.y < -5) {
                         Overlays[x, y].SetActive(true);
                     }
                 }
-
-
             }
         }
-        
+
     }
-    
+
     private void GenerateTiles(){
         
 		float xSize = 3.61f;
@@ -253,12 +256,30 @@ public class LevelGeneration : MonoBehaviour {
     private GameObject GenDog()
     {
         int roll = Random.Range(0, PrefabController.Dogs.Count);
+        int chance = Random.Range(0, 100);
+        int rarity = (int)PrefabController.Dogs[roll].GetComponent<Creature>().RarityType;
+        while (chance > rarity)
+        {
+            roll = Random.Range(0, PrefabController.Dogs.Count);
+            chance = Random.Range(0, 100);
+            rarity = (int)PrefabController.Dogs[roll].GetComponent<Creature>().RarityType;
+        }
+        
         return PrefabController.Dogs[roll];
     }
 
     private GameObject GenMonster()
     {
         int roll = Random.Range(0, PrefabController.Monsters.Count);
+        int chance = Random.Range(0, 100);
+        int rarity = (int)PrefabController.Monsters[roll].GetComponent<Creature>().RarityType;
+        while (chance > rarity)
+        {
+            roll = Random.Range(0, PrefabController.Dogs.Count);
+            chance = Random.Range(0, 100);
+            rarity = (int)PrefabController.Monsters[roll].GetComponent<Creature>().RarityType;
+        }
+
         return PrefabController.Monsters[roll];
     }
 

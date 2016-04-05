@@ -13,10 +13,10 @@ public class CombatAI : MonoBehaviour {
 
     private int _attackCooldown;
 
-    public CombatController.TraitType Damage;
+    public CombatController.DamageType Damage;
     private int _attackDamage;
 
-    public CombatController.TraitType AttackRate;
+    public CombatController.AttackRateType AttackRate;
     private int _attackRate;
 
     public GameController GameController;
@@ -34,8 +34,8 @@ public class CombatAI : MonoBehaviour {
 
 		Health = GetComponent<Health> ();
 
-        _attackDamage = GameController.CombatController.TraitDamageAmount(Damage);
-        _attackRate = GameController.CombatController.TraitAttackSpeed(AttackRate);
+        _attackDamage = (int)Damage;
+        _attackRate = (int)AttackRate;
 
         _attackCooldown = 0;
         HasTarget = false;
