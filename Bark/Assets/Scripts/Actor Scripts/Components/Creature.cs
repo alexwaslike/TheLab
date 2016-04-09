@@ -87,7 +87,7 @@ public class Creature : MonoBehaviour {
     public void Move(float x, float y)
     {
         if(Mathf.Abs(y) > 0.001)
-            transform.Translate(new Vector3(x* (1 / Mathf.Sqrt(2)), y* (1 / Mathf.Sqrt(2)), 0));
+            transform.Translate(new Vector3(x* 0.5f, y* 0.5f, 0));
         else
             transform.Translate(x, y, 0);
     }

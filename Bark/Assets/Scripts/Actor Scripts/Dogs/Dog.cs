@@ -82,7 +82,6 @@ public class Dog : MonoBehaviour {
 
     public void PositionDog(int index)
     {
-
         MainCharacter character = Creature.GameController.MainCharacter;
 
 		if (character.DogInventory.Count > 0) {
@@ -94,7 +93,7 @@ public class Dog : MonoBehaviour {
 			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * _dogDistance);
 			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * _dogDistance);
 
-			Creature.Move ((xLoc - transform.position.x) * Creature.Speed, (yLoc - transform.position.y) * Creature.Speed);
+            Creature.Move (xLoc - transform.position.x, yLoc - transform.position.y);
 		} else
 			Debug.LogWarning ("Dog not in inventory!!");
 

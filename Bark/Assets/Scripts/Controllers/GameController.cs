@@ -109,7 +109,12 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void AddDog(Dog dog){
-		HUD.AddNewDogStats (dog);
+
+        //LevelGeneration.RemoveFromGrid(dog.gameObject);
+        dog.gameObject.transform.SetParent(MainCharacter.transform, false);
+        dog.gameObject.transform.localPosition = new Vector3(-1, -1, 0);
+
+        HUD.AddNewDogStats (dog);
 		DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
 
 		if(DogInventory.GetComponent<Inventory>().Collection.Count > DogInventory.GetComponent<Inventory>().MaxDogsOnGround)
@@ -117,9 +122,7 @@ public class GameController : MonoBehaviour {
 		else
 			dog.Creature.ChangeState (State.Follow);
 
-		MainCharacter.AddDogToInventory (dog);
-
-		LevelGeneration.RemoveFromGrid (dog.gameObject);
+        MainCharacter.AddDogToInventory (dog);
 	}
 
 	public void AddItem(Item item){
