@@ -42,13 +42,9 @@ public class GameController : MonoBehaviour {
 
 
 	// utility
-	public void SetSortingOrder(GameObject obj)
+	public void SetSortingOrder(SpriteRenderer spriteRenderer)
     {
-		SpriteRenderer spriteRenderer = obj.GetComponent<SpriteRenderer> ();
-		if (spriteRenderer != null) {
-			spriteRenderer.sortingOrder = maxHeight - Mathf.FloorToInt(obj.transform.position.y*4);
-		} else
-			Debug.LogError ("Sprite Renderer null when attempting to sort object!");
+		spriteRenderer.sortingOrder = maxHeight - Mathf.FloorToInt(spriteRenderer.gameObject.transform.position.y*4);
 	}
 
 	public void PauseGame(bool paused)

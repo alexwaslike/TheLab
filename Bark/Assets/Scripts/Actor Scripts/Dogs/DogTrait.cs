@@ -11,9 +11,9 @@ public class DogTrait : MonoBehaviour {
 
 	protected MainCharacter _player;
 
-	public virtual void OnAttach(MainCharacter mainCharacter){Debug.Log ("not implemented");}
+	public virtual void OnAttach(MainCharacter mainCharacter){Debug.Log ("OnAttach not implemented");}
 
-	public virtual void OnDetach(){Debug.Log ("not implemented");}
+	public virtual void OnDetach(){Debug.Log ("OnDetach not implemented");}
 
 
 }

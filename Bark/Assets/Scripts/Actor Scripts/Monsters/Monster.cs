@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Creature))]
 [RequireComponent(typeof(CombatAI))]
@@ -10,6 +10,10 @@ public class Monster : MonoBehaviour {
     public CombatAI CombatAI;
     private float time;
     private int direction, directionx, directiony;
+
+    public int NumItemsDropped;
+
+    public Image HealthBarImage;
 
 	void Start ()
     {
@@ -74,6 +78,15 @@ public class Monster : MonoBehaviour {
 		Creature.ChangeState (State.Dead);
 		Creature.GameController.CombatController.RemoveFromCombat (CombatAI);
 		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
+
+        int x = 0;
+        for(int i=0; i< NumItemsDropped; i++)
+        {
+            GameObject drop = Creature.GameController.LevelGeneration.GenItem();
+            Instantiate(drop, new Vector3(transform.position.x + x, transform.position.y, 0), Quaternion.identity);
+            x++;
+        }
+
 		Destroy (gameObject);
 	}
 

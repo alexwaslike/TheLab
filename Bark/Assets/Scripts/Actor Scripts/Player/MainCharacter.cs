@@ -33,7 +33,7 @@ public class MainCharacter : MonoBehaviour {
 	void Start ()
     {
 		Health = GetComponent<Health>();
-        GameController.SetSortingOrder (gameObject);
+        GameController.SetSortingOrder(GetComponent<SpriteRenderer>());
 		_dogs = new List<Dog> ();
 		_items = new List<Item> ();
 		_numActiveDogs = 0;
@@ -41,7 +41,7 @@ public class MainCharacter : MonoBehaviour {
 	
 	void Update ()
     {
-		GameController.SetSortingOrder (gameObject);
+		GameController.SetSortingOrder (GetComponent<SpriteRenderer>());
 	}
 
 	public void ActivateDog(Dog dog){
@@ -56,13 +56,15 @@ public class MainCharacter : MonoBehaviour {
 		
 	public void AddDogToInventory(Dog dog)
     {
-		_dogs.Add (dog);
-		dog.PositionDog (_dogs.IndexOf(dog));
+        GameController.LevelGeneration.RemoveFromGrid(dog.gameObject);
+
+        _dogs.Add (dog);
+        dog.PositionDog (_dogs.IndexOf(dog));
 
 		if (dog.Creature.CurrentState == State.Follow)
 			_numActiveDogs++;
 
-		dog.Attached (this);
+        dog.Attached (this);
 	}
 
 	public void RemoveDogFromInventory(Dog dog){

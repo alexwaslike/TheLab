@@ -11,13 +11,13 @@ public class CombatAI : MonoBehaviour {
         get { return _currentTarget; }
     }
 
-    private int _attackCooldown;
+    private float _attackCooldown;
 
     public CombatController.DamageType Damage;
     private int _attackDamage;
 
     public CombatController.AttackRateType AttackRate;
-    private int _attackRate;
+    private float _attackRate;
 
     public GameController GameController;
     public Creature Creature;
@@ -25,6 +25,11 @@ public class CombatAI : MonoBehaviour {
     public float InteractionRange = 2.0f;
 	public float AttackRange = 2.0f;
 	public bool HasTarget;
+
+    [System.NonSerialized]
+    public float DodgeChance = 0f;
+    [System.NonSerialized]
+    public float DamageReduction = 0f;
 
     void Start()
     {
@@ -118,13 +123,13 @@ public class CombatAI : MonoBehaviour {
 			if (_currentTarget.GetComponent<CombatAI> () != null)
 				_currentTarget.GetComponent<CombatAI> ().BeingAttacked (this);
 
-			if (_attackCooldown == 0)
+			if (_attackCooldown <= 0)
 			{
 				_attackCooldown = _attackRate;
 				_currentTarget.TakeDamage(_attackDamage);
 			}
 			else {
-				_attackCooldown--;
+				_attackCooldown -= 1*Time.deltaTime;
 			}
 		}
     }

@@ -215,14 +215,14 @@ public class LevelGeneration : MonoBehaviour {
                 if (roll <= ItemChance)
                 {
                     Objects[x, y] = Instantiate(GenItem(), Grid[x, y], Quaternion.identity) as GameObject;
-                    Objects[x, y].transform.SetParent(DogParent, true);
+                    Objects[x, y].transform.SetParent(ItemParent, true);
                     Objects[x, y].GetComponent<Item>().GameController = GameController;
                 }
             }
         }
     }
 
-    private GameObject GenItem()
+    public GameObject GenItem()
     {
         int roll = Random.Range(0, PrefabController.Items.Count);
         return PrefabController.Items[roll];
@@ -369,7 +369,7 @@ public class LevelGeneration : MonoBehaviour {
 		GenPlantArea (x,y);
     }
 
-	public void RemoveFromGrid(Object obj){
+	public void RemoveFromGrid(GameObject obj){
 		for (int x = 0; x < _max_X; x++) {
 			for (int y = 0; y < _max_Y; y++) {
 				if (Objects[x, y] == obj) {

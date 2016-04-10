@@ -12,7 +12,7 @@ public class CharacterMovement : MonoBehaviour {
 		float vertical = Input.GetAxis("Vertical");
         
         if (Mathf.Abs(vertical) > 0.001)
-		    transform.Translate(new Vector3(horizontal, vertical, 0) * Speed * 0.5f * Time.deltaTime );
+		    transform.Translate(new Vector3(horizontal, vertical, 0) * Speed * 0.7f * Time.deltaTime );
         else
             transform.Translate(new Vector3(horizontal, vertical, 0) * Speed * Time.deltaTime);
 

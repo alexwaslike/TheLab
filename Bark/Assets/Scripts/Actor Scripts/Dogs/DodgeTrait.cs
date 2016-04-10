@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class DodgeTrait : MonoBehaviour {
+// Ability: 25% chance of monster missing
+public class DodgeTrait : DogTrait {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Start()
+    {
+        GetComponent<CombatAI>().DodgeChance = 25f;
+    }
+
 }

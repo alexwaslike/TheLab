@@ -12,6 +12,7 @@ public class Creature : MonoBehaviour {
     public CombatController.MovementSpeedType MovementSpeed;
     public CombatController.HealthType HealthType;
     public CombatController.RarityType RarityType;
+    public Animator Animator;
 
     private float _speed;
     public float Speed
@@ -46,11 +47,11 @@ public class Creature : MonoBehaviour {
         CombatAI.Health.MaxHealth = (int)HealthType;
         _speed = (int)MovementSpeed;
 
-		GameController.SetSortingOrder (gameObject);
+		GameController.SetSortingOrder (SpriteRenderer);
 	}
 
 	void Update(){
-		GameController.SetSortingOrder (gameObject);
+		GameController.SetSortingOrder (SpriteRenderer);
 	}
 
     public void ChangeState(State newState)
@@ -76,6 +77,7 @@ public class Creature : MonoBehaviour {
 			gameObject.SetActive (true);
 			_state = State.Follow;
 			SpriteRenderer.sprite = Sprite_S;
+                if (Animator != null) { Animator.enabled = true; Animator.Play("MoveLeft"); }
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);

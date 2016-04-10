@@ -18,12 +18,12 @@ public class Dog : MonoBehaviour {
 	public Health Health;
 	public Collectible Collectible;
 
-	void Start ()
+    void Start ()
     {
 
-		string description = "Traits:\\n";
+		string description = "Traits:\n";
 		foreach (DogTrait trait in Traits) {
-			description += trait.Name + ": " + trait.Description + "\\n";
+			description += trait.Name + ": " + trait.Description + "\n";
 		}
 		Collectible.Description = description;
 		Collectible.Name = Creature.Name;

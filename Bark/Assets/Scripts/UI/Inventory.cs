@@ -53,8 +53,8 @@ public class Inventory : MonoBehaviour {
 				return;
 			}
 			GameController.MainCharacter.ActivateDog (selectedDog);
-			DisplayStats (SelectedItem);
-		}
+            Exit();
+        }
 	}
 
 	public void DeactivateDog(){
@@ -64,13 +64,12 @@ public class Inventory : MonoBehaviour {
 			return;
 		}
 		GameController.MainCharacter.DeactivateDog (selectedDog);
-		DisplayStats (SelectedItem);
+        Exit();
 	}
 
 	public void RemoveItem(Collectible itemToRemove){
 		Destroy(_collection [itemToRemove].gameObject);
 		_collection.Remove (itemToRemove);
-
 	}
 
 	private void DisplayStats(Collectible item){

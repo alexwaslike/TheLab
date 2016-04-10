@@ -5,6 +5,7 @@ public class HealthBar : MonoBehaviour {
 
     public Health Health;
     public RawImage HealthBarImg;
+    public Image HealthBarBackground;
 
     private float _height;
     private float _maxWidth;
@@ -21,7 +22,7 @@ public class HealthBar : MonoBehaviour {
 
     void Update()
     {
-        HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * Health.HP / 100, _height);
+        HealthBarImg.rectTransform.sizeDelta = new Vector2(_maxWidth * Health.HP / Health.MaxHealth, _height);
         HealthBarImg.rectTransform.anchoredPosition = new Vector2(_xLoc + HealthBarImg.rectTransform.sizeDelta.x / 2 - _maxWidth / 2, _yLoc);
     }
 }

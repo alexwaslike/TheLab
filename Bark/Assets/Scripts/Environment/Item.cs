@@ -18,7 +18,7 @@ public class Item : MonoBehaviour {
 	void Start(){
 
 		Collectible.Inventory = GameController.ItemInventory.GetComponent<Inventory> ();
-		GameController.SetSortingOrder (gameObject);
+		GameController.SetSortingOrder (SpriteRenderer);
 
 		Collectible.Name = Name;
 		Collectible.Description = WritingDB.ItemDescriptions[Name];
