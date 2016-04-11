@@ -34,12 +34,22 @@ public class Creature : MonoBehaviour {
 	public Sprite Sprite_Dead;
 	public Sprite Sprite_Box;
 
+    // animation names
+    public string AnimNorth;
+    public string AnimSouth;
+    public string AnimEast;
+    public string AnimWest;
+
 	// other public
     public CreatureType Type;
     public string Name = "doge";
     public CombatAI CombatAI;
     public SpriteRenderer SpriteRenderer;
     public GameController GameController;
+
+    // movement detection
+    private float prevX;
+    private float prevY;
 
 	void Start(){
 
@@ -48,11 +58,37 @@ public class Creature : MonoBehaviour {
         _speed = (int)MovementSpeed;
 
 		GameController.SetSortingOrder (SpriteRenderer);
+
+        prevX = transform.position.x;
+        prevY = transform.position.y;
 	}
 
 	void Update(){
 		GameController.SetSortingOrder (SpriteRenderer);
-	}
+
+        if(Animator != null)
+        {
+            float xMovement = transform.position.x - prevX;
+            float yMovement = transform.position.y - prevY;
+
+            if (xMovement > 0)
+                Animator.SetInteger("xMovement", 1);
+            else if (xMovement < 0)
+                Animator.SetInteger("xMovement", -1);
+            else
+                Animator.SetInteger("xMovement", 0);
+
+            if (yMovement > 0)
+                Animator.SetInteger("yMovement", 1);
+            else if (yMovement < 0)
+                Animator.SetInteger("yMovement", -1);
+            else
+                Animator.SetInteger("yMovement", 0);
+
+            prevX = transform.position.x;
+            prevY = transform.position.y;
+        }
+    }
 
     public void ChangeState(State newState)
     {
@@ -76,8 +112,7 @@ public class Creature : MonoBehaviour {
 		case State.Follow:
 			gameObject.SetActive (true);
 			_state = State.Follow;
-			SpriteRenderer.sprite = Sprite_S;
-                if (Animator != null) { Animator.enabled = true; Animator.Play("MoveLeft"); }
+            if (Animator != null) Animator.Play(AnimSouth, 0);
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);

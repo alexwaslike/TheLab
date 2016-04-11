@@ -2,6 +2,12 @@
 
 public class LevelGeneration : MonoBehaviour {
 
+    public bool SpawnMonsters = true;
+    public bool SpawnDogs = true;
+    public bool SpawnEnvironment = true;
+    public bool SpawnOverlays = true;
+    public bool SpawnItems = true;
+
 	public GameController GameController;
 	public PrefabController PrefabController;
 	public Transform TileParent;
@@ -58,11 +64,16 @@ public class LevelGeneration : MonoBehaviour {
         Overlays =  new GameObject[_max_X, _max_Y];
 
 		GenerateTiles();
-		GenerateEnvironment();
-        GenerateMonsters();
-        GenerateDogs();
-        GenerateOverlays();
-        GenerateItems();
+        if(SpawnEnvironment)
+		    GenerateEnvironment();
+        if(SpawnMonsters)
+            GenerateMonsters();
+        if(SpawnDogs)
+            GenerateDogs();
+        if(SpawnOverlays)
+            GenerateOverlays();
+        if(SpawnItems)
+            GenerateItems();
     }
 
 	void Update(){
