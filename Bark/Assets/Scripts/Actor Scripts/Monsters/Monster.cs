@@ -83,7 +83,9 @@ public class Monster : MonoBehaviour {
         for(int i=0; i< NumItemsDropped; i++)
         {
             GameObject drop = Creature.GameController.LevelGeneration.GenItem();
-            Instantiate(drop, new Vector3(transform.position.x + x, transform.position.y, 0), Quaternion.identity);
+            drop = Instantiate(drop, new Vector3(transform.position.x + x, transform.position.y, 0), Quaternion.identity) as GameObject;
+            drop.SetActive(true);
+            drop.GetComponent<Item>().GameController = Creature.GameController;
             x++;
         }
 

@@ -40,11 +40,11 @@ public class CombatController : MonoBehaviour {
 
     public enum AttackRateType
     {
-        High = 10,
-        MedHigh = 20,
-        Med = 40,
-        LowMed = 80,
-        Low = 120
+        High = 0,
+        MedHigh = 0,
+        Med = 0,
+        LowMed = 0,
+        Low = 0
     }
 
     public enum MovementSpeedType
