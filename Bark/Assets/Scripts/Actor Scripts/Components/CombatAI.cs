@@ -37,7 +37,7 @@ public class CombatAI : MonoBehaviour {
         if (Creature != null)
             GameController = Creature.GameController;
 
-		Health = GetComponent<Health> ();
+		Health = GetComponent<Health>();
 
         _attackDamage = (int)Damage;
         _attackRate = (int)AttackRate;
@@ -134,7 +134,7 @@ public class CombatAI : MonoBehaviour {
 		}
     }
 
-	private void BeingAttacked(CombatAI attacker){
+	public void BeingAttacked(CombatAI attacker){
 		if (_currentTarget != attacker.Health) {
 			Creature.ChangeState (State.Attack);
 			GameController.CombatController.AddToCombat (this);

@@ -105,8 +105,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void AddDog(Dog dog){
-
-        //LevelGeneration.RemoveFromGrid(dog.gameObject);
+        
         dog.gameObject.transform.SetParent(MainCharacter.transform, false);
         dog.gameObject.transform.localPosition = new Vector3(-1, -1, 0);
 
@@ -119,6 +118,12 @@ public class GameController : MonoBehaviour {
 			dog.Creature.ChangeState (State.Follow);
 
         MainCharacter.AddDogToInventory (dog);
+
+        if(CombatController.EngagedAI.Count > 0 && MainCharacter.DogInventory.Count == 1)
+        {
+            dog.CombatAI.BeingAttacked(CombatController.EngagedAI[0]);
+            CombatController.AddToCombat(dog.CombatAI);
+        }
 	}
 
 	public void AddItem(Item item){

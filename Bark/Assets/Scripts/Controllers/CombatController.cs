@@ -22,19 +22,19 @@ public class CombatController : MonoBehaviour {
 
     public enum HealthType
     {
-        High = 150,
-        MedHigh = 125,
-        Med = 100,
-        LowMed = 75,
-        Low = 50
+        High = 80,
+        MedHigh = 50,
+        Med = 30,
+        LowMed = 20,
+        Low = 10
     }
 
     public enum DamageType
     {
-        High = 20,
-        MedHigh = 16,
-        Med = 12,
-        LowMed = 8,
+        High = 30,
+        MedHigh = 20,
+        Med = 15,
+        LowMed = 10,
         Low = 5
     }
 
@@ -58,7 +58,7 @@ public class CombatController : MonoBehaviour {
 
     public void AddToCombat(CombatAI combatAI){
 		_engagedAI.Add (combatAI);
-	}
+    }
 
 	public void RemoveFromCombat(CombatAI aiToRemove){
 

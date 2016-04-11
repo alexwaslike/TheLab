@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Creature : MonoBehaviour {
 
@@ -112,7 +111,7 @@ public class Creature : MonoBehaviour {
 		case State.Follow:
 			gameObject.SetActive (true);
 			_state = State.Follow;
-            if (Animator != null) Animator.Play(AnimSouth, 0);
+                if (Animator != null) Animator.Play(AnimSouth, 0); else SpriteRenderer.sprite = Sprite_E;
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);
