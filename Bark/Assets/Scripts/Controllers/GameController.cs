@@ -109,13 +109,18 @@ public class GameController : MonoBehaviour {
         dog.gameObject.transform.SetParent(MainCharacter.transform, false);
         dog.gameObject.transform.localPosition = new Vector3(-1, -1, 0);
 
-        HUD.AddNewDogStats (dog);
-		DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
+        DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
 
 		if(DogInventory.GetComponent<Inventory>().Collection.Count > DogInventory.GetComponent<Inventory>().MaxDogsOnGround)
-			dog.Creature.ChangeState (State.InInventory);
-		else
-			dog.Creature.ChangeState (State.Follow);
+        {
+            dog.Creature.ChangeState(State.InInventory);
+        }
+        else
+        {
+            HUD.AddNewDogStats(dog);
+            dog.Creature.ChangeState(State.Follow);
+        }
+			
 
         MainCharacter.AddDogToInventory (dog);
 

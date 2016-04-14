@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+// interaction range very long
 public class RangedAttackTrait : MonoBehaviour {
 
-	// Use this for initialization
 	void Start () {
-	
+        GetComponent<CombatAI>().InteractionRange *= 2.0f;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
+

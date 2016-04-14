@@ -14,7 +14,8 @@ public class HUD : MonoBehaviour
     public GameController GameController;
     public GameObject DogStatsPrefab;
 
-	private float DogStatsBuffer = Screen.height/7.0f;
+	private float DogStatsBuffer = Screen.height/4.0f;
+    private float _dogStatsYStart = 108.0f;
 
     void Start()
     {
@@ -23,11 +24,11 @@ public class HUD : MonoBehaviour
 
     public void AddNewDogStats(Dog dog)
     {
-        GameObject newStats = Instantiate(DogStatsPrefab, new Vector3(DogStatsPrefab.transform.position.x, DogStatsPrefab.transform.position.y, 0.0f), Quaternion.identity) as GameObject;
+        GameObject newStats = Instantiate(DogStatsPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 
         _dogStatItems.Add(newStats.GetComponent<DogStats>());
         newStats.transform.SetParent(transform, false);
-        newStats.transform.Translate(new Vector3(0, DogStatsBuffer * -(_dogStatItems.Count-1), 0));
+        newStats.transform.localPosition = new Vector3(DogStatsPrefab.transform.position.x, _dogStatsYStart + DogStatsBuffer * -(_dogStatItems.Count-1), 0);
 
         newStats.GetComponentInChildren<HealthBar>().Health = dog.Health;
         newStats.GetComponent<DogStats>().Dog = dog;
@@ -35,17 +36,14 @@ public class HUD : MonoBehaviour
     }
 
     public void RemoveDogStats(Dog dog)
-    { 
-        foreach (DogStats dogStat in _dogStatItems) {
-            if (dogStat.Dog == dog) {
-                _dogStatItems.Remove(dogStat);
-                Destroy(dogStat.gameObject);
-                break;
-            }
-        }
+    {
+        int dogStat = GetIndexOfDogStat(dog);
+        DogStats dogToRemove = _dogStatItems[dogStat];
+        _dogStatItems.Remove(dogToRemove);
+        Destroy(dogToRemove.gameObject);
 
-        for(int i=0; i<_dogStatItems.Count; i++) {
-            _dogStatItems[i].transform.Translate(new Vector3(0, DogStatsBuffer, 0));
+        for (int j = 0; j<_dogStatItems.Count; j++) {
+            _dogStatItems[j].transform.localPosition = new Vector3(DogStatsPrefab.transform.position.x, _dogStatsYStart + DogStatsBuffer * -j, 0);
         }
     }
 
@@ -57,5 +55,23 @@ public class HUD : MonoBehaviour
 	public void ViewItemInventoryClicked(){
 		GameController.ItemInventory.SetActive(true);
 	}
+
+    public int GetIndexOfDogStat(Dog dog)
+    {
+        int index = -1;
+        int i = 0;
+        bool foundDog = false;
+        while (!foundDog)
+        {
+            DogStats dogStat = _dogStatItems[i];
+            if (dogStat.Dog == dog)
+            {
+                index = i;
+                foundDog = true;
+            }
+            i++;
+        }
+        return index;
+    }
 
 }

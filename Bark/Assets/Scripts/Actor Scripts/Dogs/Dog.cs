@@ -10,7 +10,7 @@ public class Dog : MonoBehaviour {
 
 	public List<DogTrait> Traits;
 
-	private float _dogDistance = 2.5f;
+	private float _dogDistance = 3.0f;
 
 	public GameObject Shadow;
     public Creature Creature;
@@ -37,12 +37,12 @@ public class Dog : MonoBehaviour {
     {
 		if (Creature.CurrentState == State.Follow) {
 			
-			PositionDog (Creature.GameController.MainCharacter.DogInventory.IndexOf (this));
+			PositionDog ();
 
 		} else if (Creature.CurrentState == State.Attack) {
 
 			CombatAI.TryAttackMonster ();
-			PositionDog (Creature.GameController.MainCharacter.DogInventory.IndexOf (this));
+			PositionDog ();
 
 		} else if (Creature.CurrentState == State.Box) {
 
@@ -80,7 +80,7 @@ public class Dog : MonoBehaviour {
 		}
 	}
 
-    public void PositionDog(int index)
+    public void PositionDog()
     {
         MainCharacter character = Creature.GameController.MainCharacter;
 
@@ -88,7 +88,7 @@ public class Dog : MonoBehaviour {
             
 			float radians;
 			if(character.NumActiveDogs != 0)
-				radians = ((360 / character.NumActiveDogs) * index) * (Mathf.PI / 180.0f);
+				radians = ((360 / Creature.GameController.HUD.DogStatItems.Count-1) * Creature.GameController.HUD.GetIndexOfDogStat(this)) * (Mathf.PI / 180.0f);
 			else
 				radians = 360 * (Mathf.PI / 180.0f);
 			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * _dogDistance);

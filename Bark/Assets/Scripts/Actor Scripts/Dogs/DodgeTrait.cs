@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-// Ability: 25% chance of monster missing
+// Dodge: 25% chance of monster missing
 public class DodgeTrait : DogTrait {
 
 	void Start()

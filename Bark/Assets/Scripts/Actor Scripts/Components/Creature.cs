@@ -70,19 +70,45 @@ public class Creature : MonoBehaviour {
             float xMovement = transform.position.x - prevX;
             float yMovement = transform.position.y - prevY;
 
-            if (xMovement > 0)
-                Animator.SetInteger("xMovement", 1);
-            else if (xMovement < 0)
-                Animator.SetInteger("xMovement", -1);
-            else
-                Animator.SetInteger("xMovement", 0);
+            if (xMovement != 0 || yMovement != 0)
+            {
+                Animator.SetBool("isMoving", true);
 
-            if (yMovement > 0)
-                Animator.SetInteger("yMovement", 1);
-            else if (yMovement < 0)
-                Animator.SetInteger("yMovement", -1);
-            else
-                Animator.SetInteger("yMovement", 0);
+                if (xMovement > 0)
+                {
+                    Animator.SetBool("facingRight", true);
+                    Animator.SetBool("facingLeft", false);
+                }
+                else if (xMovement < 0)
+                {
+                    Animator.SetBool("facingRight", false);
+                    Animator.SetBool("facingLeft", true);
+                }
+                else {
+                    Animator.SetBool("facingRight", false);
+                    Animator.SetBool("facingLeft", false);
+                }
+
+                if (yMovement > 0)
+                {
+                    Animator.SetBool("facingUp", true);
+                    Animator.SetBool("facingDown", false);
+                }
+                else if (yMovement < 0)
+                {
+                    Animator.SetBool("facingUp", false);
+                    Animator.SetBool("facingDown", true);
+                }
+                else {
+                    Animator.SetBool("facingUp", false);
+                    Animator.SetBool("facingDown", false);
+                }
+
+            }
+            else {
+                Animator.SetBool("isMoving", false);
+            }
+                
 
             prevX = transform.position.x;
             prevY = transform.position.y;
@@ -111,7 +137,7 @@ public class Creature : MonoBehaviour {
 		case State.Follow:
 			gameObject.SetActive (true);
 			_state = State.Follow;
-                if (Animator != null) Animator.Play(AnimSouth, 0); else SpriteRenderer.sprite = Sprite_E;
+            if (Animator == null) SpriteRenderer.sprite = Sprite_E;
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);

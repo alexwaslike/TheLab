@@ -2,8 +2,8 @@
 
 public class Health : MonoBehaviour {
 
-	private int _health;
-	public int HP
+	private float _health;
+	public float HP
 	{
 		get { return _health; }
 	}
@@ -14,7 +14,7 @@ public class Health : MonoBehaviour {
 		_health = MaxHealth;
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage(float damage)
 	{
         if (_health - damage <= 0)
         {
@@ -33,11 +33,14 @@ public class Health : MonoBehaviour {
 
             if(GetComponent<CombatAI>() != null)
             {
+                float reduction = damage * GetComponent<CombatAI>().DamageReduction;
+                damage -= reduction;
+
                 int roll = Random.Range(0, 100);
                 if (roll > 0 && roll < GetComponent<CombatAI>().DodgeChance)
                     damage = 0;
             }
-            
+
             _health -= damage;
 
         }

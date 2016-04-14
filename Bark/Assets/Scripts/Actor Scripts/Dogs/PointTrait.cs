@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+// exclamation point always on the N/S/E/W side based on closest other dog
 public class PointTrait : MonoBehaviour {
 
 	// Use this for initialization

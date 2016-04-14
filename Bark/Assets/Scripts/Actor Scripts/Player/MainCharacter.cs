@@ -46,11 +46,13 @@ public class MainCharacter : MonoBehaviour {
 
 	public void ActivateDog(Dog dog){
 		_numActiveDogs++;
+        GameController.HUD.AddNewDogStats(dog);
 		dog.Creature.ChangeState (State.Follow);
 	}
 
 	public void DeactivateDog(Dog dog){
 		_numActiveDogs--;
+        GameController.HUD.RemoveDogStats(dog);
 		dog.Creature.ChangeState (State.InInventory);
 	}
 		
@@ -59,7 +61,7 @@ public class MainCharacter : MonoBehaviour {
         GameController.LevelGeneration.RemoveFromGrid(dog.gameObject);
 
         _dogs.Add (dog);
-        dog.PositionDog (_dogs.IndexOf(dog));
+        dog.PositionDog ();
 
 		if (dog.Creature.CurrentState == State.Follow)
 			_numActiveDogs++;
