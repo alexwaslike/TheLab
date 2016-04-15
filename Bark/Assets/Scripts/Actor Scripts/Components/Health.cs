@@ -8,7 +8,8 @@ public class Health : MonoBehaviour {
 		get { return _health; }
 	}
 
-	public int MaxHealth;
+    [System.NonSerialized]
+    public int MaxHealth;
 
 	void Start(){
 		_health = MaxHealth;

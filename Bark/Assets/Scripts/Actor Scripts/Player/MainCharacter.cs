@@ -33,7 +33,10 @@ public class MainCharacter : MonoBehaviour {
 	void Start ()
     {
 		Health = GetComponent<Health>();
+        Health.MaxHealth = 40;
+
         GameController.SetSortingOrder(GetComponent<SpriteRenderer>());
+
 		_dogs = new List<Dog> ();
 		_items = new List<Item> ();
 		_numActiveDogs = 0;

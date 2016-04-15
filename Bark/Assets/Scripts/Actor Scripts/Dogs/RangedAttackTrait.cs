@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-// interaction range very long
+// Ability: Ranged attack
 public class RangedAttackTrait : MonoBehaviour {
 
 	void Start () {
-        GetComponent<CombatAI>().InteractionRange *= 2.0f;
+        
 	}
 
 }

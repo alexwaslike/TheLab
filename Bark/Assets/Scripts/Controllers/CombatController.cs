@@ -58,6 +58,15 @@ public class CombatController : MonoBehaviour {
 
     public void AddToCombat(CombatAI combatAI){
 		_engagedAI.Add (combatAI);
+        Debug.Log(combatAI.gameObject.name + "added to combat");
+
+        if (combatAI.GetComponent<Monster>() != null) {
+            foreach (Dog dog in GameController.MainCharacter.DogInventory) {
+                if (dog.Creature.CurrentState == State.Follow && !dog.CombatAI.HasTarget) {
+                    dog.CombatAI.BeingAttacked(combatAI);
+                }
+            }
+        }
     }
 
 	public void RemoveFromCombat(CombatAI aiToRemove){

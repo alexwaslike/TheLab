@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class SweeperTrait : MonoBehaviour {
+// Sweeper- Increase monster drop rate by 50%
+public class SweeperTrait : DogTrait {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	void Start()
+    {
+        GetComponent<CombatAI>().DropRateIncrease = 2;
+    }
+
 }

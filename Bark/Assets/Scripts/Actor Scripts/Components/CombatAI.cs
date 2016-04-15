@@ -24,12 +24,17 @@ public class CombatAI : MonoBehaviour {
 	public Health Health;
     public float InteractionRange = 2.0f;
 	public float AttackRange = 2.0f;
-	public bool HasTarget;
+
+    [System.NonSerialized]
+    public bool HasTarget;
 
     [System.NonSerialized]
     public float DodgeChance = 0f;
     [System.NonSerialized]
     public float DamageReduction = 0f;
+    [System.NonSerialized]
+    public int DropRateIncrease = 1;
+    private bool dropRateApplied = false;
 
     void Start()
     {
@@ -95,7 +100,14 @@ public class CombatAI : MonoBehaviour {
 			GameController.CombatController.AddToCombat (this);
 
 		if (HasTarget) {
-			Attack ();
+
+            if (!dropRateApplied)
+            {
+                _currentTarget.GetComponent<Monster>().NumItemsDropped *= DropRateIncrease;
+                dropRateApplied = true;
+            }
+
+            Attack ();
 		} else {
 
             bool foundTarget = false;
@@ -120,27 +132,30 @@ public class CombatAI : MonoBehaviour {
     private void Attack()
     {
 		if(WithinRange(_currentTarget.gameObject, AttackRange)) {
-			if (_currentTarget.GetComponent<CombatAI> () != null)
-				_currentTarget.GetComponent<CombatAI> ().BeingAttacked (this);
 
-			if (_attackCooldown <= 0)
-			{
+            if (_currentTarget.GetComponent<CombatAI>() != null) {
+                _currentTarget.GetComponent<CombatAI>().BeingAttacked(this);
+            }
+
+            if (_attackCooldown <= 0) {
 				_attackCooldown = _attackRate;
 				_currentTarget.TakeDamage(_attackDamage);
-			}
-			else {
+			} else {
 				_attackCooldown -= 1*Time.deltaTime;
 			}
+
 		}
     }
 
 	public void BeingAttacked(CombatAI attacker){
+
 		if (_currentTarget != attacker.Health) {
 			Creature.ChangeState (State.Attack);
 			GameController.CombatController.AddToCombat (this);
 			_currentTarget = attacker.GetComponent<Health>();
 			HasTarget = true;
 		}
+
 	}
 
 
