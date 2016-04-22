@@ -45,6 +45,24 @@ public class Inventory : MonoBehaviour {
 
 	}
 
+    public void UseItem()
+    {
+        if(SelectedItem != null) {
+            SelectedItem.GetComponent<Item>().ActivateItem();
+            RemoveItem(SelectedItem);
+
+            if (_collection.Count > 0)
+            {
+                Collectible[] keys = new Collectible[_collection.Keys.Count];
+                _collection.Keys.CopyTo(keys, 0);
+                SelectedItem = keys[0];
+            }
+            else
+                SelectedItem = null;
+        }
+        
+    }
+
 	public void ActivateDog(){
 		if (GameController.MainCharacter.NumActiveDogs < MaxDogsOnGround) {
 			Dog selectedDog = SelectedItem.GetComponent<Dog> ();

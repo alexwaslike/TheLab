@@ -17,6 +17,14 @@ public class Health : MonoBehaviour {
 		_health = MaxHealth;
 	}
 
+    public void Heal(float healAmount)
+    {
+        if (_health + healAmount > MaxHealth)
+            _health = MaxHealth;
+        else
+            _health += healAmount;
+    }
+
 	public void TakeDamage(float damage)
 	{
         GameObject damageObj = Instantiate(TakingDamageUI, Vector3.zero, Quaternion.identity) as GameObject;

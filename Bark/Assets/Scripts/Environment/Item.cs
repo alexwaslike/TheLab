@@ -28,4 +28,9 @@ public class Item : MonoBehaviour {
 		GameController.ItemClicked (this);
 	}
 
+    public virtual void ActivateItem()
+    {
+        Debug.Log("ActivateItem not implemented");
+    }
+
 }

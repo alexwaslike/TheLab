@@ -15,9 +15,9 @@ public static class WritingDB {
 
 	public static Dictionary<string, string> ItemDescriptions = new Dictionary<string, string>()
 	{
-		{"Super Potion", "zimbabwe"},
-        {"Potent Potion", "bazinger"},
-        {"Mild Potion", "bazoople"}
+		{"Super Potion", "Heals full health."},
+        {"Potent Potion", "Heals half health."},
+        {"Mild Potion", "Heals 1/4 health."}
     };
 
 }
