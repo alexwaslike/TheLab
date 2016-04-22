@@ -61,7 +61,7 @@ public class HUD : MonoBehaviour
         int index = -1;
         int i = 0;
         bool foundDog = false;
-        while (!foundDog)
+        while (!foundDog && i < _dogStatItems.Count)
         {
             DogStats dogStat = _dogStatItems[i];
             if (dogStat.Dog == dog)

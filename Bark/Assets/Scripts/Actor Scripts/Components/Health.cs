@@ -8,6 +8,8 @@ public class Health : MonoBehaviour {
 		get { return _health; }
 	}
 
+    public GameObject TakingDamageUI;
+
     [System.NonSerialized]
     public int MaxHealth;
 
@@ -17,9 +19,16 @@ public class Health : MonoBehaviour {
 
 	public void TakeDamage(float damage)
 	{
+        GameObject damageObj = Instantiate(TakingDamageUI, Vector3.zero, Quaternion.identity) as GameObject;
+        damageObj.transform.parent = gameObject.transform;
+        damageObj.transform.Rotate(new Vector3(0, 0, Random.Range(0, 360)));
+        damageObj.transform.localPosition = new Vector3(Random.Range(-transform.localScale.x, transform.localScale.x), Random.Range(-transform.localScale.y, transform.localScale.y), 2);
+
+
         if (_health - damage <= 0)
         {
             _health = 0;
+            Debug.Log(name + " died");
 
             if (GetComponent<Dog>() != null)
                 GetComponent<Dog>().Death();

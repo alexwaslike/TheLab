@@ -13,10 +13,10 @@ public class MainCharacter : MonoBehaviour {
 	public float DogHealthMultiplier = 1.0f;
 	public float SpeedMultiplier = 1.0f;
 
-	private List<Dog> _dogs;
+	private List<Dog> _dogInventory;
 	public List<Dog> DogInventory
     {
-		get { return _dogs; }
+		get { return _dogInventory; }
 	}
 
 	private List<Item> _items;
@@ -37,7 +37,7 @@ public class MainCharacter : MonoBehaviour {
 
         GameController.SetSortingOrder(GetComponent<SpriteRenderer>());
 
-		_dogs = new List<Dog> ();
+		_dogInventory = new List<Dog> ();
 		_items = new List<Item> ();
 		_numActiveDogs = 0;
 	}
@@ -49,34 +49,52 @@ public class MainCharacter : MonoBehaviour {
 
 	public void ActivateDog(Dog dog){
 		_numActiveDogs++;
+
         GameController.HUD.AddNewDogStats(dog);
 		dog.Creature.ChangeState (State.Follow);
-	}
+
+        foreach (Dog doge in _dogInventory) {
+            if (doge.Creature.CurrentState == State.Follow) {
+                doge.PositionDog();
+            }
+        }
+            
+    }
 
 	public void DeactivateDog(Dog dog){
 		_numActiveDogs--;
+
         GameController.HUD.RemoveDogStats(dog);
 		dog.Creature.ChangeState (State.InInventory);
-	}
+
+        foreach (Dog doge in _dogInventory) {
+            if (doge.Creature.CurrentState == State.Follow)
+                doge.PositionDog();
+        }    
+    }
 		
 	public void AddDogToInventory(Dog dog)
     {
         GameController.LevelGeneration.RemoveFromGrid(dog.gameObject);
 
-        _dogs.Add (dog);
-        dog.PositionDog ();
+        _dogInventory.Add (dog);
 
-		if (dog.Creature.CurrentState == State.Follow)
-			_numActiveDogs++;
-
+        if (dog.Creature.CurrentState == State.Follow) {
+            _numActiveDogs++;
+            foreach (Dog doge in _dogInventory)
+                doge.PositionDog();
+        }
+        
         dog.Attached (this);
 	}
 
 	public void RemoveDogFromInventory(Dog dog){
 		_numActiveDogs--;
-		dog.Detached ();
-		_dogs.Remove (dog);
-	}
+        _dogInventory.Remove (dog);
+
+        foreach (Dog doge in _dogInventory)
+            doge.PositionDog();
+    }
 
 	public void AddItemToInventory(Item item){
 		_items.Add (item);

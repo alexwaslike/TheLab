@@ -124,11 +124,8 @@ public class GameController : MonoBehaviour {
 
         MainCharacter.AddDogToInventory (dog);
 
-        if(CombatController.EngagedAI.Count > 0 && MainCharacter.DogInventory.Count == 1)
-        {
-            dog.CombatAI.BeingAttacked(CombatController.EngagedAI[0]);
+        if(CombatController.EngagedAI.Count > 0)
             CombatController.AddToCombat(dog.CombatAI);
-        }
 	}
 
 	public void AddItem(Item item){

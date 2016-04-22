@@ -31,20 +31,20 @@ public class CombatController : MonoBehaviour {
 
     public enum DamageType
     {
-        High = 30,
-        MedHigh = 20,
-        Med = 15,
-        LowMed = 10,
-        Low = 5
+        High = 15,
+        MedHigh = 10,
+        Med = 7,
+        LowMed = 3,
+        Low = 1
     }
 
     public enum AttackRateType
     {
-        High = 0,
-        MedHigh = 0,
-        Med = 0,
-        LowMed = 0,
-        Low = 0
+        High = 1,
+        MedHigh = 2,
+        Med = 3,
+        LowMed = 4,
+        Low = 5
     }
 
     public enum MovementSpeedType
@@ -56,15 +56,25 @@ public class CombatController : MonoBehaviour {
         Low = 4
     }
 
+    void Start()
+    {
+        _engagedAI = new List<CombatAI>();
+    }
+
     public void AddToCombat(CombatAI combatAI){
 		_engagedAI.Add (combatAI);
-        Debug.Log(combatAI.gameObject.name + "added to combat");
 
         if (combatAI.GetComponent<Monster>() != null) {
+            GameController.LevelGeneration.RemoveFromGrid(gameObject);
             foreach (Dog dog in GameController.MainCharacter.DogInventory) {
                 if (dog.Creature.CurrentState == State.Follow && !dog.CombatAI.HasTarget) {
                     dog.CombatAI.BeingAttacked(combatAI);
                 }
+            }
+        } else if (combatAI.GetComponent<Dog>() != null) {
+            foreach (CombatAI ai in EngagedAI) {
+                if(ai != null && ai.GetComponent<Monster>() != null)
+                    ai.GetNewDogTarget();
             }
         }
     }
@@ -74,17 +84,22 @@ public class CombatController : MonoBehaviour {
 		aiToRemove.HasTarget = false;
 		_engagedAI.Remove (aiToRemove);
 
+        int numEngagedMonsters = 0;
 		foreach(CombatAI AI in _engagedAI){
 
 			if (AI != null && (AI.CurrentTarget == null || AI.CurrentTarget == aiToRemove.Health)) {
 				AI.HasTarget = false;
 			}
+            if(AI != null && AI.GetComponent<Monster>() != null) {
+                AI.GetNewDogTarget();
+                numEngagedMonsters++;
+            }
+
 		}
 
-	}
+        if (numEngagedMonsters == 0)
+            CombatOver();
 
-	void Start(){
-		_engagedAI = new List<CombatAI> ();
 	}
 
 	public bool CanAttackDog()
@@ -98,5 +113,16 @@ public class CombatController : MonoBehaviour {
 		return false;
 
 	}
+
+    private void CombatOver()
+    {
+        foreach(CombatAI AI in _engagedAI) {
+            if(AI != null) {
+                AI.HasTarget = false;
+                AI.GetComponent<Creature>().ChangeState(State.Follow);
+            }
+        }
+        _engagedAI.Clear();
+    }
 
 }

@@ -83,12 +83,21 @@ public class Dog : MonoBehaviour {
     public void PositionDog()
     {
         MainCharacter character = Creature.GameController.MainCharacter;
+        int dogLoc = 0;
+        foreach(Dog dog in character.DogInventory)
+        {
+            if (dog == this)
+                break;
+            if(dog.Creature.CurrentState == State.Follow || dog.Creature.CurrentState == State.Attack)
+                dogLoc++;
+        }
 
-		if (character.DogInventory.Count > 0) {
+		if (character.DogInventory.Count > 0 && Creature.CurrentState == State.Follow || Creature.CurrentState == State.Attack)
+        {
             
 			float radians;
-			if(character.NumActiveDogs != 0)
-				radians = ((360 / Creature.GameController.HUD.DogStatItems.Count-1) * Creature.GameController.HUD.GetIndexOfDogStat(this)) * (Mathf.PI / 180.0f);
+			if(character.NumActiveDogs > 0)
+				radians = ((360 / character.NumActiveDogs) * dogLoc) * (Mathf.PI / 180.0f);
 			else
 				radians = 360 * (Mathf.PI / 180.0f);
 			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * _dogDistance);
@@ -97,14 +106,19 @@ public class Dog : MonoBehaviour {
             Creature.Move (xLoc - transform.position.x, yLoc - transform.position.y);
 
         } else
-			Debug.LogWarning ("Dog not in inventory!!");
+			Debug.LogWarning ("Dog not active or not in inventory");
 
     }
 
 	public void Death(){
-        Creature.Animator.enabled = false;
-        Creature.ChangeState (State.Dead);
-		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
+
+        Creature.ChangeState(State.Dead);
+        Detached();
+
+        if (Creature.Animator != null)
+            Creature.Animator.enabled = false;
+        
+        transform.parent = null;
 		Creature.GameController.DogDeath (this);
 	}
 

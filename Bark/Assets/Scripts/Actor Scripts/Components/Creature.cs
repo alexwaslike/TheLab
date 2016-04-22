@@ -117,7 +117,7 @@ public class Creature : MonoBehaviour {
 
     public void ChangeState(State newState)
     {
-		switch (newState) {
+        switch (newState) {
 		case State.Idle:
 			_state = State.Idle;
 			SpriteRenderer.sprite = Sprite_S;

@@ -71,20 +71,10 @@ public class CombatAI : MonoBehaviour {
 				if(!GameController.CombatController.EngagedAI.Contains(this))
 					GameController.CombatController.AddToCombat (this);
 
-				if (HasTarget)
-                {
-                    Attack();
-                }
-                else {
+                if (!HasTarget)
+                    GetNewDogTarget();
+                Attack();
 
-					if (Creature.GameController.MainCharacter.DogInventory.Count > 0)
-						_currentTarget = GameController.MainCharacter.DogInventory [0].Health;
-					else
-						_currentTarget = GameController.MainCharacter.Health;
-                    HasTarget = true;
-                    Attack();
-
-                }
             }
             else {
                 HasTarget = false;
@@ -92,6 +82,15 @@ public class CombatAI : MonoBehaviour {
             }
         }
         else Debug.Log("Attempting to use Creature Attack method with non-Creature");
+    }
+
+    public void GetNewDogTarget()
+    {
+        if (Creature.GameController.MainCharacter.DogInventory.Count > 0)
+            _currentTarget = GameController.MainCharacter.DogInventory[0].Health;
+        else
+            _currentTarget = GameController.MainCharacter.Health;
+        HasTarget = true;
     }
 
 	public void TryAttackMonster(){
@@ -112,7 +111,7 @@ public class CombatAI : MonoBehaviour {
 
             bool foundTarget = false;
             foreach (CombatAI AI in GameController.CombatController.EngagedAI) {
-				if (AI.GetComponent<Monster> () != null) {
+				if (AI != null && AI.GetComponent<Monster> () != null) {
 					_currentTarget = AI.GetComponent<Health> ();
                     foundTarget = true;
 					break;
@@ -122,6 +121,7 @@ public class CombatAI : MonoBehaviour {
                 HasTarget = true;
                 Attack();
             } else {
+                GameController.CombatController.RemoveFromCombat(this);
                 Creature.ChangeState(State.Follow);
             }
 
@@ -141,7 +141,7 @@ public class CombatAI : MonoBehaviour {
 				_attackCooldown = _attackRate;
 				_currentTarget.TakeDamage(_attackDamage);
 			} else {
-				_attackCooldown -= 1*Time.deltaTime;
+				_attackCooldown -= 2.0f*Time.deltaTime;
 			}
 
 		}
@@ -149,12 +149,12 @@ public class CombatAI : MonoBehaviour {
 
 	public void BeingAttacked(CombatAI attacker){
 
-		if (_currentTarget != attacker.Health) {
+        if (_currentTarget != attacker.Health) {
 			Creature.ChangeState (State.Attack);
 			GameController.CombatController.AddToCombat (this);
 			_currentTarget = attacker.GetComponent<Health>();
 			HasTarget = true;
-		}
+        }
 
 	}
 

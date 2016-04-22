@@ -75,6 +75,9 @@ public class Monster : MonoBehaviour {
     }
 
 	public void Death(){
+
+        GetComponent<BoxCollider2D>().enabled = false;
+        
 		Creature.ChangeState (State.Dead);
 		Creature.GameController.CombatController.RemoveFromCombat (CombatAI);
 		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
@@ -83,7 +86,7 @@ public class Monster : MonoBehaviour {
         for(int i=0; i< NumItemsDropped; i++)
         {
             GameObject drop = Creature.GameController.LevelGeneration.GenItem();
-            drop = Instantiate(drop, new Vector3(transform.position.x + x, transform.position.y, 0), Quaternion.identity) as GameObject;
+            drop = Instantiate(drop, new Vector3(transform.position.x + 2*x, transform.position.y, 0), Quaternion.identity) as GameObject;
             drop.SetActive(true);
             drop.GetComponent<Item>().GameController = Creature.GameController;
             x++;
