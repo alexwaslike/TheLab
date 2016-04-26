@@ -8,6 +8,7 @@ public class MainCharacter : MonoBehaviour {
 	public GameController GameController;
 	public Health Health;
     public GameObject LoseUI;
+    public CharacterMovement Movement;
 
 	public float DogAttackMultiplier = 1.0f;
 	public float DogHealthMultiplier = 1.0f;
@@ -76,7 +77,7 @@ public class MainCharacter : MonoBehaviour {
 	public void AddDogToInventory(Dog dog)
     {
         GameController.LevelGeneration.RemoveFromGrid(dog.gameObject);
-
+        
         _dogInventory.Add (dog);
 
         if (dog.Creature.CurrentState == State.Follow) {

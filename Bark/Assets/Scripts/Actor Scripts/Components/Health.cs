@@ -36,7 +36,6 @@ public class Health : MonoBehaviour {
         if (_health - damage <= 0)
         {
             _health = 0;
-            Debug.Log(name + " died");
 
             if (GetComponent<Dog>() != null)
                 GetComponent<Dog>().Death();

@@ -10,7 +10,7 @@ public class Dog : MonoBehaviour {
 
 	public List<DogTrait> Traits;
 
-	private float _dogDistance = 3.0f;
+	public float DogDistance = 1.0f;
 
 	public GameObject Shadow;
     public Creature Creature;
@@ -100,10 +100,13 @@ public class Dog : MonoBehaviour {
 				radians = ((360 / character.NumActiveDogs) * dogLoc) * (Mathf.PI / 180.0f);
 			else
 				radians = 360 * (Mathf.PI / 180.0f);
-			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * _dogDistance);
-			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * _dogDistance);
+			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * DogDistance);
+			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * DogDistance);
 
-            Creature.Move (xLoc - transform.position.x, yLoc - transform.position.y);
+            float xMovement = (xLoc - transform.position.x) * Creature.Speed * Time.deltaTime;
+            float yMovement = (yLoc - transform.position.y) * Creature.Speed * Time.deltaTime;
+
+            Creature.Move(xMovement, yMovement);
 
         } else
 			Debug.LogWarning ("Dog not active or not in inventory");

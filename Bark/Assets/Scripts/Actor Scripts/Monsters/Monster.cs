@@ -26,9 +26,7 @@ public class Monster : MonoBehaviour {
 
             if (CombatAI.HasTarget)
             {
-                float xShift = (CombatAI.CurrentTarget.transform.position.x - transform.position.x - (CombatAI.InteractionRange / 5.0f)) * Creature.Speed*Time.deltaTime;
-                float yShift = (CombatAI.CurrentTarget.transform.position.y - transform.position.y - (CombatAI.InteractionRange / 5.0f)) * Creature.Speed*Time.deltaTime;
-                Creature.Move(xShift, yShift);
+                transform.position = Vector3.MoveTowards(transform.position, CombatAI.CurrentTarget.transform.position, Creature.Speed * Time.deltaTime);
             }
             CombatAI.TryAttackDog();
 

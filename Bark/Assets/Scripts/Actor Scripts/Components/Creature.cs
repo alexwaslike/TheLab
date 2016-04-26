@@ -13,11 +13,7 @@ public class Creature : MonoBehaviour {
     public CombatController.RarityType RarityType;
     public Animator Animator;
 
-    private float _speed;
-    public float Speed
-    {
-        get { return _speed; }
-    }
+    public float Speed;
 
     private int _rarity;
     public int Rarity
@@ -54,7 +50,7 @@ public class Creature : MonoBehaviour {
 
         _rarity = (int)RarityType;
         CombatAI.Health.MaxHealth = (int)HealthType;
-        _speed = (int)MovementSpeed;
+        Speed = (int)MovementSpeed;
 
 		GameController.SetSortingOrder (SpriteRenderer);
 
@@ -148,10 +144,10 @@ public class Creature : MonoBehaviour {
 
     public void Move(float x, float y)
     {
-        if(Mathf.Abs(y) > 0.001)
-            transform.Translate(new Vector3(x* 0.5f, y* 0.5f, 0));
+        if (Mathf.Abs(y) > 0.001)
+            transform.Translate(x * 0.6f, y * 0.6f, 0.0f);
         else
-            transform.Translate(x, y, 0);
+            transform.Translate(x, y, 0.0f);
     }
 
 }
