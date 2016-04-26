@@ -14,7 +14,7 @@ public class HUD : MonoBehaviour
     public GameController GameController;
     public GameObject DogStatsPrefab;
 
-	private float DogStatsBuffer = Screen.height/4.0f;
+	private float DogStatsBuffer = Screen.height/108.0f + 75.0f;
     private float _dogStatsYStart = 108.0f;
 
     void Start()
