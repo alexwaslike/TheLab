@@ -16,7 +16,7 @@ public class AutoTransparency : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag.Equals("Player"))
+        if (other.gameObject.tag.Equals("Player") && other.GetComponent<SpriteRenderer>().sortingOrder < _spriteRenderer.sortingOrder )
             _spriteRenderer.color = _transparentColor;  
     }
 

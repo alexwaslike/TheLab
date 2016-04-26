@@ -106,7 +106,7 @@ public class GameController : MonoBehaviour {
 
 	public void AddDog(Dog dog){
         
-        dog.gameObject.transform.SetParent(MainCharacter.transform, false);
+        dog.gameObject.transform.SetParent(null, false);
         dog.gameObject.transform.localPosition = new Vector3(-1, -1, 0);
 
         DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
