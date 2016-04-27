@@ -130,10 +130,10 @@ public class LevelGeneration : MonoBehaviour {
         
 		float xSize = 3.61f;
 		float ySize = 1.82f;
+        
         bool alt = false;
-
         for (int x = 0; x < _max_X; x++) {
-			for (int y = 0; y < _max_Y; y++){
+            for (int y = 0; y < _max_Y; y++){
 
                 Vector3 newPos = Vector3.zero;
 
@@ -144,15 +144,15 @@ public class LevelGeneration : MonoBehaviour {
 
                 _grid [x, y] = newPos;
 
-				Tiles[x, y] = Instantiate (tilePrefab, newPos, Quaternion.identity) as GameObject;
-				Tiles[x, y].transform.SetParent (TileParent, true);
+                Tiles[x, y] = Instantiate (tilePrefab, newPos, Quaternion.identity) as GameObject;
+                Tiles[x, y].transform.SetParent (TileParent, true);
 
             }
             alt = !alt;
         }
-	}
+    }
 
-	private void GenerateEnvironment(){
+    private void GenerateEnvironment(){
 
 		int buildingChance = (int)(BuildingChance);
 		int foliageChance = (int)(buildingChance + FoliageClusterChance);
