@@ -133,7 +133,7 @@ public class LevelGeneration : MonoBehaviour {
     private void GenerateTiles(){
         
 		
-        float tileSize = 2.55f;
+        float tileSize = 2.525f;
 
         Vector2 xyVector;
         Vector3 newPos;

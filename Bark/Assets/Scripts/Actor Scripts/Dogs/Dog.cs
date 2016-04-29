@@ -13,6 +13,7 @@ public class Dog : MonoBehaviour {
 	public float DogDistance = 1.0f;
 
 	public GameObject Shadow;
+    //public GameObject Light;
     public Creature Creature;
     public CombatAI CombatAI;
 	public Health Health;
@@ -62,13 +63,13 @@ public class Dog : MonoBehaviour {
 
 	private void Clicked()
     {
-		if (Creature.CurrentState == State.Box) {
+        if (Creature.CurrentState == State.Box) {
             Creature.GameController.DogClicked (this);
 		}
 	}
 
 	public void Attached(MainCharacter mainCharacter){
-		Shadow.SetActive(false);
+        Shadow.SetActive(false);
 		foreach(DogTrait trait in Traits){
 			trait.OnAttach (mainCharacter);
 		}
