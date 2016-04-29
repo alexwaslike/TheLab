@@ -103,7 +103,8 @@ public class LevelGeneration : MonoBehaviour {
 
                 if(Tiles[x,y] != null) {
                     position = _grid[x, y];
-                    if(position.x > cameraTopRight.x + 2 || position.x < cameraBottomLeft.x - 2 || position.y > cameraTopRight.y + 1 || position.y < cameraBottomLeft.y - 1) {
+                    size = Tiles[x, y].transform.lossyScale;
+                    if (position.x - size.x / 2.0f > cameraTopRight.x + 2 || position.x + size.x / 2.0f < cameraBottomLeft.x - 2 || position.y - size.y / 2.0f > cameraTopRight.y + 1 || position.y + size.y / 2.0f < cameraBottomLeft.y - 1) {
                         Tiles[x, y].SetActive(false);
                     } else if (position.x - cameraTopRight.x < 2 || position.x - cameraBottomLeft.x < -2 || position.y - cameraTopRight.y < 1 || position.y - cameraBottomLeft.y < -1) {
                         Tiles[x, y].SetActive(true);

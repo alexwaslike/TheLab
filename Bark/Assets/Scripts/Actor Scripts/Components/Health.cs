@@ -37,7 +37,6 @@ public class Health : MonoBehaviour {
             Creature creature = GetComponent<Creature>();
             if (creature.AudioSource != null && creature.HurtSound != null)
             {
-                Debug.Log("played hurt sound " + creature.HurtSound + " from " + name);
                 creature.AudioSource.pitch = Random.Range(creature.MinPitch, creature.MaxPitch);
                 creature.AudioSource.PlayOneShot(creature.HurtSound);
             }

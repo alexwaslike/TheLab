@@ -5,6 +5,8 @@ public class PrefabController : MonoBehaviour {
 
     public GameObject KeyPrefab;
 
+    public GameObject Gravestone;
+
 	public List<GameObject> Dogs;
 
 	public List<GameObject> Monsters;

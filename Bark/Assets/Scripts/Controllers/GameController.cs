@@ -44,8 +44,7 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             PauseUI.SetActive(true);
         }
     }
@@ -59,21 +58,17 @@ public class GameController : MonoBehaviour {
 
 	public void PauseGame(bool paused)
 	{
-		if (paused)
-		{
+		if (paused) {
 			Time.timeScale = 0.0f;
 			MainCharacterObj.GetComponent<CharacterMovement>().enabled = false;
 			AllowGameplay = false;
 			PauseGray.SetActive (true);
-		} else
-		{
+		} else {
 			Time.timeScale = _timeScale;
 			if(MainCharacterObj != null)
 				MainCharacterObj.GetComponent<CharacterMovement>().enabled = true;
 			AllowGameplay = true;
-            //Hot Fix for null reference on PauseGray
-            if (PauseGray != null)
-            {
+            if (PauseGray != null) {
                 PauseGray.SetActive(false);
             }
 		}
@@ -123,6 +118,10 @@ public class GameController : MonoBehaviour {
 		HUD.RemoveDogStats(dog);
 		DogInventory.GetComponent<Inventory> ().RemoveItem (dog.GetComponent<Collectible> ());
 		CombatController.RemoveFromCombat (dog.CombatAI);
+
+        GameObject newGrave = Instantiate(PrefabController.Gravestone, dog.transform.position, Quaternion.identity) as GameObject;
+        newGrave.GetComponent<EnvironmentObject>().GameController = this;
+        Destroy(dog.gameObject);
 	}
 
 	public void AddDog(Dog dog){

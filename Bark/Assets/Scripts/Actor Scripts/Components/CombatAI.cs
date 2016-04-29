@@ -142,7 +142,6 @@ public class CombatAI : MonoBehaviour {
 				_currentTarget.TakeDamage(_attackDamage);
 
                 if (Creature.AudioSource != null) {
-                    Debug.Log("played attack sound " + Creature.AttackSound.name + " from " + name);
                     Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
                     Creature.AudioSource.PlayOneShot(Creature.AttackSound);
                 }

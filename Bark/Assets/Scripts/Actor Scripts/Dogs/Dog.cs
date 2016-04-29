@@ -123,14 +123,7 @@ public class Dog : MonoBehaviour {
             Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
             Creature.AudioSource.PlayOneShot(Creature.DeathSound);
         }
-
-        Creature.ChangeState(State.Dead);
-        Detached();
-
-        if (Creature.Animator != null)
-            Creature.Animator.enabled = false;
         
-        transform.parent = null;
 		Creature.GameController.DogDeath (this);
 	}
 
