@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class PrefabController : MonoBehaviour {
 
+    public GameObject KeyPrefab;
+
 	public List<GameObject> Dogs;
 
 	public List<GameObject> Monsters;
@@ -20,4 +22,6 @@ public class PrefabController : MonoBehaviour {
 	public List<GameObject> Rocks;
 
 	public List<GameObject> Overlays;
+
+    public List<GameObject> Notes;
 }

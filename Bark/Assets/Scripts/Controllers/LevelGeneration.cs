@@ -81,8 +81,12 @@ public class LevelGeneration : MonoBehaviour {
             GenerateDogs();
         if(SpawnOverlays)
             GenerateOverlays();
-        if(SpawnItems)
+        if (SpawnItems) {
             GenerateItems();
+            GenerateNotes();
+            GenerateKey();
+        }
+            
     }
 
 	void Update(){
@@ -195,6 +199,29 @@ public class LevelGeneration : MonoBehaviour {
             }
         }
 
+    }
+
+    private void GenerateNotes()
+    {
+        for(int i=0; i<PrefabController.Notes.Count; i++)
+        {
+            int x = Random.Range(0, _max_X);
+            int y = Random.Range(0, _max_Y);
+            _objects[x, y] = Instantiate(PrefabController.Notes[i], _grid[x, y], Quaternion.identity) as GameObject;
+            _objects[x, y].transform.SetParent(ItemParent, true);
+            _objects[x, y].GetComponent<Item>().GameController = GameController;
+        }
+        
+    }
+
+    private void GenerateKey()
+    {
+        int x = Random.Range(_max_X/2, _max_X);
+        int y = Random.Range(_max_Y/2, _max_Y);
+        _objects[x, y] = Instantiate(PrefabController.KeyPrefab, _grid[x, y], Quaternion.identity) as GameObject;
+        _objects[x, y].transform.SetParent(ItemParent, true);
+        _objects[x, y].GetComponent<KeyScript>().GameController = GameController;
+        _objects[x, y].GetComponent<KeyScript>().WinScreenUI = GameController.WinScreenUI;
     }
 
     private void GenerateEnvironment(){
