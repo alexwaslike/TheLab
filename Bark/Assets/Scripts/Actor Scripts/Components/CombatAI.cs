@@ -140,6 +140,12 @@ public class CombatAI : MonoBehaviour {
             if (_attackCooldown <= 0) {
 				_attackCooldown = _attackRate;
 				_currentTarget.TakeDamage(_attackDamage);
+
+                if(Creature.AudioSource != null) {
+                    Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+                    Creature.AudioSource.PlayOneShot(Creature.AttackSound);
+                }
+                
 			} else {
 				_attackCooldown -= 2.0f*Time.deltaTime;
 			}
@@ -156,7 +162,12 @@ public class CombatAI : MonoBehaviour {
 			HasTarget = true;
         }
 
-	}
+        if (Creature.AudioSource != null && Creature.HurtSound != null) {
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.AudioSource.PlayOneShot(Creature.HurtSound);
+        }
+
+    }
 
 
 }

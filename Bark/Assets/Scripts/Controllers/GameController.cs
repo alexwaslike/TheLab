@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
     public PrefabController PrefabController;
 	public CombatController CombatController;
 	public LevelGeneration LevelGeneration;
+    public SoundController SoundController;
 
 	// UI
 	public GameObject DogInventory;

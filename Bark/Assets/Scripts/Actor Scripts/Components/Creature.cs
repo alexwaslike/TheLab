@@ -46,7 +46,17 @@ public class Creature : MonoBehaviour {
     private float prevX;
     private float prevY;
 
-	void Start(){
+    // sounds
+    public AudioSource AudioSource;
+    public float MinPitch = 0.8f;
+    public float MaxPitch = 1.2f;
+    public AudioClip IdleSound;
+    public AudioClip AttackSound;
+    public AudioClip HurtSound;
+    public AudioClip DeathSound;
+    public AudioClip[] BarkSounds;
+
+    void Start(){
 
         _rarity = (int)RarityType;
         CombatAI.Health.MaxHealth = (int)HealthType;

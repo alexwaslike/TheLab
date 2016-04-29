@@ -69,6 +69,15 @@ public class Dog : MonoBehaviour {
 	}
 
 	public void Attached(MainCharacter mainCharacter){
+
+        if (Creature.AudioSource != null && Creature.BarkSounds != null) {
+            if (!Creature.AudioSource.enabled) Creature.AudioSource.enabled = true;
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            int random = (int)Random.Range(0.0f, Creature.BarkSounds.Length - 1);
+            Creature.AudioSource.PlayOneShot(Creature.BarkSounds[ random ]);
+            Debug.Log("played " + random);
+        }
+
         Shadow.SetActive(false);
 		foreach(DogTrait trait in Traits){
 			trait.OnAttach (mainCharacter);
@@ -115,6 +124,11 @@ public class Dog : MonoBehaviour {
     }
 
 	public void Death(){
+
+        if(Creature.AudioSource != null && Creature.DeathSound != null) {
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.AudioSource.PlayOneShot(Creature.DeathSound);
+        }
 
         Creature.ChangeState(State.Dead);
         Detached();

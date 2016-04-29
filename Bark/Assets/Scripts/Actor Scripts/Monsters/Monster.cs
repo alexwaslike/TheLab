@@ -32,6 +32,11 @@ public class Monster : MonoBehaviour {
 
         } else if (Creature.CurrentState == State.Idle) {
 
+            if(Creature.AudioSource != null && Random.Range(0,100) <= 10) {
+                Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+                Creature.AudioSource.PlayOneShot(Creature.IdleSound);
+            }
+
             if(time<=0)
             {
                 time = Random.Range(1, 10);
@@ -73,6 +78,11 @@ public class Monster : MonoBehaviour {
     }
 
 	public void Death(){
+
+        if (Creature.AudioSource != null && Creature.DeathSound != null) {
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.AudioSource.PlayOneShot(Creature.DeathSound);
+        }
 
         GetComponent<BoxCollider2D>().enabled = false;
         
