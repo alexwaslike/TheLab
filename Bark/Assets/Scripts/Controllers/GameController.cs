@@ -61,7 +61,11 @@ public class GameController : MonoBehaviour {
 			if(MainCharacterObj != null)
 				MainCharacterObj.GetComponent<CharacterMovement>().enabled = true;
 			AllowGameplay = true;
-			PauseGray.SetActive (false);
+            //Hot Fix for null reference on PauseGray
+            if (PauseGray != null)
+            {
+                PauseGray.SetActive(false);
+            }
 		}
 	}
 
