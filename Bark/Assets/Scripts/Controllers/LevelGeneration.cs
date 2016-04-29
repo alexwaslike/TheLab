@@ -220,6 +220,7 @@ public class LevelGeneration : MonoBehaviour {
         int y = Random.Range(_max_Y/2, _max_Y);
         _objects[x, y] = Instantiate(PrefabController.KeyPrefab, _grid[x, y], Quaternion.identity) as GameObject;
         _objects[x, y].transform.SetParent(ItemParent, true);
+        _objects[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
         _objects[x, y].GetComponent<KeyScript>().GameController = GameController;
         _objects[x, y].GetComponent<KeyScript>().WinScreenUI = GameController.WinScreenUI;
     }
