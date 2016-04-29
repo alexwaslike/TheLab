@@ -12,6 +12,7 @@ public class Creature : MonoBehaviour {
     public CombatController.HealthType HealthType;
     public CombatController.RarityType RarityType;
     public Animator Animator;
+    public GameObject HealthBar;
 
     public float Speed;
 
@@ -71,7 +72,7 @@ public class Creature : MonoBehaviour {
 	void Update(){
 		GameController.SetSortingOrder (SpriteRenderer);
 
-        if(Animator != null)
+        if(Animator != null && CurrentState != State.Box)
         {
             float xMovement = transform.position.x - prevX;
             float yMovement = transform.position.y - prevY;
@@ -130,7 +131,8 @@ public class Creature : MonoBehaviour {
 			break;
 		case State.Attack:
 			_state = State.Attack;
-			SpriteRenderer.sprite = Sprite_S;
+			SpriteRenderer.sprite = Sprite_N;
+            if (HealthBar != null && !HealthBar.activeSelf) HealthBar.SetActive(true);
 			break;
 		case State.Box:
 			_state = State.Box;
@@ -143,7 +145,8 @@ public class Creature : MonoBehaviour {
 		case State.Follow:
 			gameObject.SetActive (true);
 			_state = State.Follow;
-            if (Animator == null) SpriteRenderer.sprite = Sprite_E;
+                if (Animator == null) SpriteRenderer.sprite = Sprite_E;
+                else Animator.Play("Idle");
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);

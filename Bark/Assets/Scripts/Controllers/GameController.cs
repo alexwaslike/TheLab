@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour {
     public HUD HUD;
     public GameObject WinScreenUI;
 	public GameObject PauseGray;
+    public GameObject PauseUI;
 
 	// other
 	public bool AllowGameplay;
@@ -40,6 +41,14 @@ public class GameController : MonoBehaviour {
 		AllowGameplay = true;
 		_timeScale = Time.timeScale;
 	}
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseUI.SetActive(true);
+        }
+    }
 
 
 	// utility
@@ -86,6 +95,7 @@ public class GameController : MonoBehaviour {
 
     public void KeyPickup(GameObject WinScreenUI)
     {
+        WinScreenUI.GetComponent<WinUI>().PopulateText(MainCharacter.DogInventory.Count);
         WinScreenUI.SetActive(true);
     }
 

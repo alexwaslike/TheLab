@@ -13,7 +13,6 @@ public class Dog : MonoBehaviour {
 	public float DogDistance = 1.0f;
 
 	public GameObject Shadow;
-    //public GameObject Light;
     public Creature Creature;
     public CombatAI CombatAI;
 	public Health Health;
@@ -42,7 +41,7 @@ public class Dog : MonoBehaviour {
 			PositionDog ();
 
 		} else if (Creature.CurrentState == State.Box) {
-
+            
 			if (CombatAI.WithinRange (Creature.GameController.MainCharacterObj, CombatAI.InteractionRange))
 				Shadow.SetActive (true);
 			else

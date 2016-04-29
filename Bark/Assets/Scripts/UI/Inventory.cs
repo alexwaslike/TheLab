@@ -96,7 +96,8 @@ public class Inventory : MonoBehaviour {
 
 	private void DisplayStats(Collectible item){
 		SelectedItem = item;
-		SelectedItemPortrait.sprite = item.Sprite;
+        if(SelectedItemPortrait.sprite != null)
+		    SelectedItemPortrait.sprite = item.Sprite;
 		SelectedItemText.text = item.Description;
 
 		if (SelectedItem != null && SelectedItem.GetComponent<Dog>() != null && _collection.ContainsKey(SelectedItem)) {
