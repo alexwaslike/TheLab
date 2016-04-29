@@ -28,12 +28,17 @@ public class Inventory : MonoBehaviour {
 	}
 	public int MaxDogsOnGround = 5;
 
-	void Awake(){
+    public AudioSource MainAudioSource;
+    public AudioClip[] BackpackZipperSounds;
+
+    void Awake(){
 		_collection = new Dictionary<Collectible, Icon> ();
 	}
 
     void OnEnable()
     {
+        PlayBackpackSound();
+
         SelectedItem = null;
 
         if (UseItemButton != null)
@@ -46,7 +51,14 @@ public class Inventory : MonoBehaviour {
         }
     }
 
-	public void AddNewItem(Collectible item){
+    public void PlayBackpackSound()
+    {
+        MainAudioSource.pitch = Random.Range(-1f, 2f);
+        MainAudioSource.PlayOneShot(BackpackZipperSounds[(int)Random.Range(0, BackpackZipperSounds.Length)]);
+        MainAudioSource.pitch = 1.0f;
+    }
+
+    public void AddNewItem(Collectible item){
 		
 		if (_collection == null)
 			_collection = new Dictionary<Collectible, Icon> ();
@@ -111,9 +123,10 @@ public class Inventory : MonoBehaviour {
 
 	private void DisplayStats(Collectible item){
 		SelectedItem = item;
-        if(SelectedItemPortrait.sprite != null && item.Sprite != null)
-		    SelectedItemPortrait.sprite = item.Sprite;
-		SelectedItemText.text = item.Description;
+        if(item != null) {
+            SelectedItemPortrait.sprite = item.Sprite;
+            SelectedItemText.text = item.Description;
+        } 
 
         if(GameController.AddDogUI.GetComponent<AddDogUI>().SelectedCollectible != null && SelectedItem == GameController.AddDogUI.GetComponent<AddDogUI>().SelectedCollectible) {
             ActivateDogButton.SetActive(false);
@@ -141,7 +154,7 @@ public class Inventory : MonoBehaviour {
 	}
 
 	public void Exit(){
-		gameObject.SetActive (false);
+        gameObject.SetActive (false);
 	}
 
 	public void SwitchToItemsTab(){

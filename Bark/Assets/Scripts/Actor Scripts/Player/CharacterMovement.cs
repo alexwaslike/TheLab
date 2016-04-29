@@ -5,6 +5,8 @@ public class CharacterMovement : MonoBehaviour {
 	public float Speed = 0.1f;
 
     public Animator Animator;
+    public AudioSource AudioSource;
+    private float _lastSpot;
     
 	void Update()
     {
@@ -32,9 +34,17 @@ public class CharacterMovement : MonoBehaviour {
         else if (vertical < 0) {
             Animator.SetBool("isMoving", true);
             Animator.SetBool("facingUp", false);
-        }
+        } 
         else {
             Animator.SetBool("isMoving", false);
+        }
+
+        if ((Mathf.Abs(vertical) > 0.001 || Mathf.Abs(horizontal) > 0.001) && !AudioSource.isPlaying) {
+            AudioSource.time = _lastSpot;
+            AudioSource.Play();
+        } else if (Mathf.Abs(vertical) < 0.001 && Mathf.Abs(horizontal) < 0.001 && AudioSource.isPlaying) {
+            _lastSpot = AudioSource.time;
+            AudioSource.Stop();
         }
             
 

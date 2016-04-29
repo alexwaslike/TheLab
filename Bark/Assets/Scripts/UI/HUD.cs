@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
@@ -53,7 +52,7 @@ public class HUD : MonoBehaviour
 	}
 
 	public void ViewItemInventoryClicked(){
-		GameController.ItemInventory.SetActive(true);
+        GameController.ItemInventory.SetActive(true);
 	}
 
     public int GetIndexOfDogStat(Dog dog)

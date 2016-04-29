@@ -3,7 +3,6 @@
 public class SoundController : MonoBehaviour {
 
     public AudioSource MainAudioSource;
-    private float _defaultPitch;
     
     public bool PlayMenuSong = false;
 
@@ -11,7 +10,6 @@ public class SoundController : MonoBehaviour {
 
     void Start()
     {
-        _defaultPitch = MainAudioSource.pitch;
         if (PlayMenuSong) {
             MainAudioSource.time = 21;
             MainAudioSource.Play();
