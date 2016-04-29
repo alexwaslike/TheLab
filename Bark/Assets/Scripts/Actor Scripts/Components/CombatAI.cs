@@ -24,12 +24,17 @@ public class CombatAI : MonoBehaviour {
 	public Health Health;
     public float InteractionRange = 2.0f;
 	public float AttackRange = 2.0f;
-	public bool HasTarget;
+
+    [System.NonSerialized]
+    public bool HasTarget;
 
     [System.NonSerialized]
     public float DodgeChance = 0f;
     [System.NonSerialized]
     public float DamageReduction = 0f;
+    [System.NonSerialized]
+    public int DropRateIncrease = 1;
+    private bool dropRateApplied = false;
 
     void Start()
     {
@@ -37,7 +42,7 @@ public class CombatAI : MonoBehaviour {
         if (Creature != null)
             GameController = Creature.GameController;
 
-		Health = GetComponent<Health> ();
+		Health = GetComponent<Health>();
 
         _attackDamage = (int)Damage;
         _attackRate = (int)AttackRate;
@@ -66,20 +71,10 @@ public class CombatAI : MonoBehaviour {
 				if(!GameController.CombatController.EngagedAI.Contains(this))
 					GameController.CombatController.AddToCombat (this);
 
-				if (HasTarget)
-                {
-                    Attack();
-                }
-                else {
+                if (!HasTarget)
+                    GetNewDogTarget();
+                Attack();
 
-					if (Creature.GameController.MainCharacter.DogInventory.Count > 0)
-						_currentTarget = GameController.MainCharacter.DogInventory [0].Health;
-					else
-						_currentTarget = GameController.MainCharacter.Health;
-                    HasTarget = true;
-                    Attack();
-
-                }
             }
             else {
                 HasTarget = false;
@@ -89,18 +84,34 @@ public class CombatAI : MonoBehaviour {
         else Debug.Log("Attempting to use Creature Attack method with non-Creature");
     }
 
+    public void GetNewDogTarget()
+    {
+        if (Creature.GameController.MainCharacter.DogInventory.Count > 0)
+            _currentTarget = GameController.MainCharacter.DogInventory[0].Health;
+        else
+            _currentTarget = GameController.MainCharacter.Health;
+        HasTarget = true;
+    }
+
 	public void TryAttackMonster(){
 		
 		if(!GameController.CombatController.EngagedAI.Contains(this))
 			GameController.CombatController.AddToCombat (this);
 
 		if (HasTarget) {
-			Attack ();
+
+            if (!dropRateApplied)
+            {
+                _currentTarget.GetComponent<Monster>().NumItemsDropped *= DropRateIncrease;
+                dropRateApplied = true;
+            }
+
+            Attack ();
 		} else {
 
             bool foundTarget = false;
             foreach (CombatAI AI in GameController.CombatController.EngagedAI) {
-				if (AI.GetComponent<Monster> () != null) {
+				if (AI != null && AI.GetComponent<Monster> () != null) {
 					_currentTarget = AI.GetComponent<Health> ();
                     foundTarget = true;
 					break;
@@ -110,6 +121,7 @@ public class CombatAI : MonoBehaviour {
                 HasTarget = true;
                 Attack();
             } else {
+                GameController.CombatController.RemoveFromCombat(this);
                 Creature.ChangeState(State.Follow);
             }
 
@@ -120,28 +132,42 @@ public class CombatAI : MonoBehaviour {
     private void Attack()
     {
 		if(WithinRange(_currentTarget.gameObject, AttackRange)) {
-			if (_currentTarget.GetComponent<CombatAI> () != null)
-				_currentTarget.GetComponent<CombatAI> ().BeingAttacked (this);
 
-			if (_attackCooldown <= 0)
-			{
+            if (_currentTarget.GetComponent<CombatAI>() != null) {
+                _currentTarget.GetComponent<CombatAI>().BeingAttacked(this);
+            }
+
+            if (_attackCooldown <= 0) {
 				_attackCooldown = _attackRate;
 				_currentTarget.TakeDamage(_attackDamage);
+
+                if(Creature.AudioSource != null) {
+                    Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+                    Creature.AudioSource.PlayOneShot(Creature.AttackSound);
+                }
+                
+			} else {
+				_attackCooldown -= 2.0f*Time.deltaTime;
 			}
-			else {
-				_attackCooldown -= 1*Time.deltaTime;
-			}
+
 		}
     }
 
-	private void BeingAttacked(CombatAI attacker){
-		if (_currentTarget != attacker.Health) {
+	public void BeingAttacked(CombatAI attacker){
+
+        if (_currentTarget != attacker.Health) {
 			Creature.ChangeState (State.Attack);
 			GameController.CombatController.AddToCombat (this);
 			_currentTarget = attacker.GetComponent<Health>();
 			HasTarget = true;
-		}
-	}
+        }
+
+        if (Creature.AudioSource != null && Creature.HurtSound != null) {
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.AudioSource.PlayOneShot(Creature.HurtSound);
+        }
+
+    }
 
 
 }

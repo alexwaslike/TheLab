@@ -2,6 +2,12 @@
 
 public class LevelGeneration : MonoBehaviour {
 
+    public bool SpawnMonsters = true;
+    public bool SpawnDogs = true;
+    public bool SpawnEnvironment = true;
+    public bool SpawnOverlays = true;
+    public bool SpawnItems = true;
+
 	public GameController GameController;
 	public PrefabController PrefabController;
 	public Transform TileParent;
@@ -11,12 +17,17 @@ public class LevelGeneration : MonoBehaviour {
 	public Transform ItemParent;
 	public Transform PlayerLoc;
 
-	private Vector3[,] Grid;
+	private Vector3[,] _grid;
 	private int _max_X = 100;
 	private int _max_Y = 50;
 
-	private GameObject[,] Objects;
-    private GameObject[,] Overlays;
+	private GameObject[,] _objects;
+    public GameObject[,] Objects
+    {
+        get { return _objects; }
+    }
+
+    private GameObject[,] _overlays;
 
     public int TreeClusterMin = 0;
     public int TreeClusterMax = 5;
@@ -39,6 +50,10 @@ public class LevelGeneration : MonoBehaviour {
 
 	private GameObject[,] Tiles;
     public GameObject tilePrefab;
+    public GameObject RightBarrier;
+    public GameObject LeftBarrier;
+    public GameObject SEMiddleBarrier;
+    public GameObject SWMiddleBarrier;
 
 	public int xOffset;
 	public int yOffset;
@@ -52,17 +67,26 @@ public class LevelGeneration : MonoBehaviour {
 
         tilePrefab = GameController.PrefabController.Tiles[0];
 
-        Grid =		new Vector3[_max_X, _max_Y];
+        _grid =		new Vector3[_max_X, _max_Y];
 		Tiles =		new GameObject[_max_X, _max_Y];
-		Objects =	new GameObject[_max_X, _max_Y];
-        Overlays =  new GameObject[_max_X, _max_Y];
+		_objects =	new GameObject[_max_X, _max_Y];
+        _overlays =  new GameObject[_max_X, _max_Y];
 
 		GenerateTiles();
-		GenerateEnvironment();
-        GenerateMonsters();
-        GenerateDogs();
-        GenerateOverlays();
-        GenerateItems();
+        if(SpawnEnvironment)
+		    GenerateEnvironment();
+        if(SpawnMonsters)
+            GenerateMonsters();
+        if(SpawnDogs)
+            GenerateDogs();
+        if(SpawnOverlays)
+            GenerateOverlays();
+        if (SpawnItems) {
+            GenerateItems();
+            GenerateNotes();
+            GenerateKey();
+        }
+            
     }
 
 	void Update(){
@@ -71,13 +95,14 @@ public class LevelGeneration : MonoBehaviour {
         Vector3 cameraTopRight = GameController.MainCamera.ViewportToWorldPoint(new Vector3(1, 1, _nearClipPlane));
 
         Vector3 position;
+        Vector3 size;
         for(int x = 0; x < _max_X; x++)
         {
             for(int y = 0; y < _max_Y; y++)
             {
 
                 if(Tiles[x,y] != null) {
-                    position = Grid[x, y];
+                    position = _grid[x, y];
                     if(position.x > cameraTopRight.x + 2 || position.x < cameraBottomLeft.x - 2 || position.y > cameraTopRight.y + 1 || position.y < cameraBottomLeft.y - 1) {
                         Tiles[x, y].SetActive(false);
                     } else if (position.x - cameraTopRight.x < 2 || position.x - cameraBottomLeft.x < -2 || position.y - cameraTopRight.y < 1 || position.y - cameraBottomLeft.y < -1) {
@@ -85,21 +110,23 @@ public class LevelGeneration : MonoBehaviour {
                     }
                 }
 
-                if (Objects[x, y] != null) {
-                    position = Objects[x, y].transform.position;
-                    if (position.x > cameraTopRight.x + 5 || position.x < cameraBottomLeft.x - 5 || position.y > cameraTopRight.y + 5 || position.y < cameraBottomLeft.y - 5) {
-                        Objects[x, y].SetActive(false);
+                if (_objects[x, y] != null) {
+                    position = _objects[x, y].transform.position;
+                    size = _objects[x, y].transform.lossyScale;
+                    if (position.x - size.x/2.0f > cameraTopRight.x + 5 || position.x + size.x / 2.0f < cameraBottomLeft.x - 5 || position.y - size.y / 2.0f > cameraTopRight.y + 5 || position.y + size.y / 2.0f < cameraBottomLeft.y - 5) {
+                        _objects[x, y].SetActive(false);
                     } else if (position.x - cameraTopRight.x < 5 || position.x - cameraBottomLeft.x < -5 || position.y - cameraTopRight.y < 5 || position.y - cameraBottomLeft.y < -5) {
-                        Objects[x, y].SetActive(true);
+                        _objects[x, y].SetActive(true);
                     }
                 }
 
-                if (Overlays[x, y] != null) {
-                    position = Overlays[x, y].transform.position;
-                    if (position.x > cameraTopRight.x + 5 || position.x < cameraBottomLeft.x - 5 || position.y > cameraTopRight.y + 5 || position.y < cameraBottomLeft.y - 5) {
-                        Overlays[x, y].SetActive(false);
+                if (_overlays[x, y] != null) {
+                    position = _overlays[x, y].transform.position;
+                    size = _overlays[x, y].transform.lossyScale;
+                    if (position.x - size.x / 2.0f > cameraTopRight.x + 5 || position.x + size.x / 2.0f < cameraBottomLeft.x - 5 || position.y - size.y > cameraTopRight.y + 5 || position.y + size.y < cameraBottomLeft.y - 5) {
+                        _overlays[x, y].SetActive(false);
                     } else if (position.x - cameraTopRight.x < 5 || position.x - cameraBottomLeft.x < -5 || position.y - cameraTopRight.y < 5 || position.y - cameraBottomLeft.y < -5) {
-                        Overlays[x, y].SetActive(true);
+                        _overlays[x, y].SetActive(true);
                     }
                 }
             }
@@ -109,46 +136,111 @@ public class LevelGeneration : MonoBehaviour {
 
     private void GenerateTiles(){
         
-		float xSize = 3.61f;
-		float ySize = 1.82f;
-        bool alt = false;
+		
+        float tileSize = 2.525f;
+
+        Vector2 xyVector;
+        Vector3 newPos;
+
+        Vector2 dx = new Vector2(Mathf.Sqrt(2) / 2.0f, Mathf.Sqrt(2) / 4.0f);
+        Vector2 dy = new Vector2(Mathf.Sqrt(2) / 2.0f, -Mathf.Sqrt(2) / 4.0f);
 
         for (int x = 0; x < _max_X; x++) {
-			for (int y = 0; y < _max_Y; y++){
+            for (int y = 0; y < _max_Y; y++) {
 
-                Vector3 newPos = Vector3.zero;
+                xyVector = tileSize * (x * dx + y * dy);
+                newPos = new Vector3(xyVector.x, xyVector.y, 0.0f);
 
-                if(alt)
-                    newPos = new Vector3(x * (xSize / 2), y * ySize + ySize/2, 0);
-                else
-                    newPos = new Vector3(x * (xSize / 2), y * ySize, 0);
+                GameObject objToCreate = tilePrefab;
 
-                Grid [x, y] = newPos;
+                // decide whether a barrier or tile should be created
+                // barriers also need slight manual adjustments on position
+                if(x == 0) {
+                    if (y == 0 || y == _max_Y - 1) {
+                        if(y == 0) {
+                            newPos.x += 1.06f;
+                            newPos.y += -0.44f;
+                        } else {
+                            newPos.x += 0.21f;
+                            newPos.y += 0.8f;
+                        }
+                        objToCreate = LeftBarrier;
+                    } else {
+                        objToCreate = SWMiddleBarrier;
+                    } 
+                } else if (x == _max_X - 1) {
+                    if (y == 0 || y == _max_Y - 1) {
+                        objToCreate = RightBarrier;
+                    } else {
+                        newPos.x -= 1f;
+                        newPos.y -= 1f;
+                        objToCreate = SWMiddleBarrier;
+                    }
+                } else if (y == 0 || y == _max_Y - 1) {
+                    if(y == 0) {
+                        newPos.x += 1.06f;
+                        newPos.y += -0.29f;
+                    } else {
+                        newPos.x += 0.21f;
+                        newPos.y += 0.8f;
+                    }
+                    objToCreate = SEMiddleBarrier;
+                }
 
-				Tiles[x, y] = Instantiate (tilePrefab, newPos, Quaternion.identity) as GameObject;
-				Tiles[x, y].transform.SetParent (TileParent, true);
+                if(!(x == 0 && y < _max_Y / 2.0f + 4 && y > _max_Y / 2.0f - 4)) {
+                    _grid[x, y] = newPos;
+                    Tiles[x, y] = Instantiate(objToCreate, newPos, Quaternion.identity) as GameObject;
+                    Tiles[x, y].transform.SetParent(TileParent, true);
+                    if (Tiles[x, y].GetComponent<EnvironmentObject>() != null)
+                        Tiles[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
+                }
+                
 
             }
-            alt = !alt;
         }
-	}
 
-	private void GenerateEnvironment(){
+    }
+
+    private void GenerateNotes()
+    {
+        for(int i=0; i<PrefabController.Notes.Count; i++)
+        {
+            int x = Random.Range(0, _max_X);
+            int y = Random.Range(0, _max_Y);
+            _objects[x, y] = Instantiate(PrefabController.Notes[i], _grid[x, y], Quaternion.identity) as GameObject;
+            _objects[x, y].transform.SetParent(ItemParent, true);
+            _objects[x, y].GetComponent<Item>().GameController = GameController;
+        }
+        
+    }
+
+    private void GenerateKey()
+    {
+        int x = Random.Range(_max_X/2, _max_X);
+        int y = Random.Range(_max_Y/2, _max_Y);
+        _objects[x, y] = Instantiate(PrefabController.KeyPrefab, _grid[x, y], Quaternion.identity) as GameObject;
+        _objects[x, y].transform.SetParent(ItemParent, true);
+        _objects[x, y].GetComponent<KeyScript>().GameController = GameController;
+        _objects[x, y].GetComponent<KeyScript>().WinScreenUI = GameController.WinScreenUI;
+    }
+
+    private void GenerateEnvironment(){
 
 		int buildingChance = (int)(BuildingChance);
 		int foliageChance = (int)(buildingChance + FoliageClusterChance);
 
-        for (int x = 0; x < _max_X; x++) {
-			for (int y = 0; y < _max_Y; y++) {
-
-				int roll = Random.Range (0, 1000);
+        for (int x = 1; x < _max_X - 2; x++) {
+			for (int y = 1; y < _max_Y - 2; y++) {
                 
-				if (roll <= buildingChance) {
-                    GenBuildingArea(x, y);
-                } else if (roll > buildingChance && roll <= foliageChance) {
-                    GenFoliageCluster(x, y);
-                }
+                    int roll = Random.Range(0, 1000);
 
+                    if (roll <= buildingChance) {
+                        GenBuildingArea(x, y);
+                    }
+                    else if (roll > buildingChance && roll <= foliageChance) {
+                        GenFoliageCluster(x, y);
+                    }
+                    
             }
 		}
 
@@ -156,33 +248,27 @@ public class LevelGeneration : MonoBehaviour {
 
     private void GenerateDogs()
     {
-        for (int x = 0; x < _max_X; x++)
-        {
-            for (int y = 0; y < _max_Y; y++)
-            {
+        for (int x = 1; x < _max_X - 2; x++) {
+            for (int y = 0; y < _max_Y - 2; y++) {
                 int roll = Random.Range(0, 1000);
-                if (roll <= DogChance)
-                {
-                    Objects[x, y] = Instantiate(GenDog(), Grid[x, y], Quaternion.identity) as GameObject;
-                    Objects[x, y].transform.SetParent(DogParent, true);
-                    Objects[x, y].GetComponent<Creature>().GameController = GameController;
-                }
+                if (roll <= DogChance) {
+                    _objects[x, y] = Instantiate(GenDog(), _grid[x, y], Quaternion.identity) as GameObject;
+                    _objects[x, y].transform.SetParent(DogParent, true);
+                    _objects[x, y].GetComponent<Creature>().GameController = GameController;
+                }  
             }
         }
     }
 
     private void GenerateMonsters()
     {
-        for (int x = 0; x < _max_X; x++)
-        {
-            for (int y = 0; y < _max_Y; y++)
-            {
+        for (int x = 1; x < _max_X - 2; x++) {
+            for (int y = 1; y < _max_Y - 2; y++) {
                 int roll = Random.Range(0, 1000);
-                if (roll <= MonsterChance)
-                {
-                    Objects[x, y] = Instantiate(GenMonster(), Grid[x, y], Quaternion.identity) as GameObject;
-                    Objects[x, y].transform.SetParent(MonsterParent, true);
-                    Objects[x, y].GetComponent<Creature>().GameController = GameController;
+                if (roll <= MonsterChance) {
+                    _objects[x, y] = Instantiate(GenMonster(), _grid[x, y], Quaternion.identity) as GameObject;
+                    _objects[x, y].transform.SetParent(MonsterParent, true);
+                    _objects[x, y].GetComponent<Creature>().GameController = GameController;
                 }
             }
         }
@@ -190,16 +276,13 @@ public class LevelGeneration : MonoBehaviour {
 
     private void GenerateOverlays()
     {
-        for (int x = 0; x < _max_X; x++)
-        {
-            for (int y = 0; y < _max_Y; y++)
-            {
+        for (int x = 1; x < _max_X - 2; x++) {
+            for (int y = 1; y < _max_Y - 2; y++) {
                 int roll = Random.Range(0, 100);
-                if (roll <= OverlayChance)
-                {
-                    Overlays[x, y] = Instantiate(GenOverlay(), Grid[x, y], Quaternion.identity) as GameObject;
-                    Overlays[x, y].transform.SetParent(EnvironmentParent, true);
-                    Overlays[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
+                if (roll <= OverlayChance) {
+                    _overlays[x, y] = Instantiate(GenOverlay(), _grid[x, y], Quaternion.identity) as GameObject;
+                    _overlays[x, y].transform.SetParent(EnvironmentParent, true);
+                    _overlays[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
                 }
             }
         }
@@ -207,17 +290,14 @@ public class LevelGeneration : MonoBehaviour {
 
     private void GenerateItems()
     {
-        for (int x = 0; x < _max_X; x++)
-        {
-            for (int y = 0; y < _max_Y; y++)
-            {
+        for (int x = 1; x < _max_X - 2; x++) {
+            for (int y = 1; y < _max_Y - 2; y++) { 
                 int roll = Random.Range(0, 1000);
-                if (roll <= ItemChance)
-                {
-                    Objects[x, y] = Instantiate(GenItem(), Grid[x, y], Quaternion.identity) as GameObject;
-                    Objects[x, y].transform.SetParent(ItemParent, true);
-                    Objects[x, y].GetComponent<Item>().GameController = GameController;
-                }
+                if (roll <= ItemChance) {
+                    _objects[x, y] = Instantiate(GenItem(), _grid[x, y], Quaternion.identity) as GameObject;
+                    _objects[x, y].transform.SetParent(ItemParent, true);
+                    _objects[x, y].GetComponent<Item>().GameController = GameController;
+                } 
             }
         }
     }
@@ -285,17 +365,18 @@ public class LevelGeneration : MonoBehaviour {
 
     private void SetRandomLoc(int xCenter, int yCenter)
     {
+        // also prevent that random loc from being too close to barriers
         xPos = xCenter + Random.Range(distanceMin, distanceMax);
-        if (xPos < 0)
-            xPos = 0;
-        if (xPos >= _max_X)
-            xPos = _max_X-1;
+        if (xPos < 2)
+            xPos = 2;
+        if (xPos >= _max_X - 2)
+            xPos = _max_X - 3;
 
         yPos = yCenter + Random.Range(distanceMin, distanceMax);
-        if (yPos < 0)
-            yPos = 0;
-        if (yPos >= _max_Y)
-            yPos = _max_Y - 1;
+        if (yPos < 2)
+            yPos = 2;
+        if (yPos >= _max_Y - 2)
+            yPos = _max_Y - 2;
     }
 
 	private void GenTreeArea(int xCenter, int yCenter){
@@ -305,11 +386,10 @@ public class LevelGeneration : MonoBehaviour {
 
             SetRandomLoc(xCenter, yCenter);
 
-            if (Objects[xPos, yPos] == null)
-            {
-                Objects[xPos, yPos] = Instantiate(GenTree(), Grid[xPos, yPos], Quaternion.identity) as GameObject;
-                Objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
-                Objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
+            if (_objects[xPos, yPos] == null) {
+                _objects[xPos, yPos] = Instantiate(GenTree(), _grid[xPos, yPos], Quaternion.identity) as GameObject;
+                _objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
+                _objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
             }
 
 		}
@@ -319,16 +399,14 @@ public class LevelGeneration : MonoBehaviour {
     {
         int num = Random.Range(PlantClusterMin, PlantClusterMax);
 
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
 
             SetRandomLoc(xCenter, yCenter);
 
-            if (Objects[xPos, yPos] == null)
-            {
-                Objects[xPos, yPos] = Instantiate(GenPlant(), Grid[xPos, yPos], Quaternion.identity) as GameObject;
-                Objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
-                Objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
+            if (_objects[xPos, yPos] == null) {
+                _objects[xPos, yPos] = Instantiate(GenPlant(), _grid[xPos, yPos], Quaternion.identity) as GameObject;
+                _objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
+                _objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
             }
 
         }
@@ -338,28 +416,24 @@ public class LevelGeneration : MonoBehaviour {
     {
         int num = Random.Range(RockClusterMin, RockClusterMax);
 
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             SetRandomLoc(xCenter, yCenter);
 
-            if (Objects[xPos, yPos] == null)
-            {
-                Objects[xPos, yPos] = Instantiate(GenRock(), Grid[xPos, yPos], Quaternion.identity) as GameObject;
-                Objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
-                Objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
+            if (_objects[xPos, yPos] == null) {
+                _objects[xPos, yPos] = Instantiate(GenRock(), _grid[xPos, yPos], Quaternion.identity) as GameObject;
+                _objects[xPos, yPos].transform.SetParent(EnvironmentParent, true);
+                _objects[xPos, yPos].GetComponent<EnvironmentObject>().GameController = GameController;
             }
-
         }
-
     }
 
 	private void GenBuildingArea(int xCenter, int yCenter){
 
-		GenPlantArea (xCenter,yCenter);
+        GenPlantArea (xCenter,yCenter);
 
-        Objects[xCenter, yCenter] = Instantiate(GenBuilding(), Grid[xCenter, yCenter], Quaternion.identity) as GameObject;
-        Objects[xCenter, yCenter].transform.SetParent(EnvironmentParent, true);
-        Objects[xCenter, yCenter].GetComponent<EnvironmentObject>().GameController = GameController;
+        _objects[xCenter, yCenter] = Instantiate(GenBuilding(), _grid[xCenter, yCenter], Quaternion.identity) as GameObject;
+        _objects[xCenter, yCenter].transform.SetParent(EnvironmentParent, true);
+        _objects[xCenter, yCenter].GetComponent<EnvironmentObject>().GameController = GameController;
         
 	}
 
@@ -372,8 +446,8 @@ public class LevelGeneration : MonoBehaviour {
 	public void RemoveFromGrid(GameObject obj){
 		for (int x = 0; x < _max_X; x++) {
 			for (int y = 0; y < _max_Y; y++) {
-				if (Objects[x, y] == obj) {
-					Objects[x, y] = null;
+				if (_objects[x, y] == obj) {
+					_objects[x, y] = null;
 					break;
 				}
 			}

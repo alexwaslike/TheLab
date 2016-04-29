@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Creature : MonoBehaviour {
 
@@ -14,11 +13,7 @@ public class Creature : MonoBehaviour {
     public CombatController.RarityType RarityType;
     public Animator Animator;
 
-    private float _speed;
-    public float Speed
-    {
-        get { return _speed; }
-    }
+    public float Speed;
 
     private int _rarity;
     public int Rarity
@@ -34,6 +29,12 @@ public class Creature : MonoBehaviour {
 	public Sprite Sprite_Dead;
 	public Sprite Sprite_Box;
 
+    // animation names
+    public string AnimNorth;
+    public string AnimSouth;
+    public string AnimEast;
+    public string AnimWest;
+
 	// other public
     public CreatureType Type;
     public string Name = "doge";
@@ -41,22 +42,88 @@ public class Creature : MonoBehaviour {
     public SpriteRenderer SpriteRenderer;
     public GameController GameController;
 
-	void Start(){
+    // movement detection
+    private float prevX;
+    private float prevY;
+
+    // sounds
+    public AudioSource AudioSource;
+    public float MinPitch = 0.8f;
+    public float MaxPitch = 1.2f;
+    public AudioClip IdleSound;
+    public AudioClip AttackSound;
+    public AudioClip HurtSound;
+    public AudioClip DeathSound;
+    public AudioClip[] BarkSounds;
+
+    void Start(){
 
         _rarity = (int)RarityType;
         CombatAI.Health.MaxHealth = (int)HealthType;
-        _speed = (int)MovementSpeed;
+        Speed = (int)MovementSpeed;
 
 		GameController.SetSortingOrder (SpriteRenderer);
+
+        prevX = transform.position.x;
+        prevY = transform.position.y;
 	}
 
 	void Update(){
 		GameController.SetSortingOrder (SpriteRenderer);
-	}
+
+        if(Animator != null)
+        {
+            float xMovement = transform.position.x - prevX;
+            float yMovement = transform.position.y - prevY;
+
+            if (xMovement != 0 || yMovement != 0)
+            {
+                Animator.SetBool("isMoving", true);
+
+                if (xMovement > 0)
+                {
+                    Animator.SetBool("facingRight", true);
+                    Animator.SetBool("facingLeft", false);
+                }
+                else if (xMovement < 0)
+                {
+                    Animator.SetBool("facingRight", false);
+                    Animator.SetBool("facingLeft", true);
+                }
+                else {
+                    Animator.SetBool("facingRight", false);
+                    Animator.SetBool("facingLeft", false);
+                }
+
+                if (yMovement > 0)
+                {
+                    Animator.SetBool("facingUp", true);
+                    Animator.SetBool("facingDown", false);
+                }
+                else if (yMovement < 0)
+                {
+                    Animator.SetBool("facingUp", false);
+                    Animator.SetBool("facingDown", true);
+                }
+                else {
+                    Animator.SetBool("facingUp", false);
+                    Animator.SetBool("facingDown", false);
+                }
+
+            }
+            else {
+                Animator.SetBool("isMoving", false);
+            }
+                
+
+            prevX = transform.position.x;
+            prevY = transform.position.y;
+        }
+    }
 
     public void ChangeState(State newState)
     {
-		switch (newState) {
+        switch (newState) {
 		case State.Idle:
 			_state = State.Idle;
 			SpriteRenderer.sprite = Sprite_S;
@@ -76,8 +143,7 @@ public class Creature : MonoBehaviour {
 		case State.Follow:
 			gameObject.SetActive (true);
 			_state = State.Follow;
-			SpriteRenderer.sprite = Sprite_S;
-                if (Animator != null) { Animator.enabled = true; Animator.Play("MoveLeft"); }
+            if (Animator == null) SpriteRenderer.sprite = Sprite_E;
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);
@@ -88,10 +154,10 @@ public class Creature : MonoBehaviour {
 
     public void Move(float x, float y)
     {
-        if(Mathf.Abs(y) > 0.001)
-            transform.Translate(new Vector3(x* 0.5f, y* 0.5f, 0));
+        if (Mathf.Abs(y) > 0.001)
+            transform.Translate(x * 0.6f, y * 0.6f, 0.0f);
         else
-            transform.Translate(x, y, 0);
+            transform.Translate(x, y, 0.0f);
     }
 
 }

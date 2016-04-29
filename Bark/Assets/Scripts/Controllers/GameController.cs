@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour {
     public PrefabController PrefabController;
 	public CombatController CombatController;
 	public LevelGeneration LevelGeneration;
+    public SoundController SoundController;
 
 	// UI
 	public GameObject DogInventory;
@@ -61,7 +62,11 @@ public class GameController : MonoBehaviour {
 			if(MainCharacterObj != null)
 				MainCharacterObj.GetComponent<CharacterMovement>().enabled = true;
 			AllowGameplay = true;
-			PauseGray.SetActive (false);
+            //Hot Fix for null reference on PauseGray
+            if (PauseGray != null)
+            {
+                PauseGray.SetActive(false);
+            }
 		}
 	}
 
@@ -105,20 +110,27 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void AddDog(Dog dog){
+        
+        dog.gameObject.transform.SetParent(null, false);
+        dog.gameObject.transform.position = new Vector3(MainCharacterObj.transform.position.x, MainCharacterObj.transform.position.y, 0.0f);
 
-        //LevelGeneration.RemoveFromGrid(dog.gameObject);
-        dog.gameObject.transform.SetParent(MainCharacter.transform, false);
-        dog.gameObject.transform.localPosition = new Vector3(-1, -1, 0);
-
-        HUD.AddNewDogStats (dog);
-		DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
+        DogInventory.GetComponent<Inventory>().AddNewItem (dog.GetComponent<Collectible>());
 
 		if(DogInventory.GetComponent<Inventory>().Collection.Count > DogInventory.GetComponent<Inventory>().MaxDogsOnGround)
-			dog.Creature.ChangeState (State.InInventory);
-		else
-			dog.Creature.ChangeState (State.Follow);
+        {
+            dog.Creature.ChangeState(State.InInventory);
+        }
+        else
+        {
+            HUD.AddNewDogStats(dog);
+            dog.Creature.ChangeState(State.Follow);
+        }
+			
 
         MainCharacter.AddDogToInventory (dog);
+
+        if(CombatController.EngagedAI.Count > 0)
+            CombatController.AddToCombat(dog.CombatAI);
 	}
 
 	public void AddItem(Item item){

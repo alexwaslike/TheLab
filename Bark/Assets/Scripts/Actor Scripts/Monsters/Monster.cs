@@ -26,13 +26,16 @@ public class Monster : MonoBehaviour {
 
             if (CombatAI.HasTarget)
             {
-                float xShift = (CombatAI.CurrentTarget.transform.position.x - transform.position.x) * Creature.Speed*Time.deltaTime;
-                float yShift = (CombatAI.CurrentTarget.transform.position.y - transform.position.y) * Creature.Speed*Time.deltaTime;
-                Creature.Move(xShift, yShift);
+                transform.position = Vector3.MoveTowards(transform.position, CombatAI.CurrentTarget.transform.position, Creature.Speed * Time.deltaTime);
             }
             CombatAI.TryAttackDog();
 
         } else if (Creature.CurrentState == State.Idle) {
+
+            if(Creature.AudioSource != null && Random.Range(0,100) <= 10) {
+                Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+                Creature.AudioSource.PlayOneShot(Creature.IdleSound);
+            }
 
             if(time<=0)
             {
@@ -75,6 +78,14 @@ public class Monster : MonoBehaviour {
     }
 
 	public void Death(){
+
+        if (Creature.AudioSource != null && Creature.DeathSound != null) {
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.AudioSource.PlayOneShot(Creature.DeathSound);
+        }
+
+        GetComponent<BoxCollider2D>().enabled = false;
+        
 		Creature.ChangeState (State.Dead);
 		Creature.GameController.CombatController.RemoveFromCombat (CombatAI);
 		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
@@ -83,7 +94,9 @@ public class Monster : MonoBehaviour {
         for(int i=0; i< NumItemsDropped; i++)
         {
             GameObject drop = Creature.GameController.LevelGeneration.GenItem();
-            Instantiate(drop, new Vector3(transform.position.x + x, transform.position.y, 0), Quaternion.identity);
+            drop = Instantiate(drop, new Vector3(transform.position.x + 2*x, transform.position.y, 0), Quaternion.identity) as GameObject;
+            drop.SetActive(true);
+            drop.GetComponent<Item>().GameController = Creature.GameController;
             x++;
         }
 

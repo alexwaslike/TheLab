@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+// Ability: Ranged attack
 public class RangedAttackTrait : MonoBehaviour {
 
-	// Use this for initialization
 	void Start () {
-	
+        
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
+

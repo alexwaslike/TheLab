@@ -10,9 +10,10 @@ public class Dog : MonoBehaviour {
 
 	public List<DogTrait> Traits;
 
-	private float _dogDistance = 2.5f;
+	public float DogDistance = 1.0f;
 
 	public GameObject Shadow;
+    //public GameObject Light;
     public Creature Creature;
     public CombatAI CombatAI;
 	public Health Health;
@@ -21,11 +22,7 @@ public class Dog : MonoBehaviour {
     void Start ()
     {
 
-		string description = "Traits:\n";
-		foreach (DogTrait trait in Traits) {
-			description += trait.Name + ": " + trait.Description + "\n";
-		}
-		Collectible.Description = description;
+        Collectible.Description = WritingDB.DogDescriptions[Creature.Name];
 		Collectible.Name = Creature.Name;
 		Collectible.Sprite = Creature.Sprite_S;
 		Collectible.Inventory = Creature.GameController.DogInventory.GetComponent<Inventory>();
@@ -37,12 +34,12 @@ public class Dog : MonoBehaviour {
     {
 		if (Creature.CurrentState == State.Follow) {
 			
-			PositionDog (Creature.GameController.MainCharacter.DogInventory.IndexOf (this));
+			PositionDog ();
 
 		} else if (Creature.CurrentState == State.Attack) {
 
 			CombatAI.TryAttackMonster ();
-			PositionDog (Creature.GameController.MainCharacter.DogInventory.IndexOf (this));
+			PositionDog ();
 
 		} else if (Creature.CurrentState == State.Box) {
 
@@ -62,13 +59,22 @@ public class Dog : MonoBehaviour {
 
 	private void Clicked()
     {
-		if (Creature.CurrentState == State.Box) {
+        if (Creature.CurrentState == State.Box) {
             Creature.GameController.DogClicked (this);
 		}
 	}
 
 	public void Attached(MainCharacter mainCharacter){
-		Shadow.SetActive(false);
+
+        if (Creature.AudioSource != null && Creature.BarkSounds != null) {
+            if (!Creature.AudioSource.enabled) Creature.AudioSource.enabled = true;
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            int random = (int)Random.Range(0.0f, Creature.BarkSounds.Length - 1);
+            Creature.AudioSource.PlayOneShot(Creature.BarkSounds[ random ]);
+            Debug.Log("played " + random);
+        }
+
+        Shadow.SetActive(false);
 		foreach(DogTrait trait in Traits){
 			trait.OnAttach (mainCharacter);
 		}
@@ -80,28 +86,53 @@ public class Dog : MonoBehaviour {
 		}
 	}
 
-    public void PositionDog(int index)
+    public void PositionDog()
     {
         MainCharacter character = Creature.GameController.MainCharacter;
+        int dogLoc = 0;
+        foreach(Dog dog in character.DogInventory)
+        {
+            if (dog == this)
+                break;
+            if(dog.Creature.CurrentState == State.Follow || dog.Creature.CurrentState == State.Attack)
+                dogLoc++;
+        }
 
-		if (character.DogInventory.Count > 0) {
+		if (character.DogInventory.Count > 0 && Creature.CurrentState == State.Follow || Creature.CurrentState == State.Attack)
+        {
+            
 			float radians;
-			if(character.NumActiveDogs != 0)
-				radians = ((360 / character.NumActiveDogs) * index) * (Mathf.PI / 180.0f);
+			if(character.NumActiveDogs > 0)
+				radians = ((360 / character.NumActiveDogs) * dogLoc) * (Mathf.PI / 180.0f);
 			else
 				radians = 360 * (Mathf.PI / 180.0f);
-			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * _dogDistance);
-			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * _dogDistance);
+			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * DogDistance);
+			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * DogDistance);
 
-            Creature.Move (xLoc - transform.position.x, yLoc - transform.position.y);
-		} else
-			Debug.LogWarning ("Dog not in inventory!!");
+            float xMovement = (xLoc - transform.position.x) * Creature.Speed * Time.deltaTime;
+            float yMovement = (yLoc - transform.position.y) * Creature.Speed * Time.deltaTime;
+
+            Creature.Move(xMovement, yMovement);
+
+        } else
+			Debug.LogWarning ("Dog not active or not in inventory");
 
     }
 
 	public void Death(){
-		Creature.ChangeState (State.Dead);
-		Creature.GameController.LevelGeneration.RemoveFromGrid (gameObject);
+
+        if(Creature.AudioSource != null && Creature.DeathSound != null) {
+            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.AudioSource.PlayOneShot(Creature.DeathSound);
+        }
+
+        Creature.ChangeState(State.Dead);
+        Detached();
+
+        if (Creature.Animator != null)
+            Creature.Animator.enabled = false;
+        
+        transform.parent = null;
 		Creature.GameController.DogDeath (this);
 	}
 
