@@ -105,7 +105,7 @@ public class Dog : MonoBehaviour {
 			else
 				radians = 360 * (Mathf.PI / 180.0f);
 			float xLoc = character.transform.position.x + (Mathf.Cos (radians) * DogDistance);
-			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * DogDistance);
+			float yLoc = character.transform.position.y + (Mathf.Sin (radians) * DogDistance) / 2.0f;
 
             float xMovement = (xLoc - transform.position.x) * Creature.Speed * Time.deltaTime;
             float yMovement = (yLoc - transform.position.y) * Creature.Speed * Time.deltaTime;
