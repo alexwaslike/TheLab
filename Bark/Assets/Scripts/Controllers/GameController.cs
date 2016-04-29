@@ -94,7 +94,7 @@ public class GameController : MonoBehaviour {
         
 	}
 
-    public void KeyPickup(GameObject WinScreenUI)
+    public void WinGame()
     {
         WinScreenUI.GetComponent<WinUI>().PopulateText(MainCharacter.DogInventory.Count);
         WinScreenUI.SetActive(true);

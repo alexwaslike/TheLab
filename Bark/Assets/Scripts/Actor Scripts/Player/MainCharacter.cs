@@ -31,6 +31,8 @@ public class MainCharacter : MonoBehaviour {
 		get { return _numActiveDogs; }
 	}
 
+    public bool HasKey = false;
+
 	void Start ()
     {
 		Health = GetComponent<Health>();
