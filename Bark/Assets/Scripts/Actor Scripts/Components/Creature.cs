@@ -72,7 +72,7 @@ public class Creature : MonoBehaviour {
 	void Update(){
 		GameController.SetSortingOrder (SpriteRenderer);
 
-        if(Animator != null)
+        if(Animator != null && CurrentState != State.Box)
         {
             float xMovement = transform.position.x - prevX;
             float yMovement = transform.position.y - prevY;
@@ -145,7 +145,8 @@ public class Creature : MonoBehaviour {
 		case State.Follow:
 			gameObject.SetActive (true);
 			_state = State.Follow;
-            if (Animator == null) SpriteRenderer.sprite = Sprite_E;
+                if (Animator == null) SpriteRenderer.sprite = Sprite_E;
+                else Animator.Play("Idle");
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);
