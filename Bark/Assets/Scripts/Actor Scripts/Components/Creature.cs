@@ -12,6 +12,7 @@ public class Creature : MonoBehaviour {
     public CombatController.HealthType HealthType;
     public CombatController.RarityType RarityType;
     public Animator Animator;
+    public GameObject HealthBar;
 
     public float Speed;
 
@@ -130,7 +131,8 @@ public class Creature : MonoBehaviour {
 			break;
 		case State.Attack:
 			_state = State.Attack;
-			SpriteRenderer.sprite = Sprite_S;
+			SpriteRenderer.sprite = Sprite_N;
+            if (HealthBar != null && !HealthBar.activeSelf) HealthBar.SetActive(true);
 			break;
 		case State.Box:
 			_state = State.Box;

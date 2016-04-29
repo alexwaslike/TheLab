@@ -13,7 +13,7 @@ public class Monster : MonoBehaviour {
 
     public int NumItemsDropped;
 
-    public Image HealthBarImage;
+    public bool IsDecoy;
 
 	void Start ()
     {
@@ -32,44 +32,44 @@ public class Monster : MonoBehaviour {
 
         } else if (Creature.CurrentState == State.Idle) {
 
-            if(Creature.AudioSource != null && Random.Range(0,100) <= 10) {
-                Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
-                Creature.AudioSource.PlayOneShot(Creature.IdleSound);
-            }
-
-            if(time<=0)
-            {
-                time = Random.Range(1, 10);
-                direction = Random.Range(1, 5);
-            }
-            else
-            {
-                time -= Time.deltaTime;
-                switch(direction)
-                {
-				case 5:
-					directionx = 0;
-					directiony = 0;
-					break;
-                case 4:
-                    directionx = 1;
-                    directiony = 0;
-                    break;
-                case 3:
-                    directionx = -1;
-                    directiony = 0;
-                    break;
-                case 2:
-                    directiony = 1;
-                    directionx = 0;
-                    break;
-				case 1:
-                    directiony = -1;
-                    directionx = 0;
-                    break;
+            if (!IsDecoy) {
+                if (Creature.AudioSource != null && Random.Range(0, 100) <= 10) {
+                    Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+                    Creature.AudioSource.PlayOneShot(Creature.IdleSound);
                 }
-                transform.Translate(new Vector3(directionx * Creature.Speed * Time.deltaTime, directiony * Creature.Speed * Time.deltaTime, 0));
 
+                if (time <= 0) {
+                    time = Random.Range(1, 10);
+                    direction = Random.Range(1, 5);
+                }
+                else {
+                    time -= Time.deltaTime;
+                    switch (direction)
+                    {
+                        case 5:
+                            directionx = 0;
+                            directiony = 0;
+                            break;
+                        case 4:
+                            directionx = 1;
+                            directiony = 0;
+                            break;
+                        case 3:
+                            directionx = -1;
+                            directiony = 0;
+                            break;
+                        case 2:
+                            directiony = 1;
+                            directionx = 0;
+                            break;
+                        case 1:
+                            directiony = -1;
+                            directionx = 0;
+                            break;
+                    }
+                    transform.Translate(new Vector3(directionx * Creature.Speed * Time.deltaTime, directiony * Creature.Speed * Time.deltaTime, 0));
+
+                }
             }
 
 			if (CombatAI.WithinRange(Creature.GameController.MainCharacterObj, CombatAI.InteractionRange))

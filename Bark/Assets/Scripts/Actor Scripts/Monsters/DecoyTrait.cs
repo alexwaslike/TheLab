@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class DecoyTrait : MonoBehaviour {
+public class DecoyTrait : MonsterTrait {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public Monster Monster;
+    public SpriteRenderer SpriteRenderer;
+    public Animator Animator;
+    public GameObject HealthBar;
+
+    public Sprite ItemBoxSprite;
+
+	void Start()
+    {
+        HealthBar.SetActive(false);
+        Monster.IsDecoy = true;
+        SpriteRenderer.sprite = ItemBoxSprite;
+        if (Animator != null)
+            Animator.enabled = false;
+    }
+
 }
