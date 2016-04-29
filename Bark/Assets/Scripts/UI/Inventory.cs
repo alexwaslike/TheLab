@@ -49,16 +49,20 @@ public class Inventory : MonoBehaviour {
     {
         if(SelectedItem != null) {
             SelectedItem.GetComponent<Item>().ActivateItem();
-            RemoveItem(SelectedItem);
 
-            if (_collection.Count > 0)
-            {
-                Collectible[] keys = new Collectible[_collection.Keys.Count];
-                _collection.Keys.CopyTo(keys, 0);
-                SelectedItem = keys[0];
+            if(SelectedItem.GetComponent<Note>() == null) {
+                RemoveItem(SelectedItem);
+
+                if (_collection.Count > 0)
+                {
+                    Collectible[] keys = new Collectible[_collection.Keys.Count];
+                    _collection.Keys.CopyTo(keys, 0);
+                    SelectedItem = keys[0];
+                }
+                else
+                    SelectedItem = null;
             }
-            else
-                SelectedItem = null;
+            
         }
         
     }
