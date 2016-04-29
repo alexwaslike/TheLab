@@ -8,7 +8,8 @@ public class Icon : MonoBehaviour {
 	public Image Image;
 
 	void Start () {
-		Image.sprite = Collectible.Sprite;
+        if(Collectible != null && Collectible.Sprite != null)
+		    Image.sprite = Collectible.Sprite;
 		GetComponent<Button> ().onClick.AddListener (delegate { this.IconClicked (); });
 	}
 

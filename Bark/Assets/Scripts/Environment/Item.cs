@@ -13,6 +13,8 @@ public class Item : MonoBehaviour {
 
 	public string Name;
 
+    public AudioClip[] UseSoundClips;
+
 	public float StatModifier = 0.01f;
     public float InteractionRange = 5.0f;
 

@@ -70,7 +70,6 @@ public class Dog : MonoBehaviour {
             Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
             int random = (int)Random.Range(0.0f, Creature.BarkSounds.Length - 1);
             Creature.AudioSource.PlayOneShot(Creature.BarkSounds[ random ]);
-            Debug.Log("played " + random);
         }
 
         Shadow.SetActive(false);

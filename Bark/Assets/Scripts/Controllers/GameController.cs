@@ -91,6 +91,12 @@ public class GameController : MonoBehaviour {
 		AddItemUI.GetComponent<AddItemUI> ().SelectedCollectible = item.GetComponent<Collectible> ();
 		ItemInventory.SetActive (true);
 		AddItemUI.SetActive (true);
+
+        if(item.UseSoundClips.Length > 0) {
+            AudioClip clipToPlay = item.UseSoundClips[Random.Range(0, item.UseSoundClips.Length - 1)];
+            SoundController.MainAudioSource.PlayOneShot(clipToPlay);
+        }
+        
 	}
 
     public void KeyPickup(GameObject WinScreenUI)
@@ -148,7 +154,12 @@ public class GameController : MonoBehaviour {
 		ItemInventory.GetComponent<Inventory> ().AddNewItem (item.GetComponent<Collectible> ());
 		item.gameObject.SetActive (false);
 
-		LevelGeneration.RemoveFromGrid (item.gameObject);
+        if (item.UseSoundClips.Length > 0) {
+            AudioClip clipToPlay = item.UseSoundClips[Random.Range(0, item.UseSoundClips.Length-1)];
+            SoundController.MainAudioSource.PlayOneShot(clipToPlay);
+        }
+
+        LevelGeneration.RemoveFromGrid (item.gameObject);
 	}
 
 }

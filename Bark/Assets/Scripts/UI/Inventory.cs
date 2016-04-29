@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour {
 	public Text SelectedItemText;
 	public GameObject ActivateDogButton;
 	public GameObject DeactivateDogButton;
+    public GameObject UseItemButton;
 
 	// prefabs needed
 	public GameObject IconPrefab;
@@ -30,6 +31,20 @@ public class Inventory : MonoBehaviour {
 	void Awake(){
 		_collection = new Dictionary<Collectible, Icon> ();
 	}
+
+    void OnEnable()
+    {
+        SelectedItem = null;
+
+        if (UseItemButton != null)
+            UseItemButton.SetActive(false);
+
+        if(ActivateDogButton != null && DeactivateDogButton != null)
+        {
+            ActivateDogButton.SetActive(false);
+            DeactivateDogButton.SetActive(false);
+        }
+    }
 
 	public void AddNewItem(Collectible item){
 		
@@ -96,11 +111,21 @@ public class Inventory : MonoBehaviour {
 
 	private void DisplayStats(Collectible item){
 		SelectedItem = item;
-        if(SelectedItemPortrait.sprite != null)
+        if(SelectedItemPortrait.sprite != null && item.Sprite != null)
 		    SelectedItemPortrait.sprite = item.Sprite;
 		SelectedItemText.text = item.Description;
 
-		if (SelectedItem != null && SelectedItem.GetComponent<Dog>() != null && _collection.ContainsKey(SelectedItem)) {
+        if(GameController.AddDogUI.GetComponent<AddDogUI>().SelectedCollectible != null && SelectedItem == GameController.AddDogUI.GetComponent<AddDogUI>().SelectedCollectible) {
+            ActivateDogButton.SetActive(false);
+            DeactivateDogButton.SetActive(false);
+        }
+
+        if (UseItemButton != null && SelectedItem == GameController.AddItemUI.GetComponent<AddItemUI>().SelectedCollectible)
+            UseItemButton.SetActive(false);
+        else if (UseItemButton != null)
+            UseItemButton.SetActive(true);
+    
+        if (SelectedItem != null && SelectedItem.GetComponent<Dog>() != null && _collection.ContainsKey(SelectedItem)) {
 			if (SelectedItem.gameObject.activeSelf) {
 				DeactivateDogButton.SetActive (true);
 				ActivateDogButton.SetActive (false);

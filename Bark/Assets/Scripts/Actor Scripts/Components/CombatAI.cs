@@ -141,7 +141,8 @@ public class CombatAI : MonoBehaviour {
 				_attackCooldown = _attackRate;
 				_currentTarget.TakeDamage(_attackDamage);
 
-                if(Creature.AudioSource != null) {
+                if (Creature.AudioSource != null) {
+                    Debug.Log("played attack sound " + Creature.AttackSound.name + " from " + name);
                     Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
                     Creature.AudioSource.PlayOneShot(Creature.AttackSound);
                 }
@@ -160,11 +161,6 @@ public class CombatAI : MonoBehaviour {
 			GameController.CombatController.AddToCombat (this);
 			_currentTarget = attacker.GetComponent<Health>();
 			HasTarget = true;
-        }
-
-        if (Creature.AudioSource != null && Creature.HurtSound != null) {
-            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
-            Creature.AudioSource.PlayOneShot(Creature.HurtSound);
         }
 
     }

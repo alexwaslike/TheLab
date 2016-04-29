@@ -32,6 +32,16 @@ public class Health : MonoBehaviour {
         damageObj.transform.Rotate(new Vector3(0, 0, Random.Range(0, 360)));
         damageObj.transform.localPosition = new Vector3(Random.Range(-transform.localScale.x, transform.localScale.x), Random.Range(-transform.localScale.y, transform.localScale.y), 2);
 
+        if(GetComponent<Creature>() != null)
+        {
+            Creature creature = GetComponent<Creature>();
+            if (creature.AudioSource != null && creature.HurtSound != null)
+            {
+                Debug.Log("played hurt sound " + creature.HurtSound + " from " + name);
+                creature.AudioSource.pitch = Random.Range(creature.MinPitch, creature.MaxPitch);
+                creature.AudioSource.PlayOneShot(creature.HurtSound);
+            }
+        }
 
         if (_health - damage <= 0)
         {

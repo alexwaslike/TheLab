@@ -71,6 +71,7 @@ public class HUD : MonoBehaviour
             }
             i++;
         }
+
         return index;
     }
 
