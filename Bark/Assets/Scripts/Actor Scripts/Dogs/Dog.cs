@@ -22,11 +22,7 @@ public class Dog : MonoBehaviour {
     void Start ()
     {
 
-		string description = "Traits:\n";
-		foreach (DogTrait trait in Traits) {
-			description += trait.Name + ": " + trait.Description + "\n";
-		}
-		Collectible.Description = description;
+        Collectible.Description = WritingDB.DogDescriptions[Creature.Name];
 		Collectible.Name = Creature.Name;
 		Collectible.Sprite = Creature.Sprite_S;
 		Collectible.Inventory = Creature.GameController.DogInventory.GetComponent<Inventory>();

@@ -183,11 +183,14 @@ public class LevelGeneration : MonoBehaviour {
                     objToCreate = SEMiddleBarrier;
                 }
 
-                _grid[x, y] = newPos;
-                Tiles[x, y] = Instantiate(objToCreate, newPos, Quaternion.identity) as GameObject;
-                Tiles[x, y].transform.SetParent(TileParent, true);
-                if (Tiles[x, y].GetComponent<EnvironmentObject>() != null)
-                    Tiles[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
+                if(!(x == 0 && y < _max_Y / 2.0f + 4 && y > _max_Y / 2.0f - 4)) {
+                    _grid[x, y] = newPos;
+                    Tiles[x, y] = Instantiate(objToCreate, newPos, Quaternion.identity) as GameObject;
+                    Tiles[x, y].transform.SetParent(TileParent, true);
+                    if (Tiles[x, y].GetComponent<EnvironmentObject>() != null)
+                        Tiles[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
+                }
+                
 
             }
         }
