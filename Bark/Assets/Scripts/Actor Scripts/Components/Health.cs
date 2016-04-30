@@ -35,10 +35,14 @@ public class Health : MonoBehaviour {
         if(GetComponent<Creature>() != null)
         {
             Creature creature = GetComponent<Creature>();
-            if (creature.AudioSource != null && creature.HurtSound != null)
+            if (creature.AudioSource != null && creature.HurtSounds.Length > 0)
             {
                 creature.AudioSource.pitch = Random.Range(creature.MinPitch, creature.MaxPitch);
-                creature.AudioSource.PlayOneShot(creature.HurtSound);
+                int loc = Random.Range(0, creature.HurtSounds.Length);
+                if (loc >= 0 && loc < creature.HurtSounds.Length)
+                    creature.AudioSource.PlayOneShot(creature.HurtSounds[loc]);
+                else
+                    creature.AudioSource.PlayOneShot(creature.HurtSounds[0]);
             }
         }
 

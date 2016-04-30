@@ -12,7 +12,7 @@ public class KeyScript : MonoBehaviour
     {
         if (!Shadow.activeSelf && Vector3.Distance(transform.position, GameController.MainCharacter.transform.position) <= InteractionRange)
             Shadow.SetActive(true);
-        else if (Shadow.activeSelf)
+        else
             Shadow.SetActive(false);
     }
 
@@ -22,6 +22,7 @@ public class KeyScript : MonoBehaviour
             GameController.LevelGeneration.RemoveFromGrid(gameObject);
             GameController.MainCharacter.HasKey = true;
             Shadow.SetActive(false);
+            GetComponent<SpriteRenderer>().sortingLayerName = "GameWorldUI";
             transform.parent = GameController.MainCharacter.transform;
             transform.localPosition = new Vector3(0.2f, 4.7f, 0.0f);
         }

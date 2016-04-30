@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour {
 	public GameObject MainCharacterObj;
 	public MainCharacter MainCharacter;
 	public Camera MainCamera;
+    public GameObject Key;
+    public GameObject EndBunker;
 
 	// controllers
 	public SpriteController SpriteController;

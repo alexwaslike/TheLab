@@ -119,9 +119,9 @@ public class Dog : MonoBehaviour {
 
 	public void Death(){
 
-        if(Creature.AudioSource != null && Creature.DeathSound != null) {
+        if(Creature.AudioSource != null && Creature.DeathSounds != null) {
             Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
-            Creature.AudioSource.PlayOneShot(Creature.DeathSound);
+            Creature.AudioSource.PlayOneShot(Creature.DeathSounds[Random.Range(0, Creature.DeathSounds.Length)]);
         }
         
 		Creature.GameController.DogDeath (this);

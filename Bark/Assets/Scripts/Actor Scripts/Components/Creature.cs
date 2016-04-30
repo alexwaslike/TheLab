@@ -51,10 +51,10 @@ public class Creature : MonoBehaviour {
     public AudioSource AudioSource;
     public float MinPitch = 0.8f;
     public float MaxPitch = 1.2f;
-    public AudioClip IdleSound;
-    public AudioClip AttackSound;
-    public AudioClip HurtSound;
-    public AudioClip DeathSound;
+    public AudioClip[] IdleSounds;
+    public AudioClip[] AttackSounds;
+    public AudioClip[] HurtSounds;
+    public AudioClip[] DeathSounds;
     public AudioClip[] BarkSounds;
 
     void Start(){

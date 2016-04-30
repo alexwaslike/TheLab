@@ -5,6 +5,9 @@ public class SoundController : MonoBehaviour {
     public AudioSource MainAudioSource;
     
     public bool PlayMenuSong = false;
+    public bool PlayAmbientMusic = false;
+
+    public AudioClip[] AmbientMusic;
 
     public AudioClip ButtonClicked;
 
@@ -12,6 +15,18 @@ public class SoundController : MonoBehaviour {
     {
         if (PlayMenuSong) {
             MainAudioSource.time = 21;
+            MainAudioSource.Play();
+        } else if (PlayAmbientMusic) {
+            MainAudioSource.volume = 0.5f;
+            MainAudioSource.clip = AmbientMusic[Random.Range(0, AmbientMusic.Length)];
+            MainAudioSource.Play();
+        }
+    }
+
+    void Update()
+    {
+        if (!MainAudioSource.isPlaying) {
+            MainAudioSource.clip = AmbientMusic[Random.Range(0, AmbientMusic.Length)];
             MainAudioSource.Play();
         }
     }

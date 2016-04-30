@@ -224,6 +224,8 @@ public class LevelGeneration : MonoBehaviour {
         _objects[x, y].GetComponent<EnvironmentObject>().GameController = GameController;
         _objects[x, y].GetComponent<KeyScript>().GameController = GameController;
         _objects[x, y].GetComponent<KeyScript>().WinScreenUI = GameController.WinScreenUI;
+
+        GameController.Key = _objects[x, y];
     }
 
     private void GenerateEnvironment(){
