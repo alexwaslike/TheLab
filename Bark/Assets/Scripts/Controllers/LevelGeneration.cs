@@ -140,6 +140,9 @@ public class LevelGeneration : MonoBehaviour {
 		
         float tileSize = 2.525f;
 
+        float zPos = -0.01f;
+        float zAdd = 0.01f;
+
         Vector2 xyVector;
         Vector3 newPos;
 
@@ -150,9 +153,12 @@ public class LevelGeneration : MonoBehaviour {
             for (int y = 0; y < _max_Y; y++) {
 
                 xyVector = tileSize * (x * dx + y * dy);
-                newPos = new Vector3(xyVector.x, xyVector.y, 0.0f);
+                newPos = new Vector3(xyVector.x, xyVector.y, zPos);
+                zPos *= -1;
+                zPos += zAdd;
+                zAdd += 0.0001f;
 
-                GameObject objToCreate = tilePrefab;
+                GameObject objToCreate = PrefabController.Tiles[Random.Range(0, PrefabController.Tiles.Count)];
 
                 // decide whether a barrier or tile should be created
                 // barriers also need slight manual adjustments on position
@@ -208,7 +214,7 @@ public class LevelGeneration : MonoBehaviour {
         {
             int x = Random.Range(0, _max_X);
             int y = Random.Range(0, _max_Y);
-            _objects[x, y] = Instantiate(PrefabController.Notes[i], _grid[x, y], Quaternion.identity) as GameObject;
+            _objects[x, y] = Instantiate(PrefabController.Notes[i], _grid[x, y], PrefabController.Notes[i].transform.localRotation) as GameObject;
             _objects[x, y].transform.SetParent(ItemParent, true);
             _objects[x, y].GetComponent<Item>().GameController = GameController;
         }

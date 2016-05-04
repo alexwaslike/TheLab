@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 
 public class AddItemUI : MonoBehaviour {
 
@@ -22,7 +20,8 @@ public class AddItemUI : MonoBehaviour {
 	}
 
 	public void Exit(){
-		ItemInventory.gameObject.SetActive (false);
+        SelectedCollectible = null;
+        ItemInventory.gameObject.SetActive (false);
 		gameObject.SetActive(false);
 	}
 }

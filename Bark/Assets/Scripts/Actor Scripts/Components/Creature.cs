@@ -146,7 +146,7 @@ public class Creature : MonoBehaviour {
 			gameObject.SetActive (true);
 			_state = State.Follow;
                 if (Animator == null) SpriteRenderer.sprite = Sprite_E;
-                else Animator.Play("Idle");
+                else Animator.Play("Idle Left");
 			break;
 		case State.InInventory:
 			gameObject.SetActive (false);

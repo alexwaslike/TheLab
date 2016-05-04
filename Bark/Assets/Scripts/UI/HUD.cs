@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class HUD : MonoBehaviour
 {
 
+    public AudioSource AudioSource;
+
     private List<DogStats> _dogStatItems;
     public List<DogStats> DogStatItems
     {

@@ -24,16 +24,15 @@ public class Monster : MonoBehaviour {
     {
         if (Creature.CurrentState == State.Attack) {
 
-            if (CombatAI.HasTarget)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, CombatAI.CurrentTarget.transform.position, Creature.Speed * Time.deltaTime);
+            if (CombatAI.HasTarget) {
+                transform.position = Vector3.MoveTowards(transform.position, CombatAI.CurrentTarget.transform.position - new Vector3(0,0,0), Creature.Speed * Time.deltaTime);
             }
             CombatAI.TryAttackDog();
 
         } else if (Creature.CurrentState == State.Idle) {
 
             if (!IsDecoy) {
-                if (Creature.AudioSource != null && Random.Range(0, 100) <= 10) {
+                if (Creature.AudioSource != null && !Creature.AudioSource.isPlaying && Random.Range(0, 100) <= 5) {
                     Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
                     Creature.AudioSource.PlayOneShot(Creature.IdleSounds[Random.Range(0, Creature.IdleSounds.Length)]);
                 }
@@ -79,9 +78,9 @@ public class Monster : MonoBehaviour {
 
 	public void Death(){
 
-        if (Creature.AudioSource != null && Creature.DeathSounds != null) {
-            Creature.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
-            Creature.AudioSource.PlayOneShot(Creature.DeathSounds[Random.Range(0, Creature.DeathSounds.Length)]);
+        if (Creature.GameController.HUD.AudioSource != null && Creature.DeathSounds != null) {
+            Creature.GameController.HUD.AudioSource.pitch = Random.Range(Creature.MinPitch, Creature.MaxPitch);
+            Creature.GameController.HUD.AudioSource.PlayOneShot(Creature.DeathSounds[Random.Range(0, Creature.DeathSounds.Length)]);
         }
 
         GetComponent<BoxCollider2D>().enabled = false;

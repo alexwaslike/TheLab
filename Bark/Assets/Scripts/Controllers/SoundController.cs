@@ -17,7 +17,7 @@ public class SoundController : MonoBehaviour {
             MainAudioSource.time = 21;
             MainAudioSource.Play();
         } else if (PlayAmbientMusic) {
-            MainAudioSource.volume = 0.5f;
+            MainAudioSource.volume = 0.7f;
             MainAudioSource.clip = AmbientMusic[Random.Range(0, AmbientMusic.Length)];
             MainAudioSource.Play();
         }

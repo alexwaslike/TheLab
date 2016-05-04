@@ -5,6 +5,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PauseOnEnable))]
 public class Inventory : MonoBehaviour {
 
+    // default shit
+    public string DefaultText = "Item descriptions display here.";
+    public Sprite DefaultIcon;
+
 	// controllers needed
 	public GameController GameController;
 
@@ -39,7 +43,13 @@ public class Inventory : MonoBehaviour {
     {
         PlayBackpackSound();
 
-        SelectedItem = null;
+        if (_collection.Count > 0) {
+            DisplayFirstItem();
+        } else {
+            SelectedItem = null;
+            ClearView();
+        }
+            
 
         if (UseItemButton != null)
             UseItemButton.SetActive(false);
@@ -75,23 +85,31 @@ public class Inventory : MonoBehaviour {
     public void UseItem()
     {
         if(SelectedItem != null) {
+            
+            if(SelectedItem.GetComponent<Potion>() != null && GameController.MainCharacter.DogInventory.Count <= 0) {
+                return;
+            }
+
             SelectedItem.GetComponent<Item>().ActivateItem();
 
-            if(SelectedItem.GetComponent<Note>() == null) {
+            if (SelectedItem.GetComponent<Note>() == null) {
                 RemoveItem(SelectedItem);
 
                 if (_collection.Count > 0)
-                {
-                    Collectible[] keys = new Collectible[_collection.Keys.Count];
-                    _collection.Keys.CopyTo(keys, 0);
-                    SelectedItem = keys[0];
-                }
+                    DisplayFirstItem();
                 else
                     SelectedItem = null;
             }
-            
         }
         
+    }
+
+    private void DisplayFirstItem()
+    {
+        Collectible[] keys = new Collectible[_collection.Keys.Count];
+        _collection.Keys.CopyTo(keys, 0);
+        SelectedItem = keys[0];
+        DisplayStats(keys[0]);
     }
 
 	public void ActivateDog(){
@@ -154,8 +172,16 @@ public class Inventory : MonoBehaviour {
 	}
 
 	public void Exit(){
+        SelectedItem = null;
+        ClearView();
         gameObject.SetActive (false);
 	}
+
+    private void ClearView()
+    {
+        SelectedItemPortrait.sprite = DefaultIcon;
+        SelectedItemText.text = DefaultText;
+    }
 
 	public void SwitchToItemsTab(){
 		if (GameController.DogInventory.activeSelf)
